@@ -1,13 +1,12 @@
-package fr.vegeto52.realestatemanager.ui;
+package fr.vegeto52.realestatemanager.ui.mainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import fr.vegeto52.realestatemanager.R;
-import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
+import fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment.ListViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 

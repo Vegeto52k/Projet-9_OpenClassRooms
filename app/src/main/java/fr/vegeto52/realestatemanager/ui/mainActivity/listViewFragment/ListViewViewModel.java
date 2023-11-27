@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager.ui;
+package fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;

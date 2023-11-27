@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager.ui;
+package fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -56,8 +56,9 @@ public class ListViewFragment extends Fragment {
         initViewModel();
     }
 
+
+
     private void initViewModel(){
-    //    ViewModelFactory viewModelFactory = ViewModelFactory.getInstance();
         mListViewViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(ListViewViewModel.class);
         mListViewViewModel.getListViewMutableLiveData().observe(getViewLifecycleOwner(), new Observer<ListViewViewState>() {
             @Override
