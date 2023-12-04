@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
 import fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment.DetailsFragmentViewModel;
+import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragmentViewModel;
 import fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment.ListViewViewModel;
 
 /**
@@ -16,6 +17,7 @@ import fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment.ListViewVi
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final RealEstateRoomRepository mRealEstateRoomRepository;
+    private final PhotoRoomRepository mPhotoRoomRepository;
 
     private static volatile ViewModelFactory sFactory;
 
@@ -33,6 +35,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private ViewModelFactory(Context context){
         RealEstateDatabase realEstateDatabase = RealEstateDatabase.getInstance(context);
         this.mRealEstateRoomRepository = new RealEstateRoomRepository(realEstateDatabase.mRealEstateDao());
+        this.mPhotoRoomRepository = new PhotoRoomRepository(realEstateDatabase.mPhotoDao());
     }
 
     @NonNull
@@ -43,6 +46,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(DetailsFragmentViewModel.class)){
             return (T) new DetailsFragmentViewModel(mRealEstateRoomRepository);
+        }
+        if (modelClass.isAssignableFrom(EditFragmentViewModel.class)){
+            return (T) new EditFragmentViewModel(mRealEstateRoomRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

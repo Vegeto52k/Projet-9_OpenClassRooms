@@ -65,7 +65,6 @@ public class ListViewFragment extends Fragment {
             public void onChanged(ListViewViewState listViewViewState) {
                 mRealEstateList = listViewViewState.getRealEstateList();
                 initRecyclerView();
-                Log.d("Test Liste", " " + mRealEstateList.size());
                 mBinding.fragmentListViewEmpty.setVisibility(mRealEstateList.isEmpty() ? View.VISIBLE : View.GONE);
             }
         });

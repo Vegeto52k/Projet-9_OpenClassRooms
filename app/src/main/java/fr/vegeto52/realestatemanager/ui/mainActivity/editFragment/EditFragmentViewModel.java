@@ -1,23 +1,20 @@
-package fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment;
+package fr.vegeto52.realestatemanager.ui.mainActivity.editFragment;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
-
-import java.util.List;
 
 import fr.vegeto52.realestatemanager.database.repository.RealEstateRoomRepository;
 import fr.vegeto52.realestatemanager.model.RealEstate;
-import fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment.ListViewViewState;
 
 /**
- * Created by Vegeto52-PC on 21/11/2023.
+ * Created by Vegeto52-PC on 28/11/2023.
  */
-public class DetailsFragmentViewModel extends ViewModel {
+public class EditFragmentViewModel extends ViewModel {
 
     private RealEstateRoomRepository mRealEstateRoomRepository;
 
-    public DetailsFragmentViewModel(RealEstateRoomRepository realEstateRoomRepository) {
+
+    public EditFragmentViewModel(RealEstateRoomRepository realEstateRoomRepository) {
         mRealEstateRoomRepository = realEstateRoomRepository;
     }
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import fr.vegeto52.realestatemanager.api.RetrofitService;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentDetailsBinding;
 import fr.vegeto52.realestatemanager.model.RealEstate;
+import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragment;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -100,7 +102,6 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initToolbar();
         initViewModel();
     }
 
@@ -111,7 +112,22 @@ public class DetailsFragment extends Fragment {
                 requireActivity().onBackPressed();
             }
         });
-
+        mEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new EditFragment();
+                Bundle args = new Bundle();
+                args.putLong("idRealEstate", mRealEstate.getId());
+                fragment.setArguments(args);
+                if (view.getContext() instanceof AppCompatActivity){
+                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_main_activity, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+        });
 //        ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
 //        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -129,23 +145,28 @@ public class DetailsFragment extends Fragment {
                 public void onChanged(RealEstate realEstate) {
                     mRealEstate = realEstate;
                     initUi();
+                    initToolbar();
                 }
             });
     }
 
     private void initUi(){
-        mTextDescription.setText(mRealEstate.getDescription() != null ? mRealEstate.getDescription() : "Description not provided");
-        mTextAdress.setText(mRealEstate.getAddress() != null ? mRealEstate.getAddress() : "Address not provided");
+        mTextDescription.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "Description not provided");
+        mTextAdress.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "Address not provided");
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        mTextSurface.setText(String.valueOf(mRealEstate.getSurface()) != null ? decimalFormat.format(mRealEstate.getSurface()) + " sq ft" : "Surface not provided");
-        mTextNumberOfRooms.setText(String.valueOf(mRealEstate.getNumberOfRooms()) != null ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
-        mTextPointsOfInterest.setText(mRealEstate.getPointsOfInterest() != null ? mRealEstate.getPointsOfInterest() : "Points of interest not provided");
-        mTextDateOfEntry.setText(mRealEstate.getDateOfEntry() != null ? mRealEstate.getDateOfEntry() : "");
-        mTextDateOfSale.setText(mRealEstate.getDateOfSale() != null ? mRealEstate.getDateOfSale() : "Available");
-        mTextAgent.setText(mRealEstate.getAgent() != null ? mRealEstate.getAgent() : "Agent not provided");
-        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-        String priceFormate = numberFormat.format(mRealEstate.getPrice());
-        mTextPrice.setText(String.valueOf(mRealEstate.getPrice()) != null ? "$" + priceFormate : "Price not provided");
+        mTextSurface.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? decimalFormat.format(mRealEstate.getSurface()) + " sq ft" : "Surface not provided");
+        mTextNumberOfRooms.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
+        mTextPointsOfInterest.setText(!TextUtils.isEmpty(mRealEstate.getPointsOfInterest()) ? mRealEstate.getPointsOfInterest() : "Points of interest not provided");
+        mTextDateOfEntry.setText(!TextUtils.isEmpty(mRealEstate.getDateOfEntry()) ? mRealEstate.getDateOfEntry() : "Date of entry not provided");
+        mTextDateOfSale.setText(!TextUtils.isEmpty(mRealEstate.getDateOfSale()) ? mRealEstate.getDateOfSale() : "Available");
+        mTextAgent.setText(!TextUtils.isEmpty(mRealEstate.getAgent()) ? mRealEstate.getAgent() : "Agent not provided");
+        if (!TextUtils.isEmpty(String.valueOf(mRealEstate.getPrice()))){
+            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+            String priceFormate = numberFormat.format(mRealEstate.getPrice());
+            mTextPrice.setText("$" + priceFormate);
+        } else {
+            mTextPrice.setText("");
+        }
 
         initStaticMapsApi();
     //    initCarouselPhoto();

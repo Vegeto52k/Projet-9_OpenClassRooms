@@ -1,10 +1,15 @@
 package fr.vegeto52.realestatemanager.model;
 
+import android.hardware.lights.LightsManager;
+
 import androidx.annotation.Nullable;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Vegeto52-PC on 07/11/2023.
@@ -27,6 +32,7 @@ public class RealEstate {
     private String dateOfSale;
     private String agent;
 
+    @Ignore
     public RealEstate(long id, String type, double price, double surface, int numberOfRooms, String description, String photo, String address, String pointsOfInterest, boolean statut, String dateOfEntry, String dateOfSale, String agent) {
         this.id = id;
         this.type = type;
