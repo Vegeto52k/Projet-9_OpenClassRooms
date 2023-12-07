@@ -11,11 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.android.material.carousel.CarouselLayoutManager;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ import java.util.Locale;
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
+import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 
 public class EditFragment extends Fragment {
@@ -58,7 +64,7 @@ public class EditFragment extends Fragment {
     private EditFragmentViewModel mEditFragmentViewModel;
     private RealEstate mRealEstate;
     Long mRealEstateId;
-    List<Uri> mUriList = new ArrayList<>();
+    List<Photo> mPhotoList = new ArrayList<>();
 
 
     @Override
@@ -112,9 +118,19 @@ public class EditFragment extends Fragment {
             @Override
             public void onChanged(RealEstate realEstate) {
                 mRealEstate = realEstate;
-                initUi();
-                initToolbar();
-                initButton();
+                mEditFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), new Observer<List<Photo>>() {
+                    @Override
+                    public void onChanged(List<Photo> photos) {
+                        mPhotoList = photos;
+
+                        initUi();
+                        initRecyclerView();
+                        initToolbar();
+                        initButton();
+
+                        mBinding.photoCarouselEmptyEditFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
+                    }
+                });
             }
         });
     }
@@ -146,6 +162,27 @@ public class EditFragment extends Fragment {
         } else {
             mPriceEditText.setText("");
         }
+
+    }
+
+    private void initRecyclerView(){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        EditFragmentPhotoAdapter.OnRemovePhotoClickListener removePhotoClickListener = new EditFragmentPhotoAdapter.OnRemovePhotoClickListener() {
+            @Override
+            public void onRemoveClick(int position) {
+                mPhotoList.remove(position);
+                Log.d("Vérification Liste", "Taille : " + mPhotoList.size());
+                mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
+                if (mPhotoList.isEmpty()){
+                    mBinding.photoCarouselEmptyEditFragment.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+        EditFragmentPhotoAdapter editFragmentPhotoAdapter = new EditFragmentPhotoAdapter(mPhotoList, removePhotoClickListener);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
+        mRecyclerViewPhoto.addItemDecoration(dividerItemDecoration);
+        mRecyclerViewPhoto.setLayoutManager(layoutManager);
+        mRecyclerViewPhoto.setAdapter(editFragmentPhotoAdapter);
     }
 
     private void initButton(){
@@ -191,6 +228,13 @@ public class EditFragment extends Fragment {
                 }
                 updatedRealEstate.setPhoto("TODO");
 
+                mEditFragmentViewModel.deleteAllPhotos(mRealEstateId);
+                for (Photo photo2 : mPhotoList) {
+                    mEditFragmentViewModel.insertPhoto(photo2);
+                    Log.d("Vérification Liste", "Taille : " + mPhotoList.size());
+                }
+
+
                 mEditFragmentViewModel.updateRealEstate(updatedRealEstate);
                 getFragmentManager().popBackStack();
             }
@@ -220,12 +264,20 @@ public class EditFragment extends Fragment {
             if (clipData != null){
                 for (int i = 0; i < clipData.getItemCount(); i++){
                     Uri imageUri = clipData.getItemAt(i).getUri();
-                    mUriList.add(imageUri);
+                    Photo photo = new Photo();
+                    photo.setUriPhoto(imageUri);
+                    photo.setRealEstateId(mRealEstateId);
+                    mPhotoList.add(photo);
                 }
             } else {
                 Uri imageUri = data.getData();
-                mUriList.add(imageUri);
+                Photo photo = new Photo();
+                photo.setUriPhoto(imageUri);
+                photo.setRealEstateId(mRealEstateId);
+                mPhotoList.add(photo);
             }
+            mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
+            mBinding.photoCarouselEmptyEditFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
         }
     }
 }

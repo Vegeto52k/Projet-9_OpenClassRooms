@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -34,4 +35,10 @@ public interface PhotoDao {
 
     @Query("SELECT * FROM photo WHERE id = :photoId")
     LiveData<Photo> getPhoto(long photoId);
+
+    @Query("SELECT * FROM photo WHERE realEstateId = :realEstateId")
+    LiveData<List<Photo>> getListPhotoToRealEstate(long realEstateId);
+
+    @Query("DELETE FROM photo WHERE realEstateId = :realEstateId")
+    void deleteAllPhotos(long realEstateId);
 }

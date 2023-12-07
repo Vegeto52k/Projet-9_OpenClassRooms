@@ -320,9 +320,22 @@
             android:layout_height="200sp"
             android:layout_margin="4dp"
             android:orientation="horizontal"
+            tools:listitem="@layout/item_carousel_photo_edit_fragment"
             app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_fragment_media" />
+
+        <TextView
+            android:id="@+id/photo_carousel_empty_edit_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="Empty"
+            app:layout_constraintTop_toBottomOf="@id/edit_fragment_media"
+            app:layout_constraintBottom_toTopOf="@id/select_photos_button_edit_fragment"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <Button
             android:id="@+id/select_photos_button_edit_fragment"

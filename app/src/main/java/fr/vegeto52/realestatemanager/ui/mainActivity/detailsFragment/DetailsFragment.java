@@ -9,6 +9,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
@@ -27,6 +29,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import fr.vegeto52.realestatemanager.BuildConfig;
@@ -35,6 +38,7 @@ import fr.vegeto52.realestatemanager.api.MapsStaticApi;
 import fr.vegeto52.realestatemanager.api.RetrofitService;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentDetailsBinding;
+import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragment;
 import okhttp3.ResponseBody;
@@ -63,6 +67,7 @@ public class DetailsFragment extends Fragment {
     private RealEstate mRealEstate;
     Long mRealEstateId;
     String MAPS_API_KEY = BuildConfig.MAPS_API_KEY;
+    private List<Photo> mPhotoList;
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -144,8 +149,16 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onChanged(RealEstate realEstate) {
                     mRealEstate = realEstate;
-                    initUi();
-                    initToolbar();
+
+                    mDetailsFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), new Observer<List<Photo>>() {
+                        @Override
+                        public void onChanged(List<Photo> photoList) {
+                            mPhotoList = photoList;
+                            initUi();
+                            initRecyclerView();
+                            initToolbar();
+                        }
+                    });
                 }
             });
     }
@@ -169,7 +182,16 @@ public class DetailsFragment extends Fragment {
         }
 
         initStaticMapsApi();
-    //    initCarouselPhoto();
+    }
+
+    private void initRecyclerView(){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        DetailsFragmentPhotoAdapter detailsFragmentPhotoAdapter = new DetailsFragmentPhotoAdapter(mPhotoList);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
+        mRecyclerViewPhoto.addItemDecoration(dividerItemDecoration);
+        mRecyclerViewPhoto.setLayoutManager(layoutManager);
+        mRecyclerViewPhoto.setAdapter(detailsFragmentPhotoAdapter);
+        mBinding.photoCarouselEmptyDetailsFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void initStaticMapsApi(){
@@ -196,15 +218,5 @@ public class DetailsFragment extends Fragment {
                 }
             });
         }
-    }
-
-    private void initCarouselPhoto(){
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("https://www.facilogi.com/blog/wp-content/uploads/2019/03/qualifier-un-bien-immobilier-1.jpg");
-        arrayList.add("https://e-immobilier.credit-agricole.fr/var/caeimmo/storage/images/conseils/marche/y-a-t-il-une-bonne-saison-pour-acheter-un-bien-immobilier/22818-1-fre-FR/Y-a-t-il-une-bonne-saison-pour-acheter-un-bien-immobilier.jpg");
-        arrayList.add("https://media.paruvendu.fr/cms/pictures//2015120215362761.jpg");
-
-        DetailsFragmentPhotoAdapter detailsFragmentPhotoAdapter = new DetailsFragmentPhotoAdapter(getContext(), arrayList);
-        mRecyclerViewPhoto.setAdapter(detailsFragmentPhotoAdapter);
     }
 }

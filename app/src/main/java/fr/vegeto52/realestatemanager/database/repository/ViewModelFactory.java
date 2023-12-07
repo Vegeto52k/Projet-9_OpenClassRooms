@@ -45,10 +45,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new ListViewViewModel(mRealEstateRoomRepository);
         }
         if (modelClass.isAssignableFrom(DetailsFragmentViewModel.class)){
-            return (T) new DetailsFragmentViewModel(mRealEstateRoomRepository);
+            return (T) new DetailsFragmentViewModel(mRealEstateRoomRepository, mPhotoRoomRepository);
         }
         if (modelClass.isAssignableFrom(EditFragmentViewModel.class)){
-            return (T) new EditFragmentViewModel(mRealEstateRoomRepository);
+            return (T) new EditFragmentViewModel(mRealEstateRoomRepository, mPhotoRoomRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
