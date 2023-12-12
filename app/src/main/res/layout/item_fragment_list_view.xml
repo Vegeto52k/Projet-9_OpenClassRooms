@@ -20,7 +20,7 @@
 
 
     <TextView
-        android:id="@+id/name_real_estate_item"
+        android:id="@+id/type_real_estate_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
@@ -41,7 +41,7 @@
         android:singleLine="true"
         android:layout_margin="4dp"
         app:layout_constraintLeft_toRightOf="@id/photo_real_estate_item"
-        app:layout_constraintTop_toBottomOf="@id/name_real_estate_item"
+        app:layout_constraintTop_toBottomOf="@id/type_real_estate_item"
         tools:text="Liverpool" />
 
      <TextView

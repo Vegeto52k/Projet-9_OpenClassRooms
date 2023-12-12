@@ -167,20 +167,24 @@ public class DetailsFragment extends Fragment {
         mTextDescription.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "Description not provided");
         mTextAdress.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "Address not provided");
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        mTextSurface.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? decimalFormat.format(mRealEstate.getSurface()) + " sq ft" : "Surface not provided");
-        mTextNumberOfRooms.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
+    //    mTextSurface.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? decimalFormat.format(mRealEstate.getSurface()) + " sq ft" : "Surface not provided");
+        mTextSurface.setText((mRealEstate.getSurface() != null) ? (decimalFormat.format(mRealEstate.getSurface()) + " sq ft") : "Surface not provided");
+    //    mTextNumberOfRooms.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
+        mTextNumberOfRooms.setText((mRealEstate.getNumberOfRooms() != null) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
         mTextPointsOfInterest.setText(!TextUtils.isEmpty(mRealEstate.getPointsOfInterest()) ? mRealEstate.getPointsOfInterest() : "Points of interest not provided");
         mTextDateOfEntry.setText(!TextUtils.isEmpty(mRealEstate.getDateOfEntry()) ? mRealEstate.getDateOfEntry() : "Date of entry not provided");
         mTextDateOfSale.setText(!TextUtils.isEmpty(mRealEstate.getDateOfSale()) ? mRealEstate.getDateOfSale() : "Available");
         mTextAgent.setText(!TextUtils.isEmpty(mRealEstate.getAgent()) ? mRealEstate.getAgent() : "Agent not provided");
-        if (!TextUtils.isEmpty(String.valueOf(mRealEstate.getPrice()))){
-            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-            String priceFormate = numberFormat.format(mRealEstate.getPrice());
-            mTextPrice.setText("$" + priceFormate);
-        } else {
-            mTextPrice.setText("");
-        }
-
+//        if (!TextUtils.isEmpty(String.valueOf(mRealEstate.getPrice())) || mRealEstate.getPrice() == 0){
+//            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+//            String priceFormate = numberFormat.format(mRealEstate.getPrice());
+//            mTextPrice.setText("$" + priceFormate);
+//        } else {
+//            mTextPrice.setText("");
+//        }
+        Double price = mRealEstate.getPrice();
+        String priceText =  (price != null) ? ("$" + NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "Price not provided";
+        mTextPrice.setText(priceText);
         initStaticMapsApi();
     }
 

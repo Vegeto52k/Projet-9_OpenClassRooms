@@ -20,9 +20,9 @@ public class RealEstate {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private String type;
-    private double price;
-    private double surface;
-    private int numberOfRooms;
+    private Double price;
+    private Double surface;
+    private Integer numberOfRooms;
     private String description;
     private String photo;
     private String address;
@@ -33,7 +33,7 @@ public class RealEstate {
     private String agent;
 
     @Ignore
-    public RealEstate(long id, String type, double price, double surface, int numberOfRooms, String description, String photo, String address, String pointsOfInterest, boolean statut, String dateOfEntry, String dateOfSale, String agent) {
+    public RealEstate(long id, String type, Double price, Double surface, Integer numberOfRooms, String description, String photo, String address, String pointsOfInterest, boolean statut, String dateOfEntry, String dateOfSale, String agent) {
         this.id = id;
         this.type = type;
         this.price = price;
@@ -61,6 +61,7 @@ public class RealEstate {
         this.id = id;
     }
 
+    @Nullable
     public String getType() {
         return type;
     }
@@ -69,30 +70,34 @@ public class RealEstate {
         this.type = type;
     }
 
-    public double getPrice() {
+    @Nullable
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public double getSurface() {
+    @Nullable
+    public Double getSurface() {
         return surface;
     }
 
-    public void setSurface(double surface) {
+    public void setSurface(Double surface) {
         this.surface = surface;
     }
 
-    public int getNumberOfRooms() {
+    @Nullable
+    public Integer getNumberOfRooms() {
         return numberOfRooms;
     }
 
-    public void setNumberOfRooms(int numberOfRooms) {
+    public void setNumberOfRooms(Integer numberOfRooms) {
         this.numberOfRooms = numberOfRooms;
     }
 
+    @Nullable
     public String getDescription() {
         return description;
     }
@@ -101,6 +106,7 @@ public class RealEstate {
         this.description = description;
     }
 
+    @Nullable
     public String getPhoto() {
         return photo;
     }
@@ -109,6 +115,7 @@ public class RealEstate {
         this.photo = photo;
     }
 
+    @Nullable
     public String getAddress() {
         return address;
     }
@@ -117,6 +124,7 @@ public class RealEstate {
         this.address = address;
     }
 
+    @Nullable
     public String getPointsOfInterest() {
         return pointsOfInterest;
     }
@@ -133,6 +141,7 @@ public class RealEstate {
         this.statut = statut;
     }
 
+
     public String getDateOfEntry() {
         return dateOfEntry;
     }
@@ -141,6 +150,7 @@ public class RealEstate {
         this.dateOfEntry = dateOfEntry;
     }
 
+    @Nullable
     public String getDateOfSale() {
         return dateOfSale;
     }
@@ -149,6 +159,7 @@ public class RealEstate {
         this.dateOfSale = dateOfSale;
     }
 
+    @Nullable
     public String getAgent() {
         return agent;
     }

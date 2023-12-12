@@ -33,10 +33,6 @@ public class PhotoRoomRepository {
         return mPhotoDao.getPhoto(photoId);
     }
 
-//    public void insertPhoto(Photo photo){
-//        Executors.newSingleThreadExecutor().execute(() -> mPhotoDao.insert(photo));
-//    }
-
     public void insertPhoto(Photo photo){
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -66,10 +62,6 @@ public class PhotoRoomRepository {
     public LiveData<List<Photo>> getListPhotoToRealEstate(long realEstateId){
         return mPhotoDao.getListPhotoToRealEstate(realEstateId);
     }
-
-//    public void deleteAllPhotos(long realEstateId){
-//        Executors.newSingleThreadExecutor().execute(() -> mPhotoDao.deleteAllPhotos(realEstateId));
-//    }
 
     public void deleteAllPhotos(long realEstateId){
         ExecutorService executor = Executors.newSingleThreadExecutor();

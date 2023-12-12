@@ -1,6 +1,9 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.vegeto52.realestatemanager.R;
+import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 import fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment.DetailsFragment;
 
@@ -28,9 +32,11 @@ import fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment.DetailsFrag
 public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewRealEstateAdapter.ViewHolder> {
 
     private static List<RealEstate> mRealEstateList;
+    private static List<Photo> mPhotoList;
 
-    public ListViewRealEstateAdapter(List<RealEstate> realEstateList) {
+    public ListViewRealEstateAdapter(List<RealEstate> realEstateList, List<Photo> photoList) {
         mRealEstateList = realEstateList;
+        mPhotoList = photoList;
     }
 
     @NonNull
@@ -44,11 +50,6 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.displayRealEstate(mRealEstateList.get(position));
-
-        Glide.with(holder.photoRealEstate.getContext())
-                .load(mRealEstateList.get(position).getPhoto())
-                .centerCrop()
-                .into(holder.photoRealEstate);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +77,7 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView photoRealEstate;
-        public TextView nameRealEstate;
+        public TextView typeRealEstate;
         public TextView cityRealEstate;
         public TextView priceRealEstate;
         public ImageView iconSaleRealEstate;
@@ -86,7 +87,7 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
             super(itemView);
 
             photoRealEstate = itemView.findViewById(R.id.photo_real_estate_item);
-            nameRealEstate = itemView.findViewById(R.id.name_real_estate_item);
+            typeRealEstate = itemView.findViewById(R.id.type_real_estate_item);
             cityRealEstate = itemView.findViewById(R.id.city_real_estate_item);
             priceRealEstate = itemView.findViewById(R.id.price_real_estate_item);
             iconSaleRealEstate = itemView.findViewById(R.id.icon_sale_real_estate_item);
@@ -96,16 +97,33 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
 
             id = realEstate.getId();
 
-            nameRealEstate.setText(realEstate.getType() != null ? realEstate.getType() : "Name not provided");
-            cityRealEstate.setText(realEstate.getAddress() != null ? realEstate.getAddress() : "Address not provided");
-            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-            String priceFormate = numberFormat.format(realEstate.getPrice());
-            priceRealEstate.setText("$" + priceFormate);
+            typeRealEstate.setText(!TextUtils.isEmpty(realEstate.getType()) ? realEstate.getType() : "Type not provided");
+            cityRealEstate.setText(!TextUtils.isEmpty(realEstate.getAddress()) ? realEstate.getAddress() : "Address not provided");
+            Double price = realEstate.getPrice();
+            String priceText = (price != null) ? ("$" + NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "Price not provided";
+            priceRealEstate.setText(priceText);
             if (realEstate.isStatut()){
                 iconSaleRealEstate.setImageResource(R.drawable.baseline_cancel_24);
             } else {
                 iconSaleRealEstate.setImageResource(R.drawable.baseline_check_circle_24);
             }
+
+            Photo firstPhoto = getFirstPhotoForRealEstate(id);
+            if (firstPhoto != null){
+                Glide.with(itemView.getContext())
+                        .load(firstPhoto.getUriPhoto())
+                        .centerCrop()
+                        .into(photoRealEstate);
+            }
+        }
+
+        private Photo getFirstPhotoForRealEstate(long realEstateId){
+            for (Photo photo : mPhotoList){
+                if (photo.getRealEstateId() == realEstateId){
+                    return photo;
+                }
+            }
+            return null;
         }
     }
 }

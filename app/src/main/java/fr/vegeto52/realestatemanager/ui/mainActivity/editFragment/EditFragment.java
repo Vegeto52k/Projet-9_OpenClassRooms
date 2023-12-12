@@ -148,20 +148,26 @@ public class EditFragment extends Fragment {
         mTypeEditText.setText(!TextUtils.isEmpty(mRealEstate.getType()) ? mRealEstate.getType() : "");
         mDescriptionEditText.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "");
         mAddressEditText.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "");
-        mSurfaceEditText.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? String.valueOf(mRealEstate.getSurface()) : "");
-        mNumberOfRoomsEditText.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "");
+    //    mSurfaceEditText.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? String.valueOf(mRealEstate.getSurface()) : "");
+        mSurfaceEditText.setText((mRealEstate.getSurface() != null) ? String.valueOf(mRealEstate.getSurface()) : "");
+    //    mNumberOfRoomsEditText.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "");
+        mNumberOfRoomsEditText.setText((mRealEstate.getNumberOfRooms() != null) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "");
         mPointsOfInterestEditText.setText(!TextUtils.isEmpty(mRealEstate.getPointsOfInterest()) ? mRealEstate.getPointsOfInterest() : "");
         mDateOfEntryEditText.setText(!TextUtils.isEmpty(mRealEstate.getDateOfEntry()) ? mRealEstate.getDateOfEntry() : "");
         mDateOfSaleEditText.setText(!TextUtils.isEmpty(mRealEstate.getDateOfSale()) ? mRealEstate.getDateOfSale() : "");
         mAgentEditText.setText(!TextUtils.isEmpty(mRealEstate.getAgent()) ? mRealEstate.getAgent() : "");
-        if (!TextUtils.isEmpty(String.valueOf(mRealEstate.getPrice()))){
-            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-            String priceFormate = numberFormat.format(mRealEstate.getPrice());
-            priceFormate = priceFormate.replaceAll(",", "");
-            mPriceEditText.setText(priceFormate);
-        } else {
-            mPriceEditText.setText("");
-        }
+//        if (!TextUtils.isEmpty(String.valueOf(mRealEstate.getPrice()))){
+//            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+//            String priceFormate = numberFormat.format(mRealEstate.getPrice());
+//            priceFormate = priceFormate.replaceAll(",", "");
+//            mPriceEditText.setText(priceFormate);
+//        } else {
+//            mPriceEditText.setText("");
+//        }
+        Double price = mRealEstate.getPrice();
+        String priceText = (price != null) ? (NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "";
+        priceText = priceText.replaceAll(",", "");
+        mPriceEditText.setText(priceText);
 
     }
 
@@ -201,27 +207,34 @@ public class EditFragment extends Fragment {
                 updatedRealEstate.setType(mTypeEditText.getText().toString());
                 updatedRealEstate.setDescription(mDescriptionEditText.getText().toString());
                 updatedRealEstate.setAddress(mAddressEditText.getText().toString());
-                try {
-                    updatedRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
-                } catch (NumberFormatException e){
-                    mSurfaceEditText.setError("Invalid");
-                    return;
+                if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())){
+                    try {
+                        updatedRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
+                    } catch (NumberFormatException e){
+                        mSurfaceEditText.setError("Invalid");
+                        return;
+                    }
                 }
-                try {
-                    updatedRealEstate.setNumberOfRooms(Integer.parseInt(mNumberOfRoomsEditText.getText().toString()));
-                } catch (NumberFormatException e){
-                    mNumberOfRoomsEditText.setError("Invalid");
+                if (!TextUtils.isEmpty(mNumberOfRoomsEditText.getText().toString().trim())){
+                    try {
+                        updatedRealEstate.setNumberOfRooms(Integer.parseInt(mNumberOfRoomsEditText.getText().toString()));
+                    } catch (NumberFormatException e){
+                        mNumberOfRoomsEditText.setError("Invalid");
+                        return;
+                    }
                 }
                 updatedRealEstate.setPointsOfInterest(mPointsOfInterestEditText.getText().toString());
                 updatedRealEstate.setDateOfEntry(mDateOfEntryEditText.getText().toString());
                 updatedRealEstate.setDateOfSale(mDateOfSaleEditText.getText().toString());
                 updatedRealEstate.setAgent(mAgentEditText.getText().toString());
-                try {
-                    updatedRealEstate.setPrice(Double.parseDouble(mPriceEditText.getText().toString()));
-                } catch (NumberFormatException e) {
-                    mPriceEditText.setError("Invalid");
+                if (!TextUtils.isEmpty(mPriceEditText.getText().toString().trim())){
+                    try {
+                        updatedRealEstate.setPrice(Double.parseDouble(mPriceEditText.getText().toString()));
+                    } catch (NumberFormatException e) {
+                        mPriceEditText.setError("Invalid");
+                    }
                 }
-                if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString())){
+                if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString().trim())){
                     updatedRealEstate.setStatut(true);
                 } else {
                     updatedRealEstate.setStatut(false);
@@ -231,7 +244,6 @@ public class EditFragment extends Fragment {
                 mEditFragmentViewModel.deleteAllPhotos(mRealEstateId);
                 for (Photo photo2 : mPhotoList) {
                     mEditFragmentViewModel.insertPhoto(photo2);
-                    Log.d("Vérification Liste", "Taille : " + mPhotoList.size());
                 }
 
 

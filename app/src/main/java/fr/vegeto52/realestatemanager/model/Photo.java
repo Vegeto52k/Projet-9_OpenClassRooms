@@ -25,14 +25,12 @@ public class Photo {
     private long id;
     @TypeConverters(Converters.class)
     private Uri uriPhoto;
-    private String name;
     private long realEstateId;
 
     @Ignore
-    public Photo(long id, Uri uriPhoto, String name, long realEstateId) {
+    public Photo(long id, Uri uriPhoto, long realEstateId) {
         this.id = id;
         this.uriPhoto = uriPhoto;
-        this.name = name;
         this.realEstateId = realEstateId;
     }
 
@@ -53,14 +51,6 @@ public class Photo {
 
     public void setUriPhoto(Uri uriPhoto) {
         this.uriPhoto = uriPhoto;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public long getRealEstateId() {
