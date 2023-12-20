@@ -1,13 +1,19 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.editFragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,24 +31,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.google.android.material.carousel.CarouselLayoutManager;
-
+import java.io.ByteArrayOutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import fr.vegeto52.realestatemanager.EditDescriptionDialog;
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
+import fr.vegeto52.realestatemanager.ui.cameraActivity.CameraActivity;
 
-public class EditFragment extends Fragment {
+public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.OnEditDescriptionClickListener, EditDescriptionDialog.OnInputSelected{
 
     private static final int PICK_IMAGES_REQUEST_CODE = 1;
+    private static final int CAMERA_REQUEST_CODE = 2;
+    private static final int MEDIA_LIST_CODE = 3;
 
     FragmentEditBinding mBinding;
     EditText mTypeEditText;
@@ -61,10 +69,13 @@ public class EditFragment extends Fragment {
     Toolbar mToolbar;
     ImageButton mBackButton;
     Button mSelectPhotosButton;
+    Button mTakePhoto;
     private EditFragmentViewModel mEditFragmentViewModel;
     private RealEstate mRealEstate;
     Long mRealEstateId;
     List<Photo> mPhotoList = new ArrayList<>();
+    int mPositionPhoto;
+    String mDescription;
 
 
     @Override
@@ -98,6 +109,7 @@ public class EditFragment extends Fragment {
         mBackButton = view.findViewById(R.id.edit_fragment_back_button);
 
         mSelectPhotosButton = view.findViewById(R.id.select_photos_button_edit_fragment);
+        mTakePhoto = view.findViewById(R.id.take_photo_button_edit_fragment);
 
         Bundle args = getArguments();
         if (args != null){
@@ -177,7 +189,6 @@ public class EditFragment extends Fragment {
             @Override
             public void onRemoveClick(int position) {
                 mPhotoList.remove(position);
-                Log.d("Vérification Liste", "Taille : " + mPhotoList.size());
                 mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
                 if (mPhotoList.isEmpty()){
                     mBinding.photoCarouselEmptyEditFragment.setVisibility(View.VISIBLE);
@@ -185,6 +196,7 @@ public class EditFragment extends Fragment {
             }
         };
         EditFragmentPhotoAdapter editFragmentPhotoAdapter = new EditFragmentPhotoAdapter(mPhotoList, removePhotoClickListener);
+        editFragmentPhotoAdapter.setOnEditDescriptionClickListener(this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
         mRecyclerViewPhoto.addItemDecoration(dividerItemDecoration);
         mRecyclerViewPhoto.setLayoutManager(layoutManager);
@@ -258,13 +270,37 @@ public class EditFragment extends Fragment {
                 openGallery();
             }
         });
+
+        mTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCamera();
+            }
+        });
+    }
+
+    private void openCamera(){
+        Intent intent = new Intent(getContext(), CameraActivity.class);
+        startActivityForResult(intent, MEDIA_LIST_CODE);
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null){
+//            Log.d("Vérification Camera", "Test : ");
+//            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+//        }
     }
 
     private void openGallery(){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(intent, PICK_IMAGES_REQUEST_CODE);
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            startActivityForResult(intent, PICK_IMAGES_REQUEST_CODE);
+    }
+
+    private Uri getImageUri(Context context, Bitmap bitmap){
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
     }
 
     @Override
@@ -290,6 +326,40 @@ public class EditFragment extends Fragment {
             }
             mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
             mBinding.photoCarouselEmptyEditFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null){
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                Uri imageUri = getImageUri(requireContext(), imageBitmap);
+                Photo photo = new Photo();
+                photo.setUriPhoto(imageUri);
+                photo.setRealEstateId(mRealEstateId);
+                mPhotoList.add(photo);
+                mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
+                mBinding.photoCarouselEmptyEditFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
+            }
         }
+    }
+
+    @Override
+    public void onEditDescriptionClick(int position) {
+        mPositionPhoto = position;
+        EditDescriptionDialog editDescriptionDialog = new EditDescriptionDialog();
+        editDescriptionDialog.setTargetFragment(EditFragment.this, 0);
+        Bundle args = new Bundle();
+        args.putInt("position", position);
+        editDescriptionDialog.setArguments(args);
+        editDescriptionDialog.show(getFragmentManager(), "EditDescriptionDialog");
+    }
+
+    @Override
+    public void sendInput(String input) {
+        mDescription = input;
+        if (TextUtils.isEmpty(input)){
+            mPhotoList.get(mPositionPhoto).setDescription(null);
+        } else {
+            mPhotoList.get(mPositionPhoto).setDescription(mDescription);
+        }
+        mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
     }
 }

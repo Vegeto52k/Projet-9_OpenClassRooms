@@ -21,6 +21,9 @@ public interface RealEstateDao {
     void insert(RealEstate realEstate);
 
     @Insert
+    long insertAndGetId(RealEstate realEstate);
+
+    @Insert
     void insertList(List<RealEstate> realEstateList);
 
     @Update

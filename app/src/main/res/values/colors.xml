@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#0000ff</color>
     <color name="beige_light">#e6decc</color>
+    <color name="transparentBlack75">#75000000</color>
 </resources>

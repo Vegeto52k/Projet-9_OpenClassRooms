@@ -34,6 +34,7 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
     private static List<RealEstate> mRealEstateList;
     private static List<Photo> mPhotoList;
 
+
     public ListViewRealEstateAdapter(List<RealEstate> realEstateList, List<Photo> photoList) {
         mRealEstateList = realEstateList;
         mPhotoList = photoList;

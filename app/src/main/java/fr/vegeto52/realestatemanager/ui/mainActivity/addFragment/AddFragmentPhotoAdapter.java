@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager.ui.mainActivity.editFragment;
+package fr.vegeto52.realestatemanager.ui.mainActivity.addFragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,55 +13,51 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.model.Photo;
 
 /**
- * Created by Vegeto52-PC on 05/12/2023.
+ * Created by Vegeto52-PC on 19/12/2023.
  */
-public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentPhotoAdapter.ViewHolder>  {
+public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPhotoAdapter.ViewHolder> {
+
+    public OnEditDescriptionClickListener mEditDescriptionClickListener;
+    public OnRemovePhotoClickListener mRemovePhotoClickListener;
 
     public interface OnEditDescriptionClickListener{
         void onEditDescriptionClick(int position);
     }
 
-    public OnEditDescriptionClickListener mEditDescriptionClickListener;
+    public interface OnRemovePhotoClickListener{
+        void onRemoveClick(int position);
+    }
 
     public void setOnEditDescriptionClickListener(OnEditDescriptionClickListener listener){
         mEditDescriptionClickListener = listener;
     }
 
     private static List<Photo> mPhotoList;
-    private OnRemovePhotoClickListener mRemovePhotoClickListener;
-    String mInputDescription;
 
-    public interface OnRemovePhotoClickListener{
-        void onRemoveClick(int position);
-    }
-
-    public EditFragmentPhotoAdapter(List<Photo> photoList, OnRemovePhotoClickListener removePhotoClickListener){
+    public AddFragmentPhotoAdapter(List<Photo> photoList, OnRemovePhotoClickListener removePhotoClickListener) {
         mPhotoList = photoList;
         mRemovePhotoClickListener = removePhotoClickListener;
     }
 
     @NonNull
     @Override
-    public EditFragmentPhotoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AddFragmentPhotoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_carousel_photo_edit_fragment, parent, false);
+                .inflate(R.layout.item_carousel_photo_add_fragment, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EditFragmentPhotoAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AddFragmentPhotoAdapter.ViewHolder holder, int position) {
         holder.displayPhoto(mPhotoList.get(position));
-
-    //    Glide.with(holder.photoCarousel.getContext())
-    //            .load(mPhotoList.get(position).getUriPhoto())
-    //            .centerCrop()
-    //            .into(holder.photoCarousel);
 
         holder.deleteButtonCarousel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,10 +84,6 @@ public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentP
         return mPhotoList.size();
     }
 
-    public void setOnRemovePhotoClickLister(OnRemovePhotoClickListener listener){
-        mRemovePhotoClickListener = listener;
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView photoCarousel;
@@ -103,11 +95,11 @@ public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentP
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            photoCarousel = itemView.findViewById(R.id.item_photo_carousel_edit_fragment);
-            deleteButtonCarousel = itemView.findViewById(R.id.item_photo_delete_button_edit_fragment);
-            editDescription = itemView.findViewById(R.id.item_photo_edit_description_button_edit_fragment);
-            blackBand = itemView.findViewById(R.id.item_photo_black_band_edit_fragment);
-            textDescription = itemView.findViewById(R.id.item_photo_text_description_edit_fragment);
+            photoCarousel = itemView.findViewById(R.id.item_photo_carousel_add_fragment);
+            deleteButtonCarousel = itemView.findViewById(R.id.item_photo_delete_button_add_fragment);
+            editDescription = itemView.findViewById(R.id.item_photo_edit_description_button_add_fragment);
+            blackBand = itemView.findViewById(R.id.item_photo_black_band_add_fragment);
+            textDescription = itemView.findViewById(R.id.item_photo_text_description_add_fragment);
         }
 
         public void displayPhoto(Photo photo){

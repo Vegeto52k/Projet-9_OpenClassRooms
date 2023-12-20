@@ -133,14 +133,6 @@ public class DetailsFragment extends Fragment {
                 }
             }
         });
-//        ((AppCompatActivity) requireActivity()).setSupportActionBar(mToolbar);
-//        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                requireActivity().onBackPressed();
-//            }
-//        });
     }
 
     private void initViewModel(){
@@ -168,7 +160,7 @@ public class DetailsFragment extends Fragment {
         mTextAdress.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "Address not provided");
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
     //    mTextSurface.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? decimalFormat.format(mRealEstate.getSurface()) + " sq ft" : "Surface not provided");
-        mTextSurface.setText((mRealEstate.getSurface() != null) ? (decimalFormat.format(mRealEstate.getSurface()) + " sq ft") : "Surface not provided");
+        mTextSurface.setText((mRealEstate.getSurface() != null) ? (decimalFormat.format(mRealEstate.getSurface()) + " m²") : "Surface not provided");
     //    mTextNumberOfRooms.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
         mTextNumberOfRooms.setText((mRealEstate.getNumberOfRooms() != null) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
         mTextPointsOfInterest.setText(!TextUtils.isEmpty(mRealEstate.getPointsOfInterest()) ? mRealEstate.getPointsOfInterest() : "Points of interest not provided");

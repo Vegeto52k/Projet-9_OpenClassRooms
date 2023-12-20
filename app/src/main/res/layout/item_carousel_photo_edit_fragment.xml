@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="200dp"
     android:layout_height="match_parent"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
     android:foreground="?attr/selectableItemBackground"
-    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
+    tools:targetApi="33">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="200dp"
@@ -23,14 +25,48 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <View
+            android:id="@+id/item_photo_black_band_edit_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#80000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/item_photo_text_description_edit_fragment"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="@id/item_photo_black_band_edit_fragment"
+            app:layout_constraintTop_toTopOf="@id/item_photo_black_band_edit_fragment"
+            app:layout_constraintLeft_toLeftOf="@id/item_photo_black_band_edit_fragment"
+            app:layout_constraintRight_toRightOf="@id/item_photo_black_band_edit_fragment"/>
+
         <ImageButton
             android:id="@+id/item_photo_delete_button_edit_fragment"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="4dp"
             android:src="@drawable/baseline_delete_24"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            android:contentDescription="Delete photo"/>
+
+        <ImageButton
+            android:id="@+id/item_photo_edit_description_button_edit_fragment"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="4dp"
+            android:src="@drawable/baseline_edit_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:contentDescription="Add description"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

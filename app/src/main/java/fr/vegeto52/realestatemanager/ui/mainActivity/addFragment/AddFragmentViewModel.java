@@ -13,14 +13,24 @@ import fr.vegeto52.realestatemanager.model.RealEstate;
 public class AddFragmentViewModel extends ViewModel {
 
     private final RealEstateRoomRepository mRealEstateRoomRepository;
+    private final PhotoRoomRepository mPhotoRoomRepository;
 
 
-    public AddFragmentViewModel(RealEstateRoomRepository realEstateRoomRepository) {
+    public AddFragmentViewModel(RealEstateRoomRepository realEstateRoomRepository, PhotoRoomRepository photoRoomRepository) {
         mRealEstateRoomRepository = realEstateRoomRepository;
+        mPhotoRoomRepository = photoRoomRepository;
     }
 
     public void insertRealEstate(RealEstate realEstate){
         mRealEstateRoomRepository.insertRealEstate(realEstate);
+    }
+
+    public long insertRealEstateAndGetId(RealEstate realEstate){
+        return mRealEstateRoomRepository.insertRealEstateAndGetId(realEstate);
+    }
+
+    public void insertPhoto(Photo photo){
+        mPhotoRoomRepository.insertPhoto(photo);
     }
 
 }
