@@ -35,11 +35,13 @@ import fr.vegeto52.realestatemanager.databinding.FragmentAddBinding;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
+import fr.vegeto52.realestatemanager.ui.cameraActivity.CameraActivity;
 import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragment;
 
 public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnEditDescriptionClickListener, EditDescriptionDialog.OnInputSelected {
 
     private static final int PICK_IMAGES_REQUEST_CODE = 1;
+    private static final int CAMERA_ACTIVITY_REQUEST_CODE = 100;
 
     FragmentAddBinding mBinding;
     EditText mTypeEditText;
@@ -58,6 +60,7 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
     ImageButton mBackButton;
     RecyclerView mRecyclerViewViewPhoto;
     Button mSelectPhotosButton;
+    Button mTakePhoto;
     List<Photo> mPhotoList = new ArrayList<>();
     String mDescription;
     int mPositionPhoto;
@@ -88,6 +91,7 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         mRecyclerViewViewPhoto = view.findViewById(R.id.recyclerview_photo_add_fragment);
 
         mSelectPhotosButton = view.findViewById(R.id.select_photos_button_add_fragment);
+        mTakePhoto = view.findViewById(R.id.take_photo_button_add_fragment);
         mSaveButton = view.findViewById(R.id.save_button_add_fragment);
         mCancelButton = view.findViewById(R.id.cancel_button_add_fragment);
 
@@ -209,6 +213,13 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
                 openGallery();
             }
         });
+
+        mTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCamera();
+            }
+        });
     }
 
     private void openGallery(){
@@ -216,6 +227,11 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(intent, PICK_IMAGES_REQUEST_CODE);
+    }
+
+    private void openCamera(){
+        Intent intent = new Intent(getContext(), CameraActivity.class);
+        startActivityForResult(intent, CAMERA_ACTIVITY_REQUEST_CODE);
     }
 
     @Override
@@ -235,6 +251,15 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
                 Uri imageUri = data.getData();
                 Photo photo = new Photo();
                 photo.setUriPhoto(imageUri);
+                mPhotoList.add(photo);
+            }
+            mRecyclerViewViewPhoto.getAdapter().notifyDataSetChanged();
+            mBinding.photoCarouselEmptyAddFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
+        } else if (requestCode == CAMERA_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            List<Uri> capturedPhotoUris = data.getParcelableArrayListExtra("capturedPhotoUris");
+            for (Uri uri : capturedPhotoUris) {
+                Photo photo = new Photo();
+                photo.setUriPhoto(uri);
                 mPhotoList.add(photo);
             }
             mRecyclerViewViewPhoto.getAdapter().notifyDataSetChanged();

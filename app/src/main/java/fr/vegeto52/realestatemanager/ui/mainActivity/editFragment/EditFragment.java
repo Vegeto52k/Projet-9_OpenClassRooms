@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import java.io.ByteArrayOutputStream;
+import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +50,7 @@ import fr.vegeto52.realestatemanager.ui.cameraActivity.CameraActivity;
 public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.OnEditDescriptionClickListener, EditDescriptionDialog.OnInputSelected{
 
     private static final int PICK_IMAGES_REQUEST_CODE = 1;
-    private static final int CAMERA_REQUEST_CODE = 2;
-    private static final int MEDIA_LIST_CODE = 3;
+    private static final int CAMERA_ACTIVITY_REQUEST_CODE = 100;
 
     FragmentEditBinding mBinding;
     EditText mTypeEditText;
@@ -180,7 +180,6 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         String priceText = (price != null) ? (NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "";
         priceText = priceText.replaceAll(",", "");
         mPriceEditText.setText(priceText);
-
     }
 
     private void initRecyclerView(){
@@ -281,12 +280,7 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
 
     private void openCamera(){
         Intent intent = new Intent(getContext(), CameraActivity.class);
-        startActivityForResult(intent, MEDIA_LIST_CODE);
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null){
-//            Log.d("Vérification Camera", "Test : ");
-//            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
-//        }
+        startActivityForResult(intent, CAMERA_ACTIVITY_REQUEST_CODE);
     }
 
     private void openGallery(){
@@ -294,13 +288,6 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             startActivityForResult(intent, PICK_IMAGES_REQUEST_CODE);
-    }
-
-    private Uri getImageUri(Context context, Bitmap bitmap){
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
     }
 
     @Override
@@ -326,18 +313,16 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
             }
             mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
             mBinding.photoCarouselEmptyEditFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
-        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-            if (extras != null){
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                Uri imageUri = getImageUri(requireContext(), imageBitmap);
+        } else if (requestCode == CAMERA_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            List<Uri> capturedPhotoUris = data.getParcelableArrayListExtra("capturedPhotoUris");
+            for (Uri uri : capturedPhotoUris){
                 Photo photo = new Photo();
-                photo.setUriPhoto(imageUri);
+                photo.setUriPhoto(uri);
                 photo.setRealEstateId(mRealEstateId);
                 mPhotoList.add(photo);
-                mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
-                mBinding.photoCarouselEmptyEditFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
             }
+            mRecyclerViewPhoto.getAdapter().notifyDataSetChanged();
+            mBinding.photoCarouselEmptyEditFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
         }
     }
 
