@@ -122,7 +122,7 @@ public class DetailsFragment extends Fragment {
             public void onClick(View view) {
                 Fragment fragment = new EditFragment();
                 Bundle args = new Bundle();
-                args.putLong("idRealEstate", mRealEstate.getId());
+                args.putLong("idRealEstate", mRealEstateId);
                 fragment.setArguments(args);
                 if (view.getContext() instanceof AppCompatActivity){
                     ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
@@ -141,7 +141,7 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onChanged(RealEstate realEstate) {
                     mRealEstate = realEstate;
-
+                    Log.d("Vérification Details", "Lat & Lng : " + mRealEstate.getLatitude() + " " + mRealEstate.getLongitude());
                     mDetailsFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), new Observer<List<Photo>>() {
                         @Override
                         public void onChanged(List<Photo> photoList) {
@@ -159,21 +159,13 @@ public class DetailsFragment extends Fragment {
         mTextDescription.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "Description not provided");
         mTextAdress.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "Address not provided");
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-    //    mTextSurface.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? decimalFormat.format(mRealEstate.getSurface()) + " sq ft" : "Surface not provided");
         mTextSurface.setText((mRealEstate.getSurface() != null) ? (decimalFormat.format(mRealEstate.getSurface()) + " m²") : "Surface not provided");
-    //    mTextNumberOfRooms.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
         mTextNumberOfRooms.setText((mRealEstate.getNumberOfRooms() != null) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "Number of rooms not provided");
         mTextPointsOfInterest.setText(!TextUtils.isEmpty(mRealEstate.getPointsOfInterest()) ? mRealEstate.getPointsOfInterest() : "Points of interest not provided");
         mTextDateOfEntry.setText(!TextUtils.isEmpty(mRealEstate.getDateOfEntry()) ? mRealEstate.getDateOfEntry() : "Date of entry not provided");
         mTextDateOfSale.setText(!TextUtils.isEmpty(mRealEstate.getDateOfSale()) ? mRealEstate.getDateOfSale() : "Available");
         mTextAgent.setText(!TextUtils.isEmpty(mRealEstate.getAgent()) ? mRealEstate.getAgent() : "Agent not provided");
-//        if (!TextUtils.isEmpty(String.valueOf(mRealEstate.getPrice())) || mRealEstate.getPrice() == 0){
-//            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-//            String priceFormate = numberFormat.format(mRealEstate.getPrice());
-//            mTextPrice.setText("$" + priceFormate);
-//        } else {
-//            mTextPrice.setText("");
-//        }
+
         Double price = mRealEstate.getPrice();
         String priceText =  (price != null) ? ("$" + NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "Price not provided";
         mTextPrice.setText(priceText);
@@ -191,7 +183,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void initStaticMapsApi(){
-        if (mRealEstate.getAddress().equals("Address not provided")){
+        if (TextUtils.isEmpty(mRealEstate.getAddress())){
             mImageApi.setImageResource(R.drawable.baseline_not_listed_location_24);
         } else {
             MapsStaticApi mapsStaticApi = RetrofitService.getRetrofitInstance().create(MapsStaticApi.class);

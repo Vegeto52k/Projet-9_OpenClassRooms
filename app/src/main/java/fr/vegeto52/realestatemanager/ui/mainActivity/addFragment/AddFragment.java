@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +36,7 @@ import fr.vegeto52.realestatemanager.databinding.FragmentAddBinding;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
+import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
 import fr.vegeto52.realestatemanager.ui.cameraActivity.CameraActivity;
 import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragment;
 
@@ -194,16 +196,36 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
                 }
                 newRealEstate.setPhoto("TODO");
 
-                long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
-                
-                if (realEstateId != -1){
-                    for (Photo photo : mPhotoList){
-                        photo.setRealEstateId(realEstateId);
-                        mAddFragmentViewModel.insertPhoto(photo);
+                if (!TextUtils.isEmpty(mAddressEditText.getText().toString())){
+                    mAddFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), getViewLifecycleOwner(), new AddFragmentViewModel.GeocodingCallback() {
+                        @Override
+                        public void onGeocodingComplete(Double latitude, Double longitude) {
+                            newRealEstate.setLatitude(latitude);
+                            newRealEstate.setLongitude(longitude);
+                            long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
+                            if (realEstateId != -1){
+                                for (Photo photo : mPhotoList){
+                                    photo.setRealEstateId(realEstateId);
+                                    mAddFragmentViewModel.insertPhoto(photo);
+                                }
+                            }
+                            if (getFragmentManager() != null){
+                                getFragmentManager().popBackStack();
+                            }
+                        }
+                    });
+                } else {
+                    long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
+                    if (realEstateId != -1){
+                        for (Photo photo : mPhotoList){
+                            photo.setRealEstateId(realEstateId);
+                            mAddFragmentViewModel.insertPhoto(photo);
+                        }
+                    }
+                    if (getFragmentManager() != null){
+                        getFragmentManager().popBackStack();
                     }
                 }
-
-                getFragmentManager().popBackStack();
             }
         });
 

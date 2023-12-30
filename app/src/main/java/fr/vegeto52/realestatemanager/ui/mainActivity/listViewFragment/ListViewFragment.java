@@ -1,7 +1,10 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -11,12 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.List;
 
@@ -25,6 +32,7 @@ import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentListViewBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
+import fr.vegeto52.realestatemanager.ui.locationFragment.LocationFragment;
 import fr.vegeto52.realestatemanager.ui.mainActivity.addFragment.AddFragment;
 
 /**
@@ -32,6 +40,7 @@ import fr.vegeto52.realestatemanager.ui.mainActivity.addFragment.AddFragment;
  */
 public class ListViewFragment extends Fragment {
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FragmentListViewBinding mBinding;
     private RecyclerView mRecyclerView;
     private TextView mListViewEmpty;
@@ -40,6 +49,7 @@ public class ListViewFragment extends Fragment {
     private List<Photo> mPhotoList;
     private Toolbar mToolbar;
     private ImageButton mAddButton;
+    private BottomNavigationView mBottomNavigationView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +65,7 @@ public class ListViewFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerview_fragment_list_view);
         mToolbar = view.findViewById(R.id.list_view_fragment_toolbar);
         mAddButton = view.findViewById(R.id.list_view_fragment_add_button);
+        mBottomNavigationView = view.findViewById(R.id.bottom_navigation_fragment_list);
 
         return view;
     }
@@ -65,8 +76,6 @@ public class ListViewFragment extends Fragment {
         initViewModel();
     }
 
-
-
     private void initViewModel(){
         mListViewViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(ListViewViewModel.class);
         mListViewViewModel.getListViewMutableLiveData().observe(getViewLifecycleOwner(), new Observer<ListViewViewState>() {
@@ -76,6 +85,7 @@ public class ListViewFragment extends Fragment {
                 mPhotoList = listViewViewState.getPhotoList();
                 initRecyclerView();
                 initToolbar();
+                initBottomNavigationView();
                 mBinding.fragmentListViewEmpty.setVisibility(mRealEstateList.isEmpty() ? View.VISIBLE : View.GONE);
             }
         });
@@ -104,5 +114,28 @@ public class ListViewFragment extends Fragment {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(listViewRealEstateAdapter);
+    }
+
+    private void initBottomNavigationView(){
+        mBottomNavigationView.setSelectedItemId(R.id.menu_bottom_navigation_list);
+        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                int id = item.getItemId();
+                if (id == R.id.menu_bottom_navigation_location){
+                        fragment = new LocationFragment();
+                        if (getActivity() instanceof AppCompatActivity){
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_main_activity, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                        return true;
+                }
+             return false;
+            }
+        });
     }
 }

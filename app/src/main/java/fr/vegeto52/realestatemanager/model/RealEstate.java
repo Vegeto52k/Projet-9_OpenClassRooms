@@ -8,6 +8,8 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class RealEstate {
     private String dateOfEntry;
     private String dateOfSale;
     private String agent;
+    private Double latitude;
+    private Double longitude;
 
     @Ignore
     public RealEstate(long id, String type, Double price, Double surface, Integer numberOfRooms, String description, String photo, String address, String pointsOfInterest, boolean statut, String dateOfEntry, String dateOfSale, String agent) {
@@ -166,5 +170,23 @@ public class RealEstate {
 
     public void setAgent(String agent) {
         this.agent = agent;
+    }
+
+    @Nullable
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    @Nullable
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

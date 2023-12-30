@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
+import fr.vegeto52.realestatemanager.ui.locationFragment.LocationViewModel;
 import fr.vegeto52.realestatemanager.ui.mainActivity.addFragment.AddFragmentViewModel;
 import fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment.DetailsFragmentViewModel;
 import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragmentViewModel;
@@ -19,6 +20,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final RealEstateRoomRepository mRealEstateRoomRepository;
     private final PhotoRoomRepository mPhotoRoomRepository;
+    private final LocationRepository mLocationRepository;
+    private final GeocodingRepository mGeocodingRepository;
 
     private static volatile ViewModelFactory sFactory;
 
@@ -37,6 +40,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         RealEstateDatabase realEstateDatabase = RealEstateDatabase.getInstance(context);
         this.mRealEstateRoomRepository = new RealEstateRoomRepository(realEstateDatabase.mRealEstateDao());
         this.mPhotoRoomRepository = new PhotoRoomRepository(realEstateDatabase.mPhotoDao());
+        this.mLocationRepository = new LocationRepository();
+        this.mGeocodingRepository = new GeocodingRepository();
     }
 
     @NonNull
@@ -49,10 +54,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new DetailsFragmentViewModel(mRealEstateRoomRepository, mPhotoRoomRepository);
         }
         if (modelClass.isAssignableFrom(EditFragmentViewModel.class)){
-            return (T) new EditFragmentViewModel(mRealEstateRoomRepository, mPhotoRoomRepository);
+            return (T) new EditFragmentViewModel(mRealEstateRoomRepository, mPhotoRoomRepository, mGeocodingRepository);
         }
         if (modelClass.isAssignableFrom(AddFragmentViewModel.class)){
-            return (T) new AddFragmentViewModel(mRealEstateRoomRepository, mPhotoRoomRepository);
+            return (T) new AddFragmentViewModel(mRealEstateRoomRepository, mPhotoRoomRepository, mGeocodingRepository);
+        }
+        if (modelClass.isAssignableFrom(LocationViewModel.class)){
+            return (T) new LocationViewModel(mLocationRepository, mRealEstateRoomRepository, mGeocodingRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

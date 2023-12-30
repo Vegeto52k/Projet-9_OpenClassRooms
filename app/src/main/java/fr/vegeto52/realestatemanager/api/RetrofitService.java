@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Vegeto52-PC on 22/11/2023.
@@ -27,6 +28,7 @@ public class RetrofitService {
             String BASE_URL = "https://maps.googleapis.com/";
             sRetrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build();
         }

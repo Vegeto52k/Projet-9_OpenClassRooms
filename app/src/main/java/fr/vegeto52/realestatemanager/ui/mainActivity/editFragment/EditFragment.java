@@ -32,6 +32,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.ByteArrayOutputStream;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -45,6 +47,7 @@ import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
+import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
 import fr.vegeto52.realestatemanager.ui.cameraActivity.CameraActivity;
 
 public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.OnEditDescriptionClickListener, EditDescriptionDialog.OnInputSelected{
@@ -160,22 +163,13 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         mTypeEditText.setText(!TextUtils.isEmpty(mRealEstate.getType()) ? mRealEstate.getType() : "");
         mDescriptionEditText.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "");
         mAddressEditText.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "");
-    //    mSurfaceEditText.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getSurface())) ? String.valueOf(mRealEstate.getSurface()) : "");
         mSurfaceEditText.setText((mRealEstate.getSurface() != null) ? String.valueOf(mRealEstate.getSurface()) : "");
-    //    mNumberOfRoomsEditText.setText(!TextUtils.isEmpty(String.valueOf(mRealEstate.getNumberOfRooms())) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "");
         mNumberOfRoomsEditText.setText((mRealEstate.getNumberOfRooms() != null) ? String.valueOf(mRealEstate.getNumberOfRooms()) : "");
         mPointsOfInterestEditText.setText(!TextUtils.isEmpty(mRealEstate.getPointsOfInterest()) ? mRealEstate.getPointsOfInterest() : "");
         mDateOfEntryEditText.setText(!TextUtils.isEmpty(mRealEstate.getDateOfEntry()) ? mRealEstate.getDateOfEntry() : "");
         mDateOfSaleEditText.setText(!TextUtils.isEmpty(mRealEstate.getDateOfSale()) ? mRealEstate.getDateOfSale() : "");
         mAgentEditText.setText(!TextUtils.isEmpty(mRealEstate.getAgent()) ? mRealEstate.getAgent() : "");
-//        if (!TextUtils.isEmpty(String.valueOf(mRealEstate.getPrice()))){
-//            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-//            String priceFormate = numberFormat.format(mRealEstate.getPrice());
-//            priceFormate = priceFormate.replaceAll(",", "");
-//            mPriceEditText.setText(priceFormate);
-//        } else {
-//            mPriceEditText.setText("");
-//        }
+
         Double price = mRealEstate.getPrice();
         String priceText = (price != null) ? (NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "";
         priceText = priceText.replaceAll(",", "");
@@ -218,6 +212,7 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                 updatedRealEstate.setType(mTypeEditText.getText().toString());
                 updatedRealEstate.setDescription(mDescriptionEditText.getText().toString());
                 updatedRealEstate.setAddress(mAddressEditText.getText().toString());
+
                 if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())){
                     try {
                         updatedRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
@@ -257,9 +252,24 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                     mEditFragmentViewModel.insertPhoto(photo2);
                 }
 
-
-                mEditFragmentViewModel.updateRealEstate(updatedRealEstate);
-                getFragmentManager().popBackStack();
+                if (!TextUtils.isEmpty(mAddressEditText.getText().toString())){
+                    mEditFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), getViewLifecycleOwner(), new EditFragmentViewModel.GeocodingCallback() {
+                        @Override
+                        public void onGeocodingComplete(Double latitude, Double longitude) {
+                            updatedRealEstate.setLatitude(latitude);
+                            updatedRealEstate.setLongitude(longitude);
+                            if (getFragmentManager() != null){
+                                mEditFragmentViewModel.updateRealEstate(updatedRealEstate);
+                                getFragmentManager().popBackStack();
+                            }
+                        }
+                    });
+                } else {
+                    if (getFragmentManager() != null){
+                        mEditFragmentViewModel.updateRealEstate(updatedRealEstate);
+                        getFragmentManager().popBackStack();
+                    }
+                }
             }
         });
 
