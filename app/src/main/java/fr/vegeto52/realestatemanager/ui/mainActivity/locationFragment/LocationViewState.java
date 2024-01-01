@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager.ui.locationFragment;
+package fr.vegeto52.realestatemanager.ui.mainActivity.locationFragment;
 
 import android.location.Location;
 

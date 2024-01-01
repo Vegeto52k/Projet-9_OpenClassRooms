@@ -1,7 +1,10 @@
 package fr.vegeto52.realestatemanager.model;
 
 import android.hardware.lights.LightsManager;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -17,7 +20,7 @@ import java.util.List;
  * Created by Vegeto52-PC on 07/11/2023.
  */
 @Entity(tableName = "real_estate")
-public class RealEstate {
+public class RealEstate implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -56,6 +59,56 @@ public class RealEstate {
     public RealEstate() {
 
     }
+
+    protected RealEstate(Parcel in) {
+        id = in.readLong();
+        type = in.readString();
+        if (in.readByte() == 0) {
+            price = null;
+        } else {
+            price = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            surface = null;
+        } else {
+            surface = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            numberOfRooms = null;
+        } else {
+            numberOfRooms = in.readInt();
+        }
+        description = in.readString();
+        photo = in.readString();
+        address = in.readString();
+        pointsOfInterest = in.readString();
+        statut = in.readByte() != 0;
+        dateOfEntry = in.readString();
+        dateOfSale = in.readString();
+        agent = in.readString();
+        if (in.readByte() == 0) {
+            latitude = null;
+        } else {
+            latitude = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            longitude = null;
+        } else {
+            longitude = in.readDouble();
+        }
+    }
+
+    public static final Creator<RealEstate> CREATOR = new Creator<RealEstate>() {
+        @Override
+        public RealEstate createFromParcel(Parcel in) {
+            return new RealEstate(in);
+        }
+
+        @Override
+        public RealEstate[] newArray(int size) {
+            return new RealEstate[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -189,4 +242,143 @@ public class RealEstate {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(type);
+        if (price == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(price);
+        }
+        if (surface == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(surface);
+        }
+        if (numberOfRooms == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(numberOfRooms);
+        }
+        parcel.writeString(description);
+        parcel.writeString(photo);
+        parcel.writeString(address);
+        parcel.writeString(pointsOfInterest);
+        parcel.writeByte((byte) (statut ? 1 : 0));
+        parcel.writeString(dateOfEntry);
+        parcel.writeString(dateOfSale);
+        parcel.writeString(agent);
+        if (latitude == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(latitude);
+        }
+        if (longitude == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(longitude);
+        }
+    }
+
+    //Parcelable
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(@NonNull Parcel parcel, int i) {
+//        parcel.writeLong(id);
+//        parcel.writeString(type);
+//        if (price != null) {
+//            parcel.writeDouble(price);
+//        } else {
+//            parcel.writeDouble(-1); // ou une valeur par défaut si price est null
+//        }
+//        if (surface != null) {
+//            parcel.writeDouble(surface);
+//        } else {
+//            parcel.writeDouble(-1); // ou une valeur par défaut si surface est null
+//        }
+//        if (numberOfRooms != null) {
+//            parcel.writeInt(numberOfRooms);
+//        } else {
+//            parcel.writeInt(-1); // ou une valeur par défaut si numberOfRooms est null
+//        }
+//        parcel.writeString(description);
+//        parcel.writeString(photo);
+//        parcel.writeString(address);
+//        parcel.writeString(pointsOfInterest);
+//        parcel.writeByte((byte) (statut ? 1 : 0));
+//        parcel.writeString(dateOfEntry);
+//        parcel.writeString(dateOfSale);
+//        parcel.writeString(agent);
+//        if (latitude != null) {
+//            parcel.writeDouble(latitude);
+//        } else {
+//            parcel.writeDouble(-1); // ou une valeur par défaut si latitude est null
+//        }
+//        if (longitude != null) {
+//            parcel.writeDouble(longitude);
+//        } else {
+//            parcel.writeDouble(-1); // ou une valeur par défaut si longitude est null
+//        }
+//    }
+//
+//    protected RealEstate(Parcel in){
+//        id = in.readLong();
+//        type = in.readString();
+//        price = in.readDouble();
+//        if (price == -1) {
+//            price = null; // ou une autre valeur par défaut si price était -1
+//        }
+//        surface = in.readDouble();
+//        if (surface == -1) {
+//            surface = null; // ou une autre valeur par défaut si surface était -1
+//        }
+//        numberOfRooms = in.readInt();
+//        if (numberOfRooms == -1) {
+//            numberOfRooms = null; // ou une autre valeur par défaut si numberOfRooms était -1
+//        }
+//        description = in.readString();
+//        photo = in.readString();
+//        address = in.readString();
+//        pointsOfInterest = in.readString();
+//        statut = in.readByte() != 0;
+//        dateOfEntry = in.readString();
+//        dateOfSale = in.readString();
+//        agent = in.readString();
+//        latitude = in.readDouble();
+//        if (latitude == -1) {
+//            latitude = null; // ou une autre valeur par défaut si latitude était -1
+//        }
+//        longitude = in.readDouble();
+//        if (longitude == -1) {
+//            longitude = null; // ou une autre valeur par défaut si longitude était -1
+//        }
+//    }
+//
+//    public static final Creator<RealEstate> CREATOR = new Creator<RealEstate>() {
+//        @Override
+//        public RealEstate createFromParcel(Parcel in) {
+//            return new RealEstate(in);
+//        }
+//
+//        @Override
+//        public RealEstate[] newArray(int size) {
+//            return new RealEstate[size];
+//        }
+//    };
 }

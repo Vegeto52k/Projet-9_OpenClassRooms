@@ -1,21 +1,17 @@
-package fr.vegeto52.realestatemanager.ui.locationFragment;
+package fr.vegeto52.realestatemanager.ui.mainActivity.locationFragment;
 
 import android.location.Location;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
-import fr.vegeto52.realestatemanager.LiveDataObserver;
 import fr.vegeto52.realestatemanager.database.repository.GeocodingRepository;
 import fr.vegeto52.realestatemanager.database.repository.LocationRepository;
 import fr.vegeto52.realestatemanager.database.repository.RealEstateRoomRepository;
 import fr.vegeto52.realestatemanager.model.RealEstate;
-import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
 
 /**
  * Created by Vegeto52-PC on 23/12/2023.

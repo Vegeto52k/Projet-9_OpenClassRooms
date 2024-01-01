@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -207,69 +208,84 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RealEstate updatedRealEstate = new RealEstate();
-                updatedRealEstate.setId(mRealEstateId);
-                updatedRealEstate.setType(mTypeEditText.getText().toString());
-                updatedRealEstate.setDescription(mDescriptionEditText.getText().toString());
-                updatedRealEstate.setAddress(mAddressEditText.getText().toString());
-
-                if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())){
-                    try {
-                        updatedRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
-                    } catch (NumberFormatException e){
-                        mSurfaceEditText.setError("Invalid");
-                        return;
-                    }
-                }
-                if (!TextUtils.isEmpty(mNumberOfRoomsEditText.getText().toString().trim())){
-                    try {
-                        updatedRealEstate.setNumberOfRooms(Integer.parseInt(mNumberOfRoomsEditText.getText().toString()));
-                    } catch (NumberFormatException e){
-                        mNumberOfRoomsEditText.setError("Invalid");
-                        return;
-                    }
-                }
-                updatedRealEstate.setPointsOfInterest(mPointsOfInterestEditText.getText().toString());
-                updatedRealEstate.setDateOfEntry(mDateOfEntryEditText.getText().toString());
-                updatedRealEstate.setDateOfSale(mDateOfSaleEditText.getText().toString());
-                updatedRealEstate.setAgent(mAgentEditText.getText().toString());
-                if (!TextUtils.isEmpty(mPriceEditText.getText().toString().trim())){
-                    try {
-                        updatedRealEstate.setPrice(Double.parseDouble(mPriceEditText.getText().toString()));
-                    } catch (NumberFormatException e) {
-                        mPriceEditText.setError("Invalid");
-                    }
-                }
-                if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString().trim())){
-                    updatedRealEstate.setStatut(true);
+                if (mPhotoList.isEmpty()){
+                    Toast.makeText(getContext(), "Need one photo with description", Toast.LENGTH_LONG).show();
                 } else {
-                    updatedRealEstate.setStatut(false);
-                }
-                updatedRealEstate.setPhoto("TODO");
+                    boolean photoWithDescription = false;
+                    for (Photo photo : mPhotoList){
+                        if (photo.getDescription() != null){
+                            photoWithDescription = true;
+                        }
+                    }
+                    if (photoWithDescription){
+                        RealEstate updatedRealEstate = new RealEstate();
+                        updatedRealEstate.setId(mRealEstateId);
+                        updatedRealEstate.setType(mTypeEditText.getText().toString());
+                        updatedRealEstate.setDescription(mDescriptionEditText.getText().toString());
+                        updatedRealEstate.setAddress(mAddressEditText.getText().toString());
 
-                mEditFragmentViewModel.deleteAllPhotos(mRealEstateId);
-                for (Photo photo2 : mPhotoList) {
-                    mEditFragmentViewModel.insertPhoto(photo2);
-                }
+                        if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())){
+                            try {
+                                updatedRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
+                            } catch (NumberFormatException e){
+                                mSurfaceEditText.setError("Invalid");
+                                return;
+                            }
+                        }
+                        if (!TextUtils.isEmpty(mNumberOfRoomsEditText.getText().toString().trim())){
+                            try {
+                                updatedRealEstate.setNumberOfRooms(Integer.parseInt(mNumberOfRoomsEditText.getText().toString()));
+                            } catch (NumberFormatException e){
+                                mNumberOfRoomsEditText.setError("Invalid");
+                                return;
+                            }
+                        }
+                        updatedRealEstate.setPointsOfInterest(mPointsOfInterestEditText.getText().toString());
+                        updatedRealEstate.setDateOfEntry(mDateOfEntryEditText.getText().toString());
+                        updatedRealEstate.setDateOfSale(mDateOfSaleEditText.getText().toString());
+                        updatedRealEstate.setAgent(mAgentEditText.getText().toString());
+                        if (!TextUtils.isEmpty(mPriceEditText.getText().toString().trim())){
+                            try {
+                                updatedRealEstate.setPrice(Double.parseDouble(mPriceEditText.getText().toString()));
+                            } catch (NumberFormatException e) {
+                                mPriceEditText.setError("Invalid");
+                            }
+                        }
+                        if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString().trim())){
+                            updatedRealEstate.setStatut(true);
+                        } else {
+                            updatedRealEstate.setStatut(false);
+                        }
+                        updatedRealEstate.setPhoto("TODO");
 
-                if (!TextUtils.isEmpty(mAddressEditText.getText().toString())){
-                    mEditFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), getViewLifecycleOwner(), new EditFragmentViewModel.GeocodingCallback() {
-                        @Override
-                        public void onGeocodingComplete(Double latitude, Double longitude) {
-                            updatedRealEstate.setLatitude(latitude);
-                            updatedRealEstate.setLongitude(longitude);
+                        mEditFragmentViewModel.deleteAllPhotos(mRealEstateId);
+                        for (Photo photo2 : mPhotoList) {
+                            mEditFragmentViewModel.insertPhoto(photo2);
+                        }
+
+                        if (!TextUtils.isEmpty(mAddressEditText.getText().toString())){
+                            mEditFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), getViewLifecycleOwner(), new EditFragmentViewModel.GeocodingCallback() {
+                                @Override
+                                public void onGeocodingComplete(Double latitude, Double longitude) {
+                                    updatedRealEstate.setLatitude(latitude);
+                                    updatedRealEstate.setLongitude(longitude);
+                                    if (getFragmentManager() != null){
+                                        mEditFragmentViewModel.updateRealEstate(updatedRealEstate);
+                                        getFragmentManager().popBackStack();
+                                    }
+                                }
+                            });
+                        } else {
                             if (getFragmentManager() != null){
                                 mEditFragmentViewModel.updateRealEstate(updatedRealEstate);
                                 getFragmentManager().popBackStack();
                             }
                         }
-                    });
-                } else {
-                    if (getFragmentManager() != null){
-                        mEditFragmentViewModel.updateRealEstate(updatedRealEstate);
-                        getFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(getContext(), "Need one photo with description", Toast.LENGTH_LONG).show();
                     }
                 }
+
             }
         });
 

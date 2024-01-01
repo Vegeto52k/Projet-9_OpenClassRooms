@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
-import fr.vegeto52.realestatemanager.ui.locationFragment.LocationViewModel;
+import fr.vegeto52.realestatemanager.ui.mainActivity.locationFragment.LocationViewModel;
 import fr.vegeto52.realestatemanager.ui.mainActivity.addFragment.AddFragmentViewModel;
 import fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment.DetailsFragmentViewModel;
 import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragmentViewModel;
