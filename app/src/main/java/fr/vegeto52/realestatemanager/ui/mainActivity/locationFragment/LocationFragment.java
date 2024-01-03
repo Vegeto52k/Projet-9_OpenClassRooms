@@ -42,6 +42,7 @@ import fr.vegeto52.realestatemanager.databinding.FragmentLocationBinding;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 import fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment.DetailsFragment;
 import fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment.ListViewFragment;
+import fr.vegeto52.realestatemanager.ui.mainActivity.simulatorFragment.SimulatorFragment;
 
 
 public class LocationFragment extends Fragment  implements OnMapReadyCallback {
@@ -124,6 +125,16 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
                 int id = item.getItemId();
                 if (id == R.id.menu_bottom_navigation_list){
                     fragment = new ListViewFragment();
+                    if (getActivity() instanceof AppCompatActivity){
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_main_activity, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                    return true;
+                } else if (id == R.id.menu_bottom_navigation_simulator) {
+                    fragment = new SimulatorFragment();
                     if (getActivity() instanceof AppCompatActivity){
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()

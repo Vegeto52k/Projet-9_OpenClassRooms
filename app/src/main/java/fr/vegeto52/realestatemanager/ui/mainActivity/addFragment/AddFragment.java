@@ -25,11 +25,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.vegeto52.realestatemanager.EditDescriptionDialog;
+import fr.vegeto52.realestatemanager.NotificationHelper;
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentAddBinding;
@@ -156,74 +158,90 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RealEstate newRealEstate = new RealEstate();
-                newRealEstate.setType(mTypeEditText.getText().toString());
-                newRealEstate.setDescription(mDescriptionEditText.getText().toString());
-                newRealEstate.setAddress(mAddressEditText.getText().toString());
-                if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())){
-                    try {
-                        newRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
-                    } catch (NumberFormatException e){
-                        mSurfaceEditText.setError("Invalid");
-                        return;
-                    }
+                if (mPhotoList.isEmpty()){
+                    Toast.makeText(getContext(), "Need one photo with description", Toast.LENGTH_LONG).show();
                 } else {
-                    mSurfaceEditText.setText(null);
-                }
-                if (!TextUtils.isEmpty(mNumberOfRoomsEditText.getText().toString().trim())){
-                    try {
-                        newRealEstate.setNumberOfRooms(Integer.parseInt(mNumberOfRoomsEditText.getText().toString()));
-                    } catch (NumberFormatException e){
-                        mNumberOfRoomsEditText.setError("Invalid");
-                        return;
+                    boolean photoWithDescription = false;
+                    for (Photo photo : mPhotoList) {
+                        if (photo.getDescription() != null) {
+                            photoWithDescription = true;
+                        }
                     }
-                }
-                newRealEstate.setPointsOfInterest(mPointsOfInterestEditText.getText().toString());
-                newRealEstate.setDateOfEntry(mDateOfEntryEditText.getText().toString());
-                newRealEstate.setDateOfSale(mDateOfSaleEditText.getText().toString());
-                newRealEstate.setAgent(mAgentEditText.getText().toString());
-                if (!TextUtils.isEmpty(mPriceEditText.getText().toString())){
-                    try {
-                        newRealEstate.setPrice(Double.parseDouble(mPriceEditText.getText().toString()));
-                    } catch (NumberFormatException e){
-                        mPriceEditText.setError("Invalid");
-                    }
-                }
-                if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString())){
-                    newRealEstate.setStatut(true);
-                } else {
-                    newRealEstate.setStatut(false);
-                }
-                newRealEstate.setPhoto("TODO");
+                    if (photoWithDescription){
+                        RealEstate newRealEstate = new RealEstate();
+                        newRealEstate.setType(mTypeEditText.getText().toString());
+                        newRealEstate.setDescription(mDescriptionEditText.getText().toString());
+                        newRealEstate.setAddress(mAddressEditText.getText().toString());
+                        if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())){
+                            try {
+                                newRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
+                            } catch (NumberFormatException e){
+                                mSurfaceEditText.setError("Invalid");
+                                return;
+                            }
+                        } else {
+                            mSurfaceEditText.setText(null);
+                        }
+                        if (!TextUtils.isEmpty(mNumberOfRoomsEditText.getText().toString().trim())){
+                            try {
+                                newRealEstate.setNumberOfRooms(Integer.parseInt(mNumberOfRoomsEditText.getText().toString()));
+                            } catch (NumberFormatException e){
+                                mNumberOfRoomsEditText.setError("Invalid");
+                                return;
+                            }
+                        }
+                        newRealEstate.setPointsOfInterest(mPointsOfInterestEditText.getText().toString());
+                        newRealEstate.setDateOfEntry(mDateOfEntryEditText.getText().toString());
+                        newRealEstate.setDateOfSale(mDateOfSaleEditText.getText().toString());
+                        newRealEstate.setAgent(mAgentEditText.getText().toString());
+                        if (!TextUtils.isEmpty(mPriceEditText.getText().toString())){
+                            try {
+                                newRealEstate.setPrice(Double.parseDouble(mPriceEditText.getText().toString()));
+                            } catch (NumberFormatException e){
+                                mPriceEditText.setError("Invalid");
+                            }
+                        }
+                        if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString())){
+                            newRealEstate.setStatut(true);
+                        } else {
+                            newRealEstate.setStatut(false);
+                        }
+                        newRealEstate.setPhoto("TODO");
 
-                if (!TextUtils.isEmpty(mAddressEditText.getText().toString())){
-                    mAddFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), getViewLifecycleOwner(), new AddFragmentViewModel.GeocodingCallback() {
-                        @Override
-                        public void onGeocodingComplete(Double latitude, Double longitude) {
-                            newRealEstate.setLatitude(latitude);
-                            newRealEstate.setLongitude(longitude);
+                        if (!TextUtils.isEmpty(mAddressEditText.getText().toString())){
+                            mAddFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), getViewLifecycleOwner(), new AddFragmentViewModel.GeocodingCallback() {
+                                @Override
+                                public void onGeocodingComplete(Double latitude, Double longitude) {
+                                    newRealEstate.setLatitude(latitude);
+                                    newRealEstate.setLongitude(longitude);
+                                    long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
+                                    if (realEstateId != -1){
+                                        for (Photo photo : mPhotoList){
+                                            photo.setRealEstateId(realEstateId);
+                                            mAddFragmentViewModel.insertPhoto(photo);
+                                        }
+                                        NotificationHelper.showNotification(getContext(), "Success", "RealEstate added");
+                                    }
+                                    if (getFragmentManager() != null){
+                                        getFragmentManager().popBackStack();
+                                    }
+                                }
+                            });
+                        } else {
                             long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
                             if (realEstateId != -1){
                                 for (Photo photo : mPhotoList){
                                     photo.setRealEstateId(realEstateId);
                                     mAddFragmentViewModel.insertPhoto(photo);
                                 }
+                                NotificationHelper.showNotification(getContext(), "Success", "RealEstate added");
                             }
                             if (getFragmentManager() != null){
                                 getFragmentManager().popBackStack();
                             }
                         }
-                    });
-                } else {
-                    long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
-                    if (realEstateId != -1){
-                        for (Photo photo : mPhotoList){
-                            photo.setRealEstateId(realEstateId);
-                            mAddFragmentViewModel.insertPhoto(photo);
-                        }
-                    }
-                    if (getFragmentManager() != null){
-                        getFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(getContext(), "Need one photo with description", Toast.LENGTH_LONG).show();
                     }
                 }
             }

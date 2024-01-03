@@ -41,6 +41,7 @@ import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 import fr.vegeto52.realestatemanager.ui.mainActivity.locationFragment.LocationFragment;
 import fr.vegeto52.realestatemanager.ui.mainActivity.addFragment.AddFragment;
+import fr.vegeto52.realestatemanager.ui.mainActivity.simulatorFragment.SimulatorFragment;
 
 /**
  * Created by Vegeto52-PC on 15/11/2023.
@@ -196,8 +197,18 @@ public class ListViewFragment extends Fragment {
                                     .commit();
                         }
                         return true;
+                } else if (id == R.id.menu_bottom_navigation_simulator) {
+                    fragment = new SimulatorFragment();
+                    if (getActivity() instanceof AppCompatActivity){
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_main_activity, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                    return true;
                 }
-             return false;
+                return false;
             }
         });
     }
