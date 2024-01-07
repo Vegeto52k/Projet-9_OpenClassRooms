@@ -18,7 +18,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
@@ -45,7 +47,12 @@ public class PhotoViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("uriPhoto", mUriPhoto);
     }
 
     @Override
@@ -58,11 +65,11 @@ public class PhotoViewFragment extends Fragment {
         mToolbar = view.findViewById(R.id.photo_view_fragment_toolbar);
         mBackButton = view.findViewById(R.id.photo_view_fragment_back_button);
 
-        Bundle args = getArguments();
-        if (args != null){
-            mUriPhoto = args.getParcelable("uriPhoto");
-        }
-
+            Bundle args = getArguments();
+            if (args != null){
+                mUriPhoto = args.getParcelable("uriPhoto");
+                Log.d("Vérification uri 3", "Uri : " + mUriPhoto);
+            }
         return view;
     }
 
@@ -87,6 +94,7 @@ public class PhotoViewFragment extends Fragment {
         Log.d("Vérification uri", "Uri : " + mUriPhoto);
         Glide.with(requireContext())
                 .load(mUriPhoto)
+                .error(R.drawable.baseline_cancel_24)
                 .into(mPhotoView);
     }
 }

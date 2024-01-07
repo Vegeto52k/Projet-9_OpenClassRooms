@@ -1,7 +1,11 @@
 package fr.vegeto52.realestatemanager.model;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -19,7 +23,7 @@ import fr.vegeto52.realestatemanager.database.room.Converters;
         parentColumns = "id",
         childColumns = "realEstateId"),
         indices = {@Index("realEstateId")})
-public class Photo {
+public class Photo implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -69,5 +73,37 @@ public class Photo {
 
     public void setRealEstateId(long realEstateId) {
         this.realEstateId = realEstateId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeParcelable(uriPhoto, i);
+        parcel.writeString(description);
+        parcel.writeLong(realEstateId);
+    }
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
+
+    protected Photo(Parcel in) {
+        id = in.readLong();
+        uriPhoto = in.readParcelable(Uri.class.getClassLoader());
+        description = in.readString();
+        realEstateId = in.readLong();
     }
 }

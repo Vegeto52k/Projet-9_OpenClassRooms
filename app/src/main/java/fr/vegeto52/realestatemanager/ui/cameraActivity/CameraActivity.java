@@ -62,7 +62,6 @@ public class CameraActivity extends AppCompatActivity {
         mBinding = ActivityCameraBinding.inflate(getLayoutInflater());
         View view = mBinding.getRoot();
         setContentView(view);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PackageManager.PERMISSION_GRANTED);
 
         mPreviewView = view.findViewById(R.id.camera_preview_camera_activity);
         mFabTakePhoto = view.findViewById(R.id.fab_image_capture_camera_activity);
@@ -72,8 +71,26 @@ public class CameraActivity extends AppCompatActivity {
         mImageViewPreview = view.findViewById(R.id.imageview_preview_camera_activity);
         mFrontLayout = view.findViewById(R.id.front_layout_camera_activity);
 
+        if (savedInstanceState != null){
+            mImageUri = savedInstanceState.getParcelable("ImageUri");
+            mCapturedPhotoUris = savedInstanceState.getParcelableArrayList("CapturedPhotoUris");
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PackageManager.PERMISSION_GRANTED);
+        }
         initCamera();
         initButton();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("ImageUri", mImageUri);
+        outState.putParcelableArrayList("CapturedPhotoUris", new ArrayList<>(mCapturedPhotoUris));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void initCamera(){

@@ -21,7 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,33 +68,42 @@ public class ListViewFragment extends Fragment {
     private RadioGroup mFilterRadioGroup;
     private RadioButton mFilterRadioButtonAvailable, mFilterRadioButtonBoth, mFilterRadioButtonUnavailable, mFilterRadioButton;
     private Button mFilterCancelButton, mFilterValidateButton, mFilterResetButton;
+    private boolean mIsTablet;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         if (savedInstanceState != null){
-            mRealEstateList = savedInstanceState.getParcelableArrayList("realEstateList");
-            mRecyclerView.setAdapter(new ListViewRealEstateAdapter(mRealEstateList, mPhotoList));
-            mRecyclerView.getAdapter().notifyDataSetChanged();
+            mRealEstateList = savedInstanceState.getParcelableArrayList("RealEstateList");
         }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("realEstateList", (ArrayList<? extends Parcelable>) mRealEstateList);
+        outState.putParcelableArrayList("RealEstateList", (ArrayList<? extends Parcelable>) mRealEstateList);
+        if (mFilterPriceMinimum != null && mFilterPriceMaximum != null && mFilterSurfaceMinimum != null && mFilterSurfaceMaximum != null && mFilterNumberOfRoomsMinimum != null && mFilterNumberOfRoomsMaximum != null && mFilterPhotosMinimum != null){
+            outState.putString("FilterPriceMinimum", mFilterPriceMinimum.getText().toString());
+            outState.putString("FilterPriceMaximum", mFilterPriceMaximum.getText().toString());
+            outState.putString("FilterSurfaceMinimum", mFilterSurfaceMinimum.getText().toString());
+            outState.putString("FilterSurfaceMaximum", mFilterSurfaceMaximum.getText().toString());
+            outState.putString("FilterNumberOfRoomsMinimum", mFilterNumberOfRoomsMinimum.getText().toString());
+            outState.putString("FilterNumberOfRoomsMaximum", mFilterNumberOfRoomsMaximum.getText().toString());
+            outState.putString("FilterPhotosMinimum", mFilterPhotosMinimum.getText().toString());
+        }
     }
 
-
-
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null){
-            mRealEstateList = savedInstanceState.getParcelableArrayList("realEstateList");
-            mRecyclerView.setAdapter(new ListViewRealEstateAdapter(mRealEstateList, mPhotoList));
-            mRecyclerView.getAdapter().notifyDataSetChanged();
+            mFilterPriceMinimum.setText(savedInstanceState.getString("FilterPriceMinimum"));
+            mFilterPriceMaximum.setText(savedInstanceState.getString("FilterPriceMaximum"));
+            mFilterSurfaceMinimum.setText(savedInstanceState.getString("FilterSurfaceMinimum"));
+            mFilterSurfaceMaximum.setText(savedInstanceState.getString("FilterSurfaceMaximum"));
+            mFilterNumberOfRoomsMinimum.setText(savedInstanceState.getString("FilterNumberOfRoomsMinimum"));
+            mFilterNumberOfRoomsMaximum.setText(savedInstanceState.getString("FilterNumberOfRoomsMaximum"));
+            mFilterPhotosMinimum.setText(savedInstanceState.getString("FilterPhotosMinimum"));
         }
     }
 
@@ -123,6 +134,9 @@ public class ListViewFragment extends Fragment {
         mFilterCancelButton = mView.findViewById(R.id.filter_cancel_button_fragment_list);
         mFilterValidateButton = mView.findViewById(R.id.filter_validate_button_fragment_list);
         mFilterResetButton = mView.findViewById(R.id.filter_reset_button_fragment_list);
+
+        int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
+        mIsTablet = smallestScreenWidthDp >= 600;
 
         return mView;
     }
@@ -173,7 +187,12 @@ public class ListViewFragment extends Fragment {
 
     private void initRecyclerView(){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        mListViewRealEstateAdapter = new ListViewRealEstateAdapter(mRealEstateListStatic, mPhotoList);
+        if (mRealEstateList.isEmpty()){
+            mListViewRealEstateAdapter = new ListViewRealEstateAdapter(mRealEstateListStatic, mPhotoList, mIsTablet);
+        } else {
+            mListViewRealEstateAdapter = new ListViewRealEstateAdapter(mRealEstateList, mPhotoList, mIsTablet);
+
+        }
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -187,26 +206,64 @@ public class ListViewFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fragment;
                 int id = item.getItemId();
+
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                fragment = fragmentManager.findFragmentById(R.id.fragment_main_activity);
+//
+//                if (id == R.id.menu_bottom_navigation_location){
+//                    if (fragment == null || !(fragment instanceof LocationFragment)){
+//                        fragment = new LocationFragment();
+//                    }
+//                } else if (id == R.id.menu_bottom_navigation_simulator) {
+//                    if (fragment == null || !(fragment instanceof SimulatorFragment)){
+//                        fragment = new SimulatorFragment();
+//                    }
+//                } else {
+//                    return false;
+//                }
+//                if (getActivity() instanceof AppCompatActivity){
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.fragment_main_activity, fragment)
+//                            .commit();
+//                }
+//                return true;
+
                 if (id == R.id.menu_bottom_navigation_location){
+                    String fragmentTag = "LOCATION_FRAGMENT";
+                    LocationFragment locationFragment = (LocationFragment) getActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
+                    if (locationFragment == null){
                         fragment = new LocationFragment();
                         if (getActivity() instanceof AppCompatActivity){
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.fragment_main_activity, fragment)
-                                    .addToBackStack(null)
+                                    .replace(R.id.fragment_main_activity, fragment, fragmentTag)
+                                    .addToBackStack(fragmentTag)
                                     .commit();
                         }
-                        return true;
-                } else if (id == R.id.menu_bottom_navigation_simulator) {
-                    fragment = new SimulatorFragment();
-                    if (getActivity() instanceof AppCompatActivity){
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fragment_main_activity, fragment)
-                                .addToBackStack(null)
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_main_activity, locationFragment, fragmentTag)
+                                .addToBackStack(fragmentTag)
                                 .commit();
                     }
-                    return true;
+                } else if (id == R.id.menu_bottom_navigation_simulator) {
+                    String fragmentTag = "SIMULATOR_FRAGMENT";
+                    SimulatorFragment simulatorFragment = (SimulatorFragment) getActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
+                    if (simulatorFragment == null){
+                        fragment = new SimulatorFragment();
+                        if (getActivity() instanceof AppCompatActivity){
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_main_activity, fragment, fragmentTag)
+                                    .addToBackStack(fragmentTag)
+                                    .commit();
+                        }
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_main_activity, simulatorFragment, fragmentTag)
+                                .addToBackStack(fragmentTag)
+                                .commit();
+                    }
                 }
                 return false;
             }
@@ -215,7 +272,13 @@ public class ListViewFragment extends Fragment {
 
     private void initFilterView(){
         mFilterScrollView.setVisibility(View.VISIBLE);
-        mFilterRadioGroup.check(R.id.filter_radiobutton_both_fragment_list);
+        if (mFilterRadioButtonAvailable.isChecked()){
+            mFilterRadioGroup.check(R.id.filter_radiobutton_available_fragment_list);
+        } else if (mFilterRadioButtonUnavailable.isChecked()){
+            mFilterRadioGroup.check(R.id.filter_radiobutton_unavailable_fragment_list);
+        } else {
+            mFilterRadioGroup.check(R.id.filter_radiobutton_both_fragment_list);
+        }
 
         mFilterCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -339,7 +402,7 @@ public class ListViewFragment extends Fragment {
                 }
             }
         }
-        mRecyclerView.setAdapter(new ListViewRealEstateAdapter(mRealEstateList, mPhotoList));
+        mRecyclerView.setAdapter(new ListViewRealEstateAdapter(mRealEstateList, mPhotoList, mIsTablet));
         mBinding.fragmentListViewEmpty.setVisibility(mRealEstateList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
@@ -353,7 +416,7 @@ public class ListViewFragment extends Fragment {
         mFilterNumberOfRoomsMaximum.setText("");
         mFilterPhotosMinimum.setText("");
         mFilterRadioGroup.check(R.id.filter_radiobutton_both_fragment_list);
-        mRecyclerView.setAdapter(new ListViewRealEstateAdapter(mRealEstateListStatic, mPhotoList));
+        mRecyclerView.setAdapter(new ListViewRealEstateAdapter(mRealEstateListStatic, mPhotoList, mIsTablet));
         mBinding.fragmentListViewEmpty.setVisibility(mRealEstateListStatic.isEmpty() ? View.VISIBLE : View.GONE);
     }
 }

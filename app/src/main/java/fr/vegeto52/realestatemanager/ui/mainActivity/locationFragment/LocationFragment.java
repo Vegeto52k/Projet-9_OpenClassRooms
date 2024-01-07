@@ -13,8 +13,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,6 +58,7 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
     private Location mLocation;
     private LatLng mUserLocation;
     private List<RealEstate> mRealEstateList;
+    private boolean mIsTablet;
 
 
     public LocationFragment() {
@@ -66,6 +69,11 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -81,6 +89,9 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
+        int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
+        mIsTablet = smallestScreenWidthDp >= 600;
+
         initToolbar();
         initBottomNavigationView();
 
@@ -95,7 +106,6 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     private void initViewModel(){
         mLocationViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(LocationViewModel.class);
-
         LiveDataObserver.observeOnce(mLocationViewModel.getLocationViewState(), new Observer<LocationViewState>() {
             @Override
             public void onChanged(LocationViewState locationViewState) {
@@ -124,25 +134,41 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
                 Fragment fragment;
                 int id = item.getItemId();
                 if (id == R.id.menu_bottom_navigation_list){
-                    fragment = new ListViewFragment();
-                    if (getActivity() instanceof AppCompatActivity){
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fragment_main_activity, fragment)
-                                .addToBackStack(null)
+                    String fragmentTag = "LISTVIEW_FRAGMENT";
+                    ListViewFragment listViewFragment = (ListViewFragment) getActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
+                    if (listViewFragment == null){
+                        fragment = new ListViewFragment();
+                        if (getActivity() instanceof AppCompatActivity){
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_main_activity, fragment, fragmentTag)
+                                    .addToBackStack(fragmentTag)
+                                    .commit();
+                        }
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_main_activity, listViewFragment, fragmentTag)
+                                .addToBackStack(fragmentTag)
                                 .commit();
                     }
-                    return true;
                 } else if (id == R.id.menu_bottom_navigation_simulator) {
-                    fragment = new SimulatorFragment();
-                    if (getActivity() instanceof AppCompatActivity){
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fragment_main_activity, fragment)
-                                .addToBackStack(null)
+                    String fragmentTag = "SIMULATOR_FRAGMENT";
+                    SimulatorFragment simulatorFragment = (SimulatorFragment) getActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
+                    if (simulatorFragment == null){
+                        fragment = new SimulatorFragment();
+                        if (getActivity() instanceof AppCompatActivity){
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_main_activity, fragment, fragmentTag)
+                                    .addToBackStack(fragmentTag)
+                                    .commit();
+                        }
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_main_activity, simulatorFragment, fragmentTag)
+                                .addToBackStack(fragmentTag)
                                 .commit();
                     }
-                    return true;
                 }
                 return false;
             }
@@ -179,15 +205,23 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
                     Bundle args = new Bundle();
                     args.putLong("idRealEstate", (Long) marker.getTag());
                     fragment.setArguments(args);
-
-                    if (getActivity() instanceof AppCompatActivity){
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fragment_main_activity, fragment)
-                                .addToBackStack(null)
-                                .commit();
+                    if (mIsTablet){
+                        if (getActivity() instanceof AppCompatActivity){
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.frament_main_activity_2, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    } else {
+                        if (getActivity() instanceof AppCompatActivity){
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_main_activity, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
                     }
-
                     return true;
                 }
                 return false;
@@ -226,7 +260,9 @@ public class LocationFragment extends Fragment  implements OnMapReadyCallback {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+        if (mMapView != null){
+            mMapView.onDestroy();
+        }
     }
 
     @Override

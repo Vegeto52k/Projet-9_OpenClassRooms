@@ -4,24 +4,43 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import fr.vegeto52.realestatemanager.R;
+import fr.vegeto52.realestatemanager.databinding.ActivityMainBinding;
+import fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment.DetailsFragment;
 import fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment.ListViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private ActivityMainBinding mBinding;
+    private FragmentContainerView mFragmentContainerView;
+    private FragmentContainerView mFragmentContainerView2;
+    private BottomNavigationView mBottomNavigationView;
+    private boolean mIsTablet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = mBinding.getRoot();
+        setContentView(view);
 
-        setContentView(R.layout.activity_main);
+        mFragmentContainerView = view.findViewById(R.id.fragment_main_activity);
+        mFragmentContainerView2 = view.findViewById(R.id.frament_main_activity_2);
+
+        int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
+        mIsTablet = smallestScreenWidthDp >= 600;
+//        mBottomNavigationView = view.findViewById(R.id.bottom_navigation_view_activity);
 
 //        if (getResources().getConfiguration().smallestScreenWidthDp >= 600){
 //
@@ -35,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         enableMyLocation();
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     private void enableMyLocation(){
@@ -60,11 +86,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI(){
-            Fragment fragment = null;
-            fragment = new ListViewFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_main_activity, fragment)
-                    .commit();
+            String fragmentTag = "LISTVIEW_FRAGMENT";
+            if (getSupportFragmentManager().findFragmentById(R.id.fragment_main_activity) == null){
+                Fragment fragment = new ListViewFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_main_activity, fragment, fragmentTag)
+                        .addToBackStack(fragmentTag)
+                        .commit();
+                if (mIsTablet){
+                    String fragmentTag2 = "DETAILS_FRAGMENT";
+                    if (getSupportFragmentManager().findFragmentByTag(fragmentTag2) == null){
+                        Fragment fragment2 = new DetailsFragment();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frament_main_activity_2, fragment2, fragmentTag2)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
+            }
     }
 }

@@ -16,12 +16,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -80,12 +82,52 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
     List<Photo> mPhotoList = new ArrayList<>();
     int mPositionPhoto;
     String mDescription;
+    private boolean saveRestored = false;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            mPhotoList = new ArrayList<>(savedInstanceState.getParcelableArrayList("PhotoListRestored2"));
+            saveRestored = true;
+            Log.d("Vérif Edit Photo", "Flute ! " + mPhotoList.size());
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mTypeEditText != null && mDescriptionEditText != null && mAddressEditText != null && mSurfaceEditText != null && mNumberOfRoomsEditText != null && mPointsOfInterestEditText != null && mDateOfEntryEditText != null && mDateOfSaleEditText != null && mAgentEditText != null && mPriceEditText != null) {
+            outState.putString("TypeEditText2", mTypeEditText.getText().toString());
+            outState.putString("DescriptionEditText2", mDescriptionEditText.getText().toString());
+            outState.putString("AddressEditText2", mAddressEditText.getText().toString());
+            outState.putString("SurfaceEditText2", mSurfaceEditText.getText().toString());
+            outState.putString("NumberOfRoomsEditText2", mNumberOfRoomsEditText.getText().toString());
+            outState.putString("PointsOfInterestEditText2", mPointsOfInterestEditText.getText().toString());
+            outState.putString("DateOfEntryEditText2", mDateOfEntryEditText.getText().toString());
+            outState.putString("DateOfSaleEditText2", mDateOfSaleEditText.getText().toString());
+            outState.putString("AgentEditText2", mAgentEditText.getText().toString());
+            outState.putString("PriceEditText2", mPriceEditText.getText().toString());
+            outState.putParcelableArrayList("PhotoListRestored2", (ArrayList<? extends Parcelable>) mPhotoList);
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mTypeEditText.setText(savedInstanceState.getString("TypeEditText2"));
+            mDescriptionEditText.setText(savedInstanceState.getString("DescriptionEditText2"));
+            mAddressEditText.setText(savedInstanceState.getString("AddressEditText2"));
+            mSurfaceEditText.setText(savedInstanceState.getString("SurfaceEditText2"));
+            mNumberOfRoomsEditText.setText(savedInstanceState.getString("NumberOfRoomsEditText2"));
+            mPointsOfInterestEditText.setText(savedInstanceState.getString("PointsOfInterestEditText2"));
+            mDateOfEntryEditText.setText(savedInstanceState.getString("DateOfEntryEditText2"));
+            mDateOfSaleEditText.setText(savedInstanceState.getString("DateOfSaleEditText2"));
+            mAgentEditText.setText(savedInstanceState.getString("AgentEditText2"));
+            mPriceEditText.setText(savedInstanceState.getString("PriceEditText2"));
+        }
     }
 
     @Override
@@ -137,9 +179,11 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                 mEditFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), new Observer<List<Photo>>() {
                     @Override
                     public void onChanged(List<Photo> photos) {
-                        mPhotoList = photos;
+                        if (!saveRestored){
+                            mPhotoList = photos;
+                            initUi();
+                        }
 
-                        initUi();
                         initRecyclerView();
                         initToolbar();
                         initButton();

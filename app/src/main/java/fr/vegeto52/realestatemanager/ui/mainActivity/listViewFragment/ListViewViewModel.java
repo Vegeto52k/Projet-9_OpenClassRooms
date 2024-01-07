@@ -2,10 +2,13 @@ package fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import fr.vegeto52.realestatemanager.database.repository.LocationRepository;
 import fr.vegeto52.realestatemanager.database.repository.PhotoRoomRepository;
 import fr.vegeto52.realestatemanager.database.repository.RealEstateRoomRepository;
 import fr.vegeto52.realestatemanager.model.Photo;
@@ -18,8 +21,9 @@ public class ListViewViewModel extends ViewModel {
 
     private RealEstateRoomRepository mRealEstateRoomRepository;
     private PhotoRoomRepository mPhotoRoomRepository;
-    private final MediatorLiveData<ListViewViewState> mMediatorLiveData = new MediatorLiveData<>();
 
+    private final MediatorLiveData<ListViewViewState> mMediatorLiveData = new MediatorLiveData<>();
+    private MutableLiveData<List<RealEstate>> mRealEstateListFilteredLiveDate = new MutableLiveData<>();
     public ListViewViewModel(RealEstateRoomRepository realEstateRoomRepository, PhotoRoomRepository photoRoomRepository){
         mRealEstateRoomRepository = realEstateRoomRepository;
         mPhotoRoomRepository = photoRoomRepository;

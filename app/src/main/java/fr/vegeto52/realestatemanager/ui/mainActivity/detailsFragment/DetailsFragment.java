@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,6 +69,7 @@ public class DetailsFragment extends Fragment {
     Long mRealEstateId;
     String MAPS_API_KEY = BuildConfig.MAPS_API_KEY;
     private List<Photo> mPhotoList;
+    private boolean mIsTablet;
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -101,13 +103,22 @@ public class DetailsFragment extends Fragment {
             mRealEstateId = args.getLong("idRealEstate");
         }
 
+        int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
+        mIsTablet = smallestScreenWidthDp >= 600;
+
+        if (mIsTablet){
+            mBackButton.setVisibility(View.INVISIBLE);
+        }
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViewModel();
+        if (mRealEstateId != null){
+            initViewModel();
+        }
     }
 
     private void initToolbar(){
@@ -141,7 +152,6 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onChanged(RealEstate realEstate) {
                     mRealEstate = realEstate;
-                    Log.d("Vérification Details", "Lat & Lng : " + mRealEstate.getLatitude() + " " + mRealEstate.getLongitude());
                     mDetailsFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), new Observer<List<Photo>>() {
                         @Override
                         public void onChanged(List<Photo> photoList) {
@@ -174,7 +184,7 @@ public class DetailsFragment extends Fragment {
 
     private void initRecyclerView(){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-        DetailsFragmentPhotoAdapter detailsFragmentPhotoAdapter = new DetailsFragmentPhotoAdapter(mPhotoList);
+        DetailsFragmentPhotoAdapter detailsFragmentPhotoAdapter = new DetailsFragmentPhotoAdapter(mPhotoList, mIsTablet);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
         mRecyclerViewPhoto.addItemDecoration(dividerItemDecoration);
         mRecyclerViewPhoto.setLayoutManager(layoutManager);

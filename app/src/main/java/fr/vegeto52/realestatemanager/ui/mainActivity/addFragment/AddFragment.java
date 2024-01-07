@@ -11,11 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -66,6 +68,7 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
     Button mSelectPhotosButton;
     Button mTakePhoto;
     List<Photo> mPhotoList = new ArrayList<>();
+    List<Photo> mPhotoListRestored;
     String mDescription;
     int mPositionPhoto;
 
@@ -75,6 +78,48 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mPhotoList = new ArrayList<>(savedInstanceState.getParcelableArrayList("PhotoListRestored"));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mTypeEditText != null && mDescriptionEditText != null && mAddressEditText != null && mSurfaceEditText != null && mNumberOfRoomsEditText != null && mPointsOfInterestEditText != null && mDateOfEntryEditText != null && mDateOfSaleEditText != null && mAgentEditText != null && mPriceEditText != null) {
+            outState.putString("TypeEditText", mTypeEditText.getText().toString());
+            outState.putString("DescriptionEditText", mDescriptionEditText.getText().toString());
+            outState.putString("AddressEditText", mAddressEditText.getText().toString());
+            outState.putString("SurfaceEditText", mSurfaceEditText.getText().toString());
+            outState.putString("NumberOfRoomsEditText", mNumberOfRoomsEditText.getText().toString());
+            outState.putString("PointsOfInterestEditText", mPointsOfInterestEditText.getText().toString());
+            outState.putString("DateOfEntryEditText", mDateOfEntryEditText.getText().toString());
+            outState.putString("DateOfSaleEditText", mDateOfSaleEditText.getText().toString());
+            outState.putString("AgentEditText", mAgentEditText.getText().toString());
+            outState.putString("PriceEditText", mPriceEditText.getText().toString());
+            outState.putParcelableArrayList("PhotoListRestored", (ArrayList<? extends Parcelable>) mPhotoList);
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mTypeEditText.setText(savedInstanceState.getString("TypeEditText"));
+            mDescriptionEditText.setText(savedInstanceState.getString("DescriptionEditText"));
+            mAddressEditText.setText(savedInstanceState.getString("AddressEditText"));
+            mSurfaceEditText.setText(savedInstanceState.getString("SurfaceEditText"));
+            mNumberOfRoomsEditText.setText(savedInstanceState.getString("NumberOfRoomsEditText"));
+            mPointsOfInterestEditText.setText(savedInstanceState.getString("PointsOfInterestEditText"));
+            mDateOfEntryEditText.setText(savedInstanceState.getString("DateOfEntryEditText"));
+            mDateOfSaleEditText.setText(savedInstanceState.getString("DateOfSaleEditText"));
+            mAgentEditText.setText(savedInstanceState.getString("AgentEditText"));
+            mPriceEditText.setText(savedInstanceState.getString("PriceEditText"));
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,14 +156,14 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         initViewModel();
     }
 
-    private void initViewModel(){
+    private void initViewModel() {
         mAddFragmentViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(AddFragmentViewModel.class);
         initToolbar();
         initButton();
         initRecyclerView();
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,27 +172,28 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         });
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         AddFragmentPhotoAdapter.OnRemovePhotoClickListener removePhotoClickListener = new AddFragmentPhotoAdapter.OnRemovePhotoClickListener() {
             @Override
             public void onRemoveClick(int position) {
                 mPhotoList.remove(position);
                 mRecyclerViewViewPhoto.getAdapter().notifyDataSetChanged();
-                if (mPhotoList.isEmpty()){
-                    mBinding.photoCarouselEmptyAddFragment.setVisibility(View.VISIBLE);
-                }
+                mBinding.photoCarouselEmptyAddFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
             }
         };
-        AddFragmentPhotoAdapter addFragmentPhotoAdapter = new AddFragmentPhotoAdapter(mPhotoList, removePhotoClickListener);
+        mBinding.photoCarouselEmptyAddFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
+        AddFragmentPhotoAdapter addFragmentPhotoAdapter;
+        addFragmentPhotoAdapter = new AddFragmentPhotoAdapter(mPhotoList, removePhotoClickListener);
         addFragmentPhotoAdapter.setOnEditDescriptionClickListener(this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
         mRecyclerViewViewPhoto.addItemDecoration(dividerItemDecoration);
         mRecyclerViewViewPhoto.setLayoutManager(layoutManager);
         mRecyclerViewViewPhoto.setAdapter(addFragmentPhotoAdapter);
+
     }
 
-    private void initButton(){
+    private void initButton() {
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,7 +204,7 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mPhotoList.isEmpty()){
+                if (mPhotoList.isEmpty()) {
                     Toast.makeText(getContext(), "Need one photo with description", Toast.LENGTH_LONG).show();
                 } else {
                     boolean photoWithDescription = false;
@@ -167,25 +213,25 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
                             photoWithDescription = true;
                         }
                     }
-                    if (photoWithDescription){
+                    if (photoWithDescription) {
                         RealEstate newRealEstate = new RealEstate();
                         newRealEstate.setType(mTypeEditText.getText().toString());
                         newRealEstate.setDescription(mDescriptionEditText.getText().toString());
                         newRealEstate.setAddress(mAddressEditText.getText().toString());
-                        if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())){
+                        if (!TextUtils.isEmpty(mSurfaceEditText.getText().toString().trim())) {
                             try {
                                 newRealEstate.setSurface(Double.parseDouble(mSurfaceEditText.getText().toString()));
-                            } catch (NumberFormatException e){
+                            } catch (NumberFormatException e) {
                                 mSurfaceEditText.setError("Invalid");
                                 return;
                             }
                         } else {
                             mSurfaceEditText.setText(null);
                         }
-                        if (!TextUtils.isEmpty(mNumberOfRoomsEditText.getText().toString().trim())){
+                        if (!TextUtils.isEmpty(mNumberOfRoomsEditText.getText().toString().trim())) {
                             try {
                                 newRealEstate.setNumberOfRooms(Integer.parseInt(mNumberOfRoomsEditText.getText().toString()));
-                            } catch (NumberFormatException e){
+                            } catch (NumberFormatException e) {
                                 mNumberOfRoomsEditText.setError("Invalid");
                                 return;
                             }
@@ -194,49 +240,49 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
                         newRealEstate.setDateOfEntry(mDateOfEntryEditText.getText().toString());
                         newRealEstate.setDateOfSale(mDateOfSaleEditText.getText().toString());
                         newRealEstate.setAgent(mAgentEditText.getText().toString());
-                        if (!TextUtils.isEmpty(mPriceEditText.getText().toString())){
+                        if (!TextUtils.isEmpty(mPriceEditText.getText().toString())) {
                             try {
                                 newRealEstate.setPrice(Double.parseDouble(mPriceEditText.getText().toString()));
-                            } catch (NumberFormatException e){
+                            } catch (NumberFormatException e) {
                                 mPriceEditText.setError("Invalid");
                             }
                         }
-                        if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString())){
+                        if (!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString())) {
                             newRealEstate.setStatut(true);
                         } else {
                             newRealEstate.setStatut(false);
                         }
                         newRealEstate.setPhoto("TODO");
 
-                        if (!TextUtils.isEmpty(mAddressEditText.getText().toString())){
+                        if (!TextUtils.isEmpty(mAddressEditText.getText().toString())) {
                             mAddFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), getViewLifecycleOwner(), new AddFragmentViewModel.GeocodingCallback() {
                                 @Override
                                 public void onGeocodingComplete(Double latitude, Double longitude) {
                                     newRealEstate.setLatitude(latitude);
                                     newRealEstate.setLongitude(longitude);
                                     long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
-                                    if (realEstateId != -1){
-                                        for (Photo photo : mPhotoList){
+                                    if (realEstateId != -1) {
+                                        for (Photo photo : mPhotoList) {
                                             photo.setRealEstateId(realEstateId);
                                             mAddFragmentViewModel.insertPhoto(photo);
                                         }
                                         NotificationHelper.showNotification(getContext(), "Success", "RealEstate added");
                                     }
-                                    if (getFragmentManager() != null){
+                                    if (getFragmentManager() != null) {
                                         getFragmentManager().popBackStack();
                                     }
                                 }
                             });
                         } else {
                             long realEstateId = mAddFragmentViewModel.insertRealEstateAndGetId(newRealEstate);
-                            if (realEstateId != -1){
-                                for (Photo photo : mPhotoList){
+                            if (realEstateId != -1) {
+                                for (Photo photo : mPhotoList) {
                                     photo.setRealEstateId(realEstateId);
                                     mAddFragmentViewModel.insertPhoto(photo);
                                 }
                                 NotificationHelper.showNotification(getContext(), "Success", "RealEstate added");
                             }
-                            if (getFragmentManager() != null){
+                            if (getFragmentManager() != null) {
                                 getFragmentManager().popBackStack();
                             }
                         }
@@ -262,14 +308,14 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
         });
     }
 
-    private void openGallery(){
+    private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(intent, PICK_IMAGES_REQUEST_CODE);
     }
 
-    private void openCamera(){
+    private void openCamera() {
         Intent intent = new Intent(getContext(), CameraActivity.class);
         startActivityForResult(intent, CAMERA_ACTIVITY_REQUEST_CODE);
     }
@@ -278,10 +324,10 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGES_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == PICK_IMAGES_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             ClipData clipData = data.getClipData();
-            if (clipData != null){
-                for (int i = 0; i < clipData.getItemCount(); i++){
+            if (clipData != null) {
+                for (int i = 0; i < clipData.getItemCount(); i++) {
                     Uri imageUri = clipData.getItemAt(i).getUri();
                     Photo photo = new Photo();
                     photo.setUriPhoto(imageUri);
@@ -310,7 +356,7 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
     @Override
     public void sendInput(String input) {
         mDescription = input;
-        if (TextUtils.isEmpty(input)){
+        if (TextUtils.isEmpty(input)) {
             mPhotoList.get(mPositionPhoto).setDescription(null);
         } else {
             mPhotoList.get(mPositionPhoto).setDescription(mDescription);

@@ -33,11 +33,13 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
 
     private static List<RealEstate> mRealEstateList;
     private static List<Photo> mPhotoList;
+    private static boolean mIsTablet;
 
 
-    public ListViewRealEstateAdapter(List<RealEstate> realEstateList, List<Photo> photoList) {
+    public ListViewRealEstateAdapter(List<RealEstate> realEstateList, List<Photo> photoList, boolean isTablet) {
         mRealEstateList = realEstateList;
         mPhotoList = photoList;
+        mIsTablet = isTablet;
     }
 
     @NonNull
@@ -60,11 +62,19 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
                 args.putLong("idRealEstate", holder.id);
                 fragment.setArguments(args);
                 if (view.getContext() instanceof AppCompatActivity){
-                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_main_activity, fragment)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mIsTablet){
+                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frament_main_activity_2, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_main_activity, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             }
         });

@@ -30,9 +30,11 @@ import fr.vegeto52.realestatemanager.ui.mainActivity.PhotoViewFragment;
 public class DetailsFragmentPhotoAdapter extends RecyclerView.Adapter<DetailsFragmentPhotoAdapter.ViewHolder> {
 
     private static List<Photo> mPhotoList;
+    private static boolean mIsTablet;
 
-    public DetailsFragmentPhotoAdapter(List<Photo> photoList){
+    public DetailsFragmentPhotoAdapter(List<Photo> photoList, boolean isTablet){
         mPhotoList = photoList;
+        mIsTablet = isTablet;
     }
 
     @NonNull
@@ -60,13 +62,20 @@ public class DetailsFragmentPhotoAdapter extends RecyclerView.Adapter<DetailsFra
                 args.putParcelable("uriPhoto", mPhotoList.get(holder.getAdapterPosition()).getUriPhoto());
                 fragment.setArguments(args);
                 if (view.getContext() instanceof AppCompatActivity){
-                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_main_activity, fragment)
-                            .addToBackStack(null)
-                            .commit();
+                    if (mIsTablet){
+                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frament_main_activity_2, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_main_activity, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
-
             }
         });
     }
