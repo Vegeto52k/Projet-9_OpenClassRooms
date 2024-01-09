@@ -2,17 +2,9 @@ package fr.vegeto52.realestatemanager.ui.mainActivity.simulatorFragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,8 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.text.DecimalFormat;
 
@@ -33,8 +29,6 @@ import fr.vegeto52.realestatemanager.ui.mainActivity.locationFragment.LocationFr
 
 public class SimulatorFragment extends Fragment {
 
-    private FragmentSimulatorBinding mBinding;
-    private Toolbar mToolbar;
     private BottomNavigationView mBottomNavigationView;
     private EditText mEditLoan, mEditInitialPayment, mEditInterestRate, mEditLoanTerm;
     private Button mButtonCalculate, mButtonReset;
@@ -54,7 +48,7 @@ public class SimulatorFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.d("Vérif Bottom", "Coco l'asticot");
-        if (mEditLoan != null && mEditInitialPayment != null && mEditInterestRate != null && mEditLoanTerm != null && mTextMonthlyPayment != null && mTextInterestAmount != null){
+        if (mEditLoan != null && mEditInitialPayment != null && mEditInterestRate != null && mEditLoanTerm != null && mTextMonthlyPayment != null && mTextInterestAmount != null) {
             outState.putString("EditLoan", mEditLoan.getText().toString());
             outState.putString("EditInitialPayment", mEditInitialPayment.getText().toString());
             outState.putString("EditInterestRate", mEditInterestRate.getText().toString());
@@ -67,7 +61,7 @@ public class SimulatorFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mEditLoan.setText(savedInstanceState.getString("EditLoan"));
             mEditInitialPayment.setText(savedInstanceState.getString("EditInitialPayment"));
             mEditInterestRate.setText(savedInstanceState.getString("EditInterestRate"));
@@ -78,12 +72,11 @@ public class SimulatorFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = FragmentSimulatorBinding.inflate(inflater, container, false);
-        View view = mBinding.getRoot();
+        fr.vegeto52.realestatemanager.databinding.FragmentSimulatorBinding binding = FragmentSimulatorBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        mToolbar = view.findViewById(R.id.simulator_fragment_toolbar);
         mBottomNavigationView = view.findViewById(R.id.simulator_fragment_bottom_navigation_view);
 
         mEditLoan = view.findViewById(R.id.simulator_fragment_edit_loan);
@@ -102,79 +95,66 @@ public class SimulatorFragment extends Fragment {
         return view;
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
 
     }
 
-    private void initBottomNavigationView(){
+    private void initBottomNavigationView() {
         mBottomNavigationView.setSelectedItemId(R.id.menu_bottom_navigation_simulator);
-        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment fragment;
-                int id = item.getItemId();
-                if (id == R.id.menu_bottom_navigation_list){
-                    String fragmentTag = "LISTVIEW_FRAGMENT";
-                    ListViewFragment listViewFragment = (ListViewFragment) getActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
-                    if (listViewFragment == null){
-                        fragment = new ListViewFragment();
-                        if (getActivity() instanceof AppCompatActivity){
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.fragment_main_activity, fragment, fragmentTag)
-                                    .addToBackStack(fragmentTag)
-                                    .commit();
-                        }
-                    } else {
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_main_activity, listViewFragment, fragmentTag)
+        mBottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment fragment;
+            int id = item.getItemId();
+            if (id == R.id.menu_bottom_navigation_list) {
+                String fragmentTag = "LISTVIEW_FRAGMENT";
+                ListViewFragment listViewFragment = (ListViewFragment) requireActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
+                if (listViewFragment == null) {
+                    fragment = new ListViewFragment();
+                    if (getActivity() instanceof AppCompatActivity) {
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_main_activity, fragment, fragmentTag)
                                 .addToBackStack(fragmentTag)
                                 .commit();
                     }
-
-                } else if (id == R.id.menu_bottom_navigation_location) {
-                    String fragmentTag = "LOCATION_FRAGMENT";
-                    LocationFragment locationFragment = (LocationFragment) getActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
-                    if (locationFragment == null){
-                        fragment = new LocationFragment();
-                        if (getActivity() instanceof AppCompatActivity){
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.fragment_main_activity, fragment, fragmentTag)
-                                    .addToBackStack(fragmentTag)
-                                    .commit();
-                        }
-                    } else {
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_main_activity, locationFragment, fragmentTag)
-                                .addToBackStack(fragmentTag)
-                                .commit();
-                    }
+                } else {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_main_activity, listViewFragment, fragmentTag)
+                            .addToBackStack(fragmentTag)
+                            .commit();
                 }
-                return false;
+
+            } else if (id == R.id.menu_bottom_navigation_location) {
+                String fragmentTag = "LOCATION_FRAGMENT";
+                LocationFragment locationFragment = (LocationFragment) requireActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
+                if (locationFragment == null) {
+                    fragment = new LocationFragment();
+                    if (getActivity() instanceof AppCompatActivity) {
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_main_activity, fragment, fragmentTag)
+                                .addToBackStack(fragmentTag)
+                                .commit();
+                    }
+                } else {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_main_activity, locationFragment, fragmentTag)
+                            .addToBackStack(fragmentTag)
+                            .commit();
+                }
             }
+            return false;
         });
     }
 
-    private void initButton(){
-        mButtonCalculate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                calculateLoan();
-            }
-        });
+    private void initButton() {
+        mButtonCalculate.setOnClickListener(view -> calculateLoan());
 
-        mButtonReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resetEditText();
-            }
-        });
+        mButtonReset.setOnClickListener(view -> resetEditText());
     }
 
     @SuppressLint("SetTextI18n")
-    private void calculateLoan(){
-        if (!TextUtils.isEmpty(mEditLoan.getText()) && !TextUtils.isEmpty(mEditInitialPayment.getText()) && !TextUtils.isEmpty(mEditInterestRate.getText()) && !TextUtils.isEmpty(mEditLoanTerm.getText())){
+    private void calculateLoan() {
+        if (!TextUtils.isEmpty(mEditLoan.getText()) && !TextUtils.isEmpty(mEditInitialPayment.getText()) && !TextUtils.isEmpty(mEditInterestRate.getText()) && !TextUtils.isEmpty(mEditLoanTerm.getText())) {
             int loanAmount = Integer.parseInt(mEditLoan.getText().toString());
             int initialPayment = Integer.parseInt(mEditInitialPayment.getText().toString());
             double interestRate = Double.parseDouble(mEditInterestRate.getText().toString());
@@ -196,7 +176,8 @@ public class SimulatorFragment extends Fragment {
         }
     }
 
-    private void resetEditText(){
+    @SuppressLint("SetTextI18n")
+    private void resetEditText() {
         mEditLoan.setText(null);
         mEditInitialPayment.setText(null);
         mEditInterestRate.setText(null);

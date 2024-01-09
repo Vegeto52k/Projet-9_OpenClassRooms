@@ -2,6 +2,7 @@ package fr.vegeto52.realestatemanager.model;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ResultsGeocodingApi {
 
 

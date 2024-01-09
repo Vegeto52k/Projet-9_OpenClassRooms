@@ -1,7 +1,88 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
     <string name="google_maps_api_key"></string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- ActivityMain -->
+    <string name="activity_camera_take_photo">Take photo</string>
+    <string name="activity_camera_back_button">Back button</string>
+    <string name="activity_camera_validate">Validate</string>
+    <string name="activity_camera_cancel">Cancel</string>
+    <string name="activity_camera_preview_photo">Preview photo</string>
+
+    <!-- DialogEditDescription -->
+    <string name="dialog_edit_description_enter_description">Enter description</string>
+    <string name="dialog_edit_description_validate">Validate</string>
+    <string name="dialog_edit_description_cancel">Cancel</string>
+
+    <!-- FragmentAdd -->
+    <string name="fragment_add_type">Type</string>
+    <string name="fragment_add_description">Description</string>
+    <string name="fragment_add_address">Address</string>
+    <string name="fragment_add_surface">Surface</string>
+    <string name="fragment_add_number_of_rooms">Number of rooms</string>
+    <string name="fragment_add_points_of_interest">Points of interest</string>
+    <string name="fragment_add_date_of_entry">Date of entry</string>
+    <string name="fragment_add_date_of_sale">Date of sale</string>
+    <string name="fragment_add_agent">Agent</string>
+    <string name="fragment_add_price">Price</string>
+    <string name="fragment_add_media">Media</string>
+    <string name="fragment_add_empty">Empty</string>
+    <string name="fragment_add_select_photos">Select Photos</string>
+    <string name="fragment_add_take_a_photo">Take a Photo</string>
+    <string name="fragment_add_save">Save</string>
+    <string name="fragment_add_cancel">Cancel</string>
+    <string name="fragment_add_back_button">Back button</string>
+
+    <!-- FragmentEdit -->
+    <string name="fragment_edit_type">Type</string>
+    <string name="fragment_edit_description">Description</string>
+    <string name="fragment_edit_address">Address</string>
+    <string name="fragment_edit_surface">Surface</string>
+    <string name="fragment_edit_number_of_rooms">Number of rooms</string>
+    <string name="fragment_edit_points_of_interest">Points of interest</string>
+    <string name="fragment_edit_date_of_entry">Date of entry</string>
+    <string name="fragment_edit_date_of_sale">Date of sale</string>
+    <string name="fragment_edit_agent">Agent</string>
+    <string name="fragment_edit_price">Price</string>
+    <string name="fragment_edit_media">Media</string>
+    <string name="fragment_edit_empty">Empty</string>
+    <string name="fragment_edit_select_photos">Select Photos</string>
+    <string name="fragment_edit_take_a_photo">Take a Photo</string>
+    <string name="fragment_edit_save">Save</string>
+    <string name="fragment_edit_cancel">Cancel</string>
+
+    <!-- FragmentListView -->
+    <string name="fragment_list_view_empty">Empty</string>
+    <string name="fragment_list_view_price">Price</string>
+    <string name="fragment_list_view_minimum">Minimum</string>
+    <string name="fragment_list_view_maximum">Maximum</string>
+    <string name="fragment_list_view_surface">Surface</string>
+    <string name="fragment_list_view_number_of_rooms">Number of rooms</string>
+    <string name="fragment_list_view_number_of_photos_minimum">Number of photos minimum</string>
+    <string name="fragment_list_view_available">Available</string>
+    <string name="fragment_list_view_both">Both</string>
+    <string name="fragment_list_view_unavailable">Unavailable</string>
+    <string name="fragment_list_view_cancel">Cancel</string>
+    <string name="fragment_list_view_validate">Validate</string>
+    <string name="fragment_list_view_reset">Reset</string>
+
+    <!-- FragmentSimulator -->
+    <string name="fragment_simulator_amount_of_the_loan">Amount of the loan</string>
+    <string name="fragment_simulator_initial_payment">Initial payment</string>
+    <string name="fragment_simulator_interest_rate">Interest rate</string>
+    <string name="fragment_simulator_interest_rate_in_percentage">Interest rate in percentage</string>
+    <string name="fragment_simulator_loan_term">Loan term</string>
+    <string name="fragment_simulator_loan_term_in_years">Loan term in years</string>
+    <string name="fragment_simulator_calculate">Calculate</string>
+    <string name="fragment_simulator_reset">Reset</string>
+    <string name="fragment_simulator_monthly_payment">Monthly payment</string>
+    <string name="fragment_simulator_result">Result</string>
+    <string name="fragment_simulator_total_interest_amount">Total interest amount</string>
+
+    <!--MenuBottomNavigation -->
+    <string name="menu_bottom_navigation_list">List</string>
+    <string name="menu_bottom_navigation_location">Location</string>
+    <string name="menu_bottom_navigation_simulator">Simulator</string>
+
 
 </resources>

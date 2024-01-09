@@ -41,6 +41,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="fr.vegeto52.realestatemanager.provider"
+            android:name=".provider.ItemContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

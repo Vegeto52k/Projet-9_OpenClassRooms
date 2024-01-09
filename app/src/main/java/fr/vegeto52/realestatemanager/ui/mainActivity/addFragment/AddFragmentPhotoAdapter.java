@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import fr.vegeto52.realestatemanager.R;
@@ -28,15 +26,15 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
     public OnEditDescriptionClickListener mEditDescriptionClickListener;
     public OnRemovePhotoClickListener mRemovePhotoClickListener;
 
-    public interface OnEditDescriptionClickListener{
+    public interface OnEditDescriptionClickListener {
         void onEditDescriptionClick(int position);
     }
 
-    public interface OnRemovePhotoClickListener{
+    public interface OnRemovePhotoClickListener {
         void onRemoveClick(int position);
     }
 
-    public void setOnEditDescriptionClickListener(OnEditDescriptionClickListener listener){
+    public void setOnEditDescriptionClickListener(OnEditDescriptionClickListener listener) {
         mEditDescriptionClickListener = listener;
     }
 
@@ -59,22 +57,16 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
     public void onBindViewHolder(@NonNull AddFragmentPhotoAdapter.ViewHolder holder, int position) {
         holder.displayPhoto(mPhotoList.get(position));
 
-        holder.deleteButtonCarousel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mRemovePhotoClickListener != null){
-                    mRemovePhotoClickListener.onRemoveClick(holder.getAdapterPosition());
-                    holder.textDescription.setText("");
-                }
+        holder.deleteButtonCarousel.setOnClickListener(view -> {
+            if (mRemovePhotoClickListener != null) {
+                mRemovePhotoClickListener.onRemoveClick(holder.getAdapterPosition());
+                holder.textDescription.setText("");
             }
         });
 
-        holder.editDescription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mEditDescriptionClickListener != null){
-                    mEditDescriptionClickListener.onEditDescriptionClick(holder.getAdapterPosition());
-                }
+        holder.editDescription.setOnClickListener(view -> {
+            if (mEditDescriptionClickListener != null) {
+                mEditDescriptionClickListener.onEditDescriptionClick(holder.getAdapterPosition());
             }
         });
     }
@@ -84,7 +76,7 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
         return mPhotoList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView photoCarousel;
         public ImageButton deleteButtonCarousel;
@@ -102,8 +94,8 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
             textDescription = itemView.findViewById(R.id.item_photo_text_description_add_fragment);
         }
 
-        public void displayPhoto(Photo photo){
-            if (TextUtils.isEmpty(photo.getDescription())){
+        public void displayPhoto(Photo photo) {
+            if (TextUtils.isEmpty(photo.getDescription())) {
                 blackBand.setVisibility(View.GONE);
             } else {
                 blackBand.setVisibility(View.VISIBLE);

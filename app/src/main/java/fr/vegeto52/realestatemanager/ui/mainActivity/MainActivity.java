@@ -1,18 +1,15 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.databinding.ActivityMainBinding;
@@ -22,49 +19,28 @@ import fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment.ListViewFr
 public class MainActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private ActivityMainBinding mBinding;
-    private FragmentContainerView mFragmentContainerView;
-    private FragmentContainerView mFragmentContainerView2;
-    private BottomNavigationView mBottomNavigationView;
     private boolean mIsTablet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = mBinding.getRoot();
+        fr.vegeto52.realestatemanager.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
-
-        mFragmentContainerView = view.findViewById(R.id.fragment_main_activity);
-        mFragmentContainerView2 = view.findViewById(R.id.frament_main_activity_2);
 
         int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
         mIsTablet = smallestScreenWidthDp >= 600;
-//        mBottomNavigationView = view.findViewById(R.id.bottom_navigation_view_activity);
-
-//        if (getResources().getConfiguration().smallestScreenWidthDp >= 600){
-//
-//        } else {
-//            Fragment fragment = null;
-//            fragment = new ListViewFragment();
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_main_activity, fragment)
-//                    .commit();
-//        }
 
         enableMyLocation();
     }
-
-
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
-    private void enableMyLocation(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+    private void enableMyLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             initUI();
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -85,26 +61,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initUI(){
-            String fragmentTag = "LISTVIEW_FRAGMENT";
-            if (getSupportFragmentManager().findFragmentById(R.id.fragment_main_activity) == null){
-                Fragment fragment = new ListViewFragment();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_main_activity, fragment, fragmentTag)
-                        .addToBackStack(fragmentTag)
-                        .commit();
-                if (mIsTablet){
-                    String fragmentTag2 = "DETAILS_FRAGMENT";
-                    if (getSupportFragmentManager().findFragmentByTag(fragmentTag2) == null){
-                        Fragment fragment2 = new DetailsFragment();
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.frament_main_activity_2, fragment2, fragmentTag2)
-                                .addToBackStack(null)
-                                .commit();
-                    }
+    private void initUI() {
+        String fragmentTag = "LISTVIEW_FRAGMENT";
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_main_activity) == null) {
+            Fragment fragment = new ListViewFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_main_activity, fragment, fragmentTag)
+                    .addToBackStack(fragmentTag)
+                    .commit();
+            if (mIsTablet) {
+                String fragmentTag2 = "DETAILS_FRAGMENT";
+                if (getSupportFragmentManager().findFragmentByTag(fragmentTag2) == null) {
+                    Fragment fragment2 = new DetailsFragment();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frament_main_activity_2, fragment2, fragmentTag2)
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
+        }
     }
 }

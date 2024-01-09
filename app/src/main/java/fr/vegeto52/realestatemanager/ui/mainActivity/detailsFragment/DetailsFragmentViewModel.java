@@ -23,23 +23,11 @@ public class DetailsFragmentViewModel extends ViewModel {
         mPhotoRoomRepository = photoRoomRepository;
     }
 
-    public LiveData<RealEstate> getRealEstateLiveData(long realEstateId){
+    public LiveData<RealEstate> getRealEstateLiveData(long realEstateId) {
         return mRealEstateRoomRepository.getRealEstate(realEstateId);
     }
 
-    public void insertRealEstate(RealEstate realEstate){
-        mRealEstateRoomRepository.insertRealEstate(realEstate);
-    }
-
-    public void updateRealEstate(RealEstate realEstate){
-        mRealEstateRoomRepository.updateRealEstate(realEstate);
-    }
-
-    public void deleteRealEstate(RealEstate realEstate){
-        mRealEstateRoomRepository.deleteRealEstate(realEstate);
-    }
-
-    public LiveData<List<Photo>> getListPhotoToRealEstate(long realEstateId){
+    public LiveData<List<Photo>> getListPhotoToRealEstate(long realEstateId) {
         return mPhotoRoomRepository.getListPhotoToRealEstate(realEstateId);
     }
 }

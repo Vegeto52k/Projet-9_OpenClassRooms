@@ -3,27 +3,15 @@ package fr.vegeto52.realestatemanager.database.repository;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
-import android.os.Looper;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import fr.vegeto52.realestatemanager.database.MainApplication;
-import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
 
 /**
  * Created by Vegeto52-PC on 23/12/2023.

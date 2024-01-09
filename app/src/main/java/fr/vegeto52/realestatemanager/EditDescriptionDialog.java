@@ -12,12 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.Objects;
+
 /**
  * Created by Vegeto52-PC on 17/12/2023.
  */
-public class EditDescriptionDialog  extends DialogFragment {
+public class EditDescriptionDialog extends DialogFragment {
 
-    public interface OnInputSelected{
+    public interface OnInputSelected {
         void sendInput(String input);
     }
 
@@ -39,31 +41,18 @@ public class EditDescriptionDialog  extends DialogFragment {
         mValidateButton = view.findViewById(R.id.dialog_edit_description_button_validate);
         mCancelButton = view.findViewById(R.id.dialog_edit_description_button_cancel);
 
-        Bundle args = getArguments();
-        if (args != null){
-            int position = args.getInt("position");
-        }
-
         initButton();
 
         return view;
     }
 
-    private void initButton(){
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getDialog().dismiss();
-            }
-        });
+    private void initButton() {
+        mCancelButton.setOnClickListener(view -> Objects.requireNonNull(getDialog()).dismiss());
 
-        mValidateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String input = mEditDescription.getText().toString();
-                mOnInputSelected.sendInput(input);
-                getDialog().dismiss();
-            }
+        mValidateButton.setOnClickListener(view -> {
+            String input = mEditDescription.getText().toString();
+            mOnInputSelected.sendInput(input);
+            Objects.requireNonNull(getDialog()).dismiss();
         });
     }
 
@@ -72,8 +61,7 @@ public class EditDescriptionDialog  extends DialogFragment {
         super.onAttach(context);
         try {
             mOnInputSelected = (OnInputSelected) getTargetFragment();
-        } catch (ClassCastException e){
-
+        } catch (ClassCastException ignored) {
         }
     }
 }

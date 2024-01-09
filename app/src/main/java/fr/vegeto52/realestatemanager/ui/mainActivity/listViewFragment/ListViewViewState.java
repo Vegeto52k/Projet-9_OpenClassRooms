@@ -13,7 +13,7 @@ public class ListViewViewState {
     private final List<RealEstate> mRealEstateList;
     private final List<Photo> mPhotoList;
 
-    public ListViewViewState(List<RealEstate> realEstateList, List<Photo> photoList){
+    public ListViewViewState(List<RealEstate> realEstateList, List<Photo> photoList) {
         mRealEstateList = realEstateList;
         mPhotoList = photoList;
     }

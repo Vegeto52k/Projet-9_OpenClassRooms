@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/beige_light"
+    android:fillViewport="true"
     tools:context=".ui.mainActivity.simulatorFragment.SimulatorFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -14,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/simulator_fragment_bottom_navigation_view"
@@ -26,18 +25,18 @@
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom_navigation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/menu_bottom_navigation" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
         android:background="@color/beige_light"
-        app:layout_constraintTop_toBottomOf="@id/simulator_fragment_toolbar"
-        app:layout_constraintBottom_toTopOf="@id/simulator_fragment_bottom_navigation_view">
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/simulator_fragment_bottom_navigation_view"
+        app:layout_constraintTop_toBottomOf="@id/simulator_fragment_toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -48,161 +47,165 @@
                 android:id="@+id/simulator_fragment_loan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Amount of the loan"
+                android:layout_marginTop="16dp"
+                android:text="@string/fragment_simulator_amount_of_the_loan"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/simulator_fragment_edit_loan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:hint="@string/fragment_simulator_amount_of_the_loan"
                 android:inputType="number"
-                android:hint="Amount of the loan"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_loan"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_loan"
+                tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/simulator_fragment_initial_payment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Initial payment"
+                android:layout_marginTop="24dp"
+                android:text="@string/fragment_simulator_initial_payment"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_loan"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_loan" />
 
             <EditText
                 android:id="@+id/simulator_fragment_edit_initial_payment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:hint="@string/fragment_simulator_initial_payment"
                 android:inputType="number"
-                android:hint="Initial payment"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_initial_payment"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_initial_payment"
+                tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/simulator_fragment_interest_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Interest rate"
+                android:layout_marginTop="24dp"
+                android:text="@string/fragment_simulator_interest_rate"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_initial_payment"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_initial_payment" />
 
             <EditText
                 android:id="@+id/simulator_fragment_edit_interest_rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:hint="@string/fragment_simulator_interest_rate_in_percentage"
                 android:inputType="numberDecimal"
-                android:hint="Interest rate in percentage"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_interest_rate"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_interest_rate"
+                tools:ignore="Autofill,TextContrastCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/simulator_fragment_loan_term"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loan term"
+                android:layout_marginTop="24dp"
+                android:text="@string/fragment_simulator_loan_term"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_interest_rate"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_interest_rate" />
 
             <EditText
                 android:id="@+id/simulator_fragment_edit_loan_term"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:hint="@string/fragment_simulator_loan_term_in_years"
                 android:inputType="number"
-                android:hint="Loan term in years"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_loan_term"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_loan_term"
+                tools:ignore="Autofill,TextContrastCheck,TouchTargetSizeCheck" />
 
             <Button
                 android:id="@+id/simulator_fragment_button_calculate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calculate"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_loan_term"
+                android:text="@string/fragment_simulator_calculate"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/simulator_fragment_button_reset"/>
+                app:layout_constraintRight_toLeftOf="@id/simulator_fragment_button_reset"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_loan_term" />
 
             <Button
                 android:id="@+id/simulator_fragment_button_reset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reset"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_loan_term"
+                android:text="@string/fragment_simulator_reset"
+                app:layout_constraintLeft_toRightOf="@id/simulator_fragment_button_calculate"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/simulator_fragment_button_calculate"/>
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_loan_term" />
 
             <TextView
                 android:id="@+id/simulator_fragment_monthly_payment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monthly payment"
+                android:layout_marginTop="24dp"
+                android:text="@string/fragment_simulator_monthly_payment"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_button_calculate"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_button_calculate" />
 
             <TextView
                 android:id="@+id/simulator_fragment_edit_monthly_payment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Result"
-                android:textSize="20sp"
                 android:layout_margin="8dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_monthly_payment"
+                android:text="@string/fragment_simulator_result"
+                android:textSize="20sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_monthly_payment" />
 
             <TextView
                 android:id="@+id/simulator_fragment_interest_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total interest amount"
+                android:layout_marginTop="24dp"
+                android:text="@string/fragment_simulator_total_interest_amount"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_monthly_payment"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_edit_monthly_payment" />
 
             <TextView
                 android:id="@+id/simulator_fragment_edit_interest_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Result"
-                android:textSize="20sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
-                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_interest_amount"
+                android:text="@string/fragment_simulator_result"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/simulator_fragment_interest_amount" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.addFragment;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,7 +10,6 @@ import fr.vegeto52.realestatemanager.database.repository.RealEstateRoomRepositor
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
-import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragmentViewModel;
 
 /**
  * Created by Vegeto52-PC on 11/12/2023.
@@ -30,39 +28,36 @@ public class AddFragmentViewModel extends ViewModel {
         mGeocodingRepository = geocodingRepository;
     }
 
-    public void insertRealEstate(RealEstate realEstate){
+    public void insertRealEstate(RealEstate realEstate) {
         mRealEstateRoomRepository.insertRealEstate(realEstate);
     }
 
-    public long insertRealEstateAndGetId(RealEstate realEstate){
+    public long insertRealEstateAndGetId(RealEstate realEstate) {
         return mRealEstateRoomRepository.insertRealEstateAndGetId(realEstate);
     }
 
-    public void insertPhoto(Photo photo){
+    public void insertPhoto(Photo photo) {
         mPhotoRoomRepository.insertPhoto(photo);
     }
 
-    public void getGeocoding(String address, LifecycleOwner lifecycleOwner, GeocodingCallback callback){
-        mGeocodingRepository.getGeocoding(address, new GeocodingRepository.GeocodingCallBack() {
-            @Override
-            public void onGeocodingResult(ResultsGeocodingApi resultsGeocodingApi) {
-                if (resultsGeocodingApi != null && !resultsGeocodingApi.getResults().isEmpty()){
-                    ResultsGeocodingApi.Results.Geometry.Location location = resultsGeocodingApi.getResults().get(0).getGeometry().getLocation();
-                    if (location != null){
-                        Double latitude = location.getLat();
-                        Double longitude = location.getLng();
-                        callback.onGeocodingComplete(latitude, longitude);
-                    }
+    public void getGeocoding(String address, GeocodingCallback callback) {
+        mGeocodingRepository.getGeocoding(address, resultsGeocodingApi -> {
+            if (resultsGeocodingApi != null && !resultsGeocodingApi.getResults().isEmpty()) {
+                ResultsGeocodingApi.Results.Geometry.Location location = resultsGeocodingApi.getResults().get(0).getGeometry().getLocation();
+                if (location != null) {
+                    Double latitude = location.getLat();
+                    Double longitude = location.getLng();
+                    callback.onGeocodingComplete(latitude, longitude);
                 }
             }
         });
     }
 
-    public interface GeocodingCallback{
+    public interface GeocodingCallback {
         void onGeocodingComplete(Double latitude, Double longitude);
     }
 
-    public LiveData<ResultsGeocodingApi> getGeocodingLiveData(){
+    public LiveData<ResultsGeocodingApi> getGeocodingLiveData() {
         return mResultsGeocodingApiMediatorLiveData;
     }
 

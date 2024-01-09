@@ -1,11 +1,7 @@
 package fr.vegeto52.realestatemanager.database.room;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import fr.vegeto52.realestatemanager.model.RealEstate;
 
@@ -14,14 +10,14 @@ import fr.vegeto52.realestatemanager.model.RealEstate;
  */
 public class DummyRealEstate {
 
-    public List<RealEstate> createListRealEstate(){
+    public List<RealEstate> createListRealEstate() {
 
         List<RealEstate> realEstateList = new ArrayList<>();
 
         RealEstate realEstate1 = new RealEstate();
         realEstate1.setType("Flat");
-        realEstate1.setPrice(Double.valueOf(17870000));
-        realEstate1.setSurface(Double.valueOf(750));
+        realEstate1.setPrice(17870000.0);
+        realEstate1.setSurface(750.0);
         realEstate1.setNumberOfRooms(8);
         realEstate1.setDescription("Beautiful flat");
         realEstate1.setPhoto("/document/msf:31");
@@ -33,8 +29,8 @@ public class DummyRealEstate {
 
         RealEstate realEstate2 = new RealEstate();
         realEstate2.setType("Flat");
-        realEstate2.setPrice(Double.valueOf(25000000));
-        realEstate2.setSurface(Double.valueOf(850));
+        realEstate2.setPrice(25000000.0);
+        realEstate2.setSurface(850.0);
         realEstate2.setNumberOfRooms(10);
         realEstate2.setDescription("Spacious flat with a view");
         realEstate2.setPhoto("TODO");
@@ -47,8 +43,8 @@ public class DummyRealEstate {
 
         RealEstate realEstate3 = new RealEstate();
         realEstate3.setType("House");
-        realEstate3.setPrice(Double.valueOf(35000000));
-        realEstate3.setSurface(Double.valueOf(1200));
+        realEstate3.setPrice(35000000.0);
+        realEstate3.setSurface(1200.0);
         realEstate3.setNumberOfRooms(12);
         realEstate3.setDescription("Charming country house");
         realEstate3.setPhoto("TODO");
@@ -60,8 +56,8 @@ public class DummyRealEstate {
 
         RealEstate realEstate4 = new RealEstate();
         realEstate4.setType("Studio");
-        realEstate4.setPrice(Double.valueOf(8000000));
-        realEstate4.setSurface(Double.valueOf(400));
+        realEstate4.setPrice(8000000.0);
+        realEstate4.setSurface(400.0);
         realEstate4.setNumberOfRooms(1);
         realEstate4.setDescription("Cozy studio in the heart of the city");
         realEstate4.setPhoto("TODO");
@@ -74,8 +70,8 @@ public class DummyRealEstate {
 
         RealEstate realEstate5 = new RealEstate();
         realEstate5.setType("Mansion");
-        realEstate5.setPrice(Double.valueOf(150000000));
-        realEstate5.setSurface(Double.valueOf(2500));
+        realEstate5.setPrice(150000000.0);
+        realEstate5.setSurface(2500.0);
         realEstate5.setNumberOfRooms(20);
         realEstate5.setDescription("Luxurious mansion with a pool");
         realEstate5.setPhoto("TODO");
@@ -87,8 +83,8 @@ public class DummyRealEstate {
 
         RealEstate realEstate6 = new RealEstate();
         realEstate6.setType("Oceanfront Apartment");
-        realEstate6.setPrice(Double.valueOf(30000000));
-        realEstate6.setSurface(Double.valueOf(1000));
+        realEstate6.setPrice(30000000.0);
+        realEstate6.setSurface(1000.0);
         realEstate6.setNumberOfRooms(6);
         realEstate6.setDescription("Stunning apartment overlooking the ocean");
         realEstate6.setPhoto("TODO");

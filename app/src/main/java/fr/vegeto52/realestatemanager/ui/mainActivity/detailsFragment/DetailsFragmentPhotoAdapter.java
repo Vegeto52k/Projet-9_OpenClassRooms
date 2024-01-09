@@ -1,9 +1,7 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.model.Photo;
-import fr.vegeto52.realestatemanager.ui.mainActivity.PhotoViewFragment;
+import fr.vegeto52.realestatemanager.ui.mainActivity.photoViewFragment.PhotoViewFragment;
 
 /**
  * Created by Vegeto52-PC on 17/11/2023.
@@ -32,7 +29,7 @@ public class DetailsFragmentPhotoAdapter extends RecyclerView.Adapter<DetailsFra
     private static List<Photo> mPhotoList;
     private static boolean mIsTablet;
 
-    public DetailsFragmentPhotoAdapter(List<Photo> photoList, boolean isTablet){
+    public DetailsFragmentPhotoAdapter(List<Photo> photoList, boolean isTablet) {
         mPhotoList = photoList;
         mIsTablet = isTablet;
     }
@@ -54,27 +51,24 @@ public class DetailsFragmentPhotoAdapter extends RecyclerView.Adapter<DetailsFra
                 .centerCrop()
                 .into(holder.photoCarousel);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new PhotoViewFragment();
-                Bundle args = new Bundle();
-                args.putParcelable("uriPhoto", mPhotoList.get(holder.getAdapterPosition()).getUriPhoto());
-                fragment.setArguments(args);
-                if (view.getContext() instanceof AppCompatActivity){
-                    if (mIsTablet){
-                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.frament_main_activity_2, fragment)
-                                .addToBackStack(null)
-                                .commit();
-                    } else {
-                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fragment_main_activity, fragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
+        holder.itemView.setOnClickListener(view -> {
+            Fragment fragment = new PhotoViewFragment();
+            Bundle args = new Bundle();
+            args.putParcelable("uriPhoto", mPhotoList.get(holder.getAdapterPosition()).getUriPhoto());
+            fragment.setArguments(args);
+            if (view.getContext() instanceof AppCompatActivity) {
+                if (mIsTablet) {
+                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frament_main_activity_2, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_main_activity, fragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
         });
@@ -99,8 +93,8 @@ public class DetailsFragmentPhotoAdapter extends RecyclerView.Adapter<DetailsFra
             textDescription = itemView.findViewById(R.id.item_photo_text_description_details_fragment);
         }
 
-        public void displayPhoto(Photo photo){
-            if (TextUtils.isEmpty(photo.getDescription())){
+        public void displayPhoto(Photo photo) {
+            if (TextUtils.isEmpty(photo.getDescription())) {
                 blackBand.setVisibility(View.GONE);
             } else {
                 blackBand.setVisibility(View.VISIBLE);

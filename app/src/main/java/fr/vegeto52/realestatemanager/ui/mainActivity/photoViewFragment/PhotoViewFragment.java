@@ -1,14 +1,7 @@
-package fr.vegeto52.realestatemanager.ui.mainActivity;
+package fr.vegeto52.realestatemanager.ui.mainActivity.photoViewFragment;
 
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
-import java.util.Objects;
+import com.bumptech.glide.Glide;
 
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.databinding.FragmentPhotoViewBinding;
@@ -56,7 +46,7 @@ public class PhotoViewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentPhotoViewBinding.inflate(inflater, container, false);
         View view = mBinding.getRoot();
@@ -65,11 +55,11 @@ public class PhotoViewFragment extends Fragment {
         mToolbar = view.findViewById(R.id.photo_view_fragment_toolbar);
         mBackButton = view.findViewById(R.id.photo_view_fragment_back_button);
 
-            Bundle args = getArguments();
-            if (args != null){
-                mUriPhoto = args.getParcelable("uriPhoto");
-                Log.d("Vérification uri 3", "Uri : " + mUriPhoto);
-            }
+        Bundle args = getArguments();
+        if (args != null) {
+            mUriPhoto = args.getParcelable("uriPhoto");
+            Log.d("Vérification uri 3", "Uri : " + mUriPhoto);
+        }
         return view;
     }
 
@@ -81,16 +71,11 @@ public class PhotoViewFragment extends Fragment {
         initUI();
     }
 
-    private void initToolbar(){
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                requireActivity().onBackPressed();
-            }
-        });
+    private void initToolbar() {
+        mBackButton.setOnClickListener(view -> requireActivity().onBackPressed());
     }
 
-    private void initUI(){
+    private void initUI() {
         Log.d("Vérification uri", "Uri : " + mUriPhoto);
         Glide.with(requireContext())
                 .load(mUriPhoto)

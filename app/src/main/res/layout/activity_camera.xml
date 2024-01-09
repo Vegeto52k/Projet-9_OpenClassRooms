@@ -17,13 +17,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
+        android:contentDescription="@string/activity_camera_take_photo"
         android:elevation="6dp"
+        android:src="@drawable/ic_baseline_add_a_photo_24"
         app:backgroundTint="@color/beige_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:contentDescription="Take photo"
-        android:src="@drawable/ic_baseline_add_a_photo_24"
         app:maxImageSize="36dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,12 +31,14 @@
         android:layout_width="51dp"
         android:layout_height="57dp"
         android:layout_margin="8dp"
+        android:contentDescription="@string/activity_camera_back_button"
         android:elevation="1dp"
         android:src="@drawable/baseline_arrow_back_24"
         app:backgroundTint="@color/beige_light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:maxImageSize="48dp" />
+        app:maxImageSize="48dp"
+        tools:ignore="ImageContrastCheck,RedundantDescriptionCheck" />
 
     <Button
         android:id="@+id/validate_button_camera_activity"
@@ -44,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="Validate"
+        android:text="@string/activity_camera_validate"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/fab_image_capture_camera_activity"
         app:layout_constraintEnd_toStartOf="@id/fab_image_capture_camera_activity"
@@ -57,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="Cancel"
+        android:text="@string/activity_camera_cancel"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/fab_image_capture_camera_activity"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,16 +70,16 @@
         android:id="@+id/front_layout_camera_activity"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/back_layout_camera_activity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
         android:background="@color/transparentBlack75"
+        android:elevation="6dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:layout_margin="16dp"
-        android:elevation="6dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/fab_image_capture_camera_activity">
+        app:layout_constraintBottom_toTopOf="@id/fab_image_capture_camera_activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/back_layout_camera_activity">
 
         <ImageView
             android:id="@+id/imageview_preview_camera_activity"
@@ -85,12 +87,12 @@
             android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:background="@color/transparentBlack75"
-            android:contentDescription="Preview photo"
-            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/activity_camera_preview_photo"
             android:elevation="2dp"
-            app:layout_constraintTop_toBottomOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

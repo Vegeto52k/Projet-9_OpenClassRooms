@@ -1,9 +1,7 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.listViewFragment;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,27 +52,24 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.displayRealEstate(mRealEstateList.get(position));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new DetailsFragment();
-                Bundle args = new Bundle();
-                args.putLong("idRealEstate", holder.id);
-                fragment.setArguments(args);
-                if (view.getContext() instanceof AppCompatActivity){
-                    if (mIsTablet){
-                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.frament_main_activity_2, fragment)
-                                .addToBackStack(null)
-                                .commit();
-                    } else {
-                        ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fragment_main_activity, fragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
+        holder.itemView.setOnClickListener(view -> {
+            Fragment fragment = new DetailsFragment();
+            Bundle args = new Bundle();
+            args.putLong("idRealEstate", holder.id);
+            fragment.setArguments(args);
+            if (view.getContext() instanceof AppCompatActivity) {
+                if (mIsTablet) {
+                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frament_main_activity_2, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_main_activity, fragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
         });
@@ -85,7 +80,7 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
         return mRealEstateList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView photoRealEstate;
         public TextView typeRealEstate;
@@ -104,7 +99,7 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
             iconSaleRealEstate = itemView.findViewById(R.id.icon_sale_real_estate_item);
         }
 
-        public void displayRealEstate(RealEstate realEstate){
+        public void displayRealEstate(RealEstate realEstate) {
 
             id = realEstate.getId();
 
@@ -113,14 +108,14 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
             Double price = realEstate.getPrice();
             String priceText = (price != null) ? ("$" + NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "Price not provided";
             priceRealEstate.setText(priceText);
-            if (realEstate.isStatut()){
+            if (realEstate.isStatut()) {
                 iconSaleRealEstate.setImageResource(R.drawable.baseline_cancel_24);
             } else {
                 iconSaleRealEstate.setImageResource(R.drawable.baseline_check_circle_24);
             }
 
             Photo firstPhoto = getFirstPhotoForRealEstate(id);
-            if (firstPhoto != null){
+            if (firstPhoto != null) {
                 Glide.with(itemView.getContext())
                         .load(firstPhoto.getUriPhoto())
                         .centerCrop()
@@ -128,9 +123,9 @@ public class ListViewRealEstateAdapter extends RecyclerView.Adapter<ListViewReal
             }
         }
 
-        private Photo getFirstPhotoForRealEstate(long realEstateId){
-            for (Photo photo : mPhotoList){
-                if (photo.getRealEstateId() == realEstateId){
+        private Photo getFirstPhotoForRealEstate(long realEstateId) {
+            for (Photo photo : mPhotoList) {
+                if (photo.getRealEstateId() == realEstateId) {
                     return photo;
                 }
             }

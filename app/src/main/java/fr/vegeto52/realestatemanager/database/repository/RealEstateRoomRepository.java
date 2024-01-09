@@ -1,8 +1,5 @@
 package fr.vegeto52.realestatemanager.database.repository;
 
-import android.app.Application;
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
@@ -11,8 +8,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import fr.vegeto52.realestatemanager.database.MainApplication;
-import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
 import fr.vegeto52.realestatemanager.database.room.dao.RealEstateDao;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 
@@ -39,37 +34,24 @@ public class RealEstateRoomRepository {
 
     public void insertRealEstate(RealEstate realEstate){
         ExecutorService executor = Executors.newSingleThreadExecutor();
-
-        Future<?> future = executor.submit(() -> {
-            // Votre tâche en arrière-plan ici
-            Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.insert(realEstate));
-        });
-
-// Attendre que la tâche en arrière-plan se termine
+        Future<?> future = executor.submit(() -> Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.insert(realEstate)));
         try {
-            future.get(); // Ceci bloque jusqu'à ce que la tâche soit terminée
-        } catch (InterruptedException | ExecutionException e) {
-            // Gérer les exceptions si nécessaire
+            future.get();
+        } catch (InterruptedException | ExecutionException ignored) {
         } finally {
-            executor.shutdown(); // Arrêter l'ExecutorService une fois terminé
+            executor.shutdown();
         }
     }
 
     public long insertRealEstateAndGetId(RealEstate realEstate){
         ExecutorService executor = Executors.newSingleThreadExecutor();
-
-        Future<Long> future = executor.submit(() -> {
-            // Insérer le bien immobilier et récupérer l'ID généré
-            return mRealEstateDao.insertAndGetId(realEstate);
-        });
-
+        Future<Long> future = executor.submit(() -> mRealEstateDao.insertAndGetId(realEstate));
         try {
-            return future.get(); // Renvoie l'ID généré
+            return future.get();
         } catch (InterruptedException | ExecutionException e) {
-            // Gérer les exceptions si nécessaire
-            return -1; // Ou une valeur qui indique une erreur, à toi de décider
+            return -1;
         } finally {
-            executor.shutdown(); // Arrêter l'ExecutorService une fois terminé
+            executor.shutdown();
         }
     }
 

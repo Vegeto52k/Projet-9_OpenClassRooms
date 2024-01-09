@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="200dp"
     android:layout_height="match_parent"
     android:layout_marginStart="4dp"
@@ -16,12 +17,13 @@
             android:id="@+id/item_photo_carousel_add_fragment"
             android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:transitionName="photo"
             android:scaleType="centerCrop"
+            android:transitionName="photo"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            tools:ignore="ContentDescription" />
 
         <View
             android:id="@+id/item_photo_black_band_add_fragment"
@@ -30,20 +32,20 @@
             android:background="#80000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/item_photo_text_description_add_fragment"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:singleLine="true"
-            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="@id/item_photo_black_band_add_fragment"
-            app:layout_constraintTop_toTopOf="@id/item_photo_black_band_add_fragment"
             app:layout_constraintLeft_toLeftOf="@id/item_photo_black_band_add_fragment"
-            app:layout_constraintRight_toRightOf="@id/item_photo_black_band_add_fragment"/>
+            app:layout_constraintRight_toRightOf="@id/item_photo_black_band_add_fragment"
+            app:layout_constraintTop_toTopOf="@id/item_photo_black_band_add_fragment" />
 
         <ImageButton
             android:id="@+id/item_photo_delete_button_add_fragment"
@@ -51,9 +53,9 @@
             android:layout_height="48dp"
             android:layout_margin="4dp"
             android:src="@drawable/baseline_delete_24"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:contentDescription="Delete photo"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/item_photo_edit_description_button_add_fragment"
@@ -61,9 +63,9 @@
             android:layout_height="48dp"
             android:layout_margin="4dp"
             android:src="@drawable/baseline_edit_24"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:contentDescription="Add description"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

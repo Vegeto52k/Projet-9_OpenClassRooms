@@ -1,21 +1,7 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.detailsFragment;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.SavedStateHandle;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +9,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,22 +44,13 @@ public class DetailsFragment extends Fragment {
 
     FragmentDetailsBinding mBinding;
     RecyclerView mRecyclerViewPhoto;
-    TextView mTextDescription;
-    TextView mTextAdress;
+    TextView mTextDescription, mTextAdress, mTextSurface, mTextNumberOfRooms, mTextPointsOfInterest, mTextDateOfEntry, mTextDateOfSale, mTextAgent, mTextPrice;
     ImageView mImageApi;
-    TextView mTextSurface;
-    TextView mTextNumberOfRooms;
-    TextView mTextPointsOfInterest;
-    TextView mTextDateOfEntry;
-    TextView mTextDateOfSale;
-    TextView mTextAgent;
-    TextView mTextPrice;
     Toolbar mToolbar;
-    ImageButton mBackButton;
-    ImageButton mEditButton;
+    ImageButton mBackButton, mEditButton;
     private DetailsFragmentViewModel mDetailsFragmentViewModel;
     private RealEstate mRealEstate;
-    Long mRealEstateId;
+    private Long mRealEstateId;
     String MAPS_API_KEY = BuildConfig.MAPS_API_KEY;
     private List<Photo> mPhotoList;
     private boolean mIsTablet;
@@ -77,7 +61,7 @@ public class DetailsFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentDetailsBinding.inflate(inflater, container, false);
         View view = mBinding.getRoot();
@@ -99,14 +83,14 @@ public class DetailsFragment extends Fragment {
         mEditButton = view.findViewById(R.id.details_fragment_edit_button);
 
         Bundle args = getArguments();
-        if (args != null){
+        if (args != null) {
             mRealEstateId = args.getLong("idRealEstate");
         }
 
         int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
         mIsTablet = smallestScreenWidthDp >= 600;
 
-        if (mIsTablet){
+        if (mIsTablet) {
             mBackButton.setVisibility(View.INVISIBLE);
         }
 
@@ -116,56 +100,42 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (mRealEstateId != null){
+        if (mRealEstateId != null) {
             initViewModel();
         }
     }
 
-    private void initToolbar(){
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                requireActivity().onBackPressed();
-            }
-        });
-        mEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new EditFragment();
-                Bundle args = new Bundle();
-                args.putLong("idRealEstate", mRealEstateId);
-                fragment.setArguments(args);
-                if (view.getContext() instanceof AppCompatActivity){
-                    ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_main_activity, fragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
+    private void initToolbar() {
+        mBackButton.setOnClickListener(view -> requireActivity().onBackPressed());
+        mEditButton.setOnClickListener(view -> {
+            Fragment fragment = new EditFragment();
+            Bundle args = new Bundle();
+            args.putLong("idRealEstate", mRealEstateId);
+            fragment.setArguments(args);
+            if (view.getContext() instanceof AppCompatActivity) {
+                ((AppCompatActivity) view.getContext()).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_main_activity, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
 
-    private void initViewModel(){
-            mDetailsFragmentViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(DetailsFragmentViewModel.class);
-            mDetailsFragmentViewModel.getRealEstateLiveData(mRealEstateId).observe(getViewLifecycleOwner(), new Observer<RealEstate>() {
-                @Override
-                public void onChanged(RealEstate realEstate) {
-                    mRealEstate = realEstate;
-                    mDetailsFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), new Observer<List<Photo>>() {
-                        @Override
-                        public void onChanged(List<Photo> photoList) {
-                            mPhotoList = photoList;
-                            initUi();
-                            initRecyclerView();
-                            initToolbar();
-                        }
-                    });
-                }
+    private void initViewModel() {
+        mDetailsFragmentViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(DetailsFragmentViewModel.class);
+        mDetailsFragmentViewModel.getRealEstateLiveData(mRealEstateId).observe(getViewLifecycleOwner(), realEstate -> {
+            mRealEstate = realEstate;
+            mDetailsFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), photoList -> {
+                mPhotoList = photoList;
+                initUi();
+                initRecyclerView();
+                initToolbar();
             });
+        });
     }
 
-    private void initUi(){
+    private void initUi() {
         mTextDescription.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "Description not provided");
         mTextAdress.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "Address not provided");
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -177,12 +147,12 @@ public class DetailsFragment extends Fragment {
         mTextAgent.setText(!TextUtils.isEmpty(mRealEstate.getAgent()) ? mRealEstate.getAgent() : "Agent not provided");
 
         Double price = mRealEstate.getPrice();
-        String priceText =  (price != null) ? ("$" + NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "Price not provided";
+        String priceText = (price != null) ? ("$" + NumberFormat.getNumberInstance(Locale.getDefault()).format(price)) : "Price not provided";
         mTextPrice.setText(priceText);
         initStaticMapsApi();
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         DetailsFragmentPhotoAdapter detailsFragmentPhotoAdapter = new DetailsFragmentPhotoAdapter(mPhotoList, mIsTablet);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
@@ -192,26 +162,26 @@ public class DetailsFragment extends Fragment {
         mBinding.photoCarouselEmptyDetailsFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    private void initStaticMapsApi(){
-        if (TextUtils.isEmpty(mRealEstate.getAddress())){
+    private void initStaticMapsApi() {
+        if (TextUtils.isEmpty(mRealEstate.getAddress())) {
             mImageApi.setImageResource(R.drawable.baseline_not_listed_location_24);
         } else {
             MapsStaticApi mapsStaticApi = RetrofitService.getRetrofitInstance().create(MapsStaticApi.class);
             Call<ResponseBody> call = mapsStaticApi.getStaticMaps(mRealEstate.getAddress(), 18, "200x200", "color:blue|" + mRealEstate.getAddress(), MAPS_API_KEY);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful() && response.body() != null){
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if (response.isSuccessful() && response.body() != null) {
                         String imageUrl = response.raw().request().url().toString();
 
-                        Glide.with(getContext())
+                        Glide.with(requireContext())
                                 .load(imageUrl)
                                 .into(mImageApi);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                     mImageApi.setImageResource(R.drawable.baseline_signal_cellular_connected_no_internet_4_bar_24);
                 }
             });

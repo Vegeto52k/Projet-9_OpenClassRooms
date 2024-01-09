@@ -1,6 +1,5 @@
 package fr.vegeto52.realestatemanager.model;
 
-import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -18,10 +17,10 @@ import fr.vegeto52.realestatemanager.database.room.Converters;
 /**
  * Created by Vegeto52-PC on 04/12/2023.
  */
-@Entity (tableName = "photo",
+@Entity(tableName = "photo",
         foreignKeys = @ForeignKey(entity = RealEstate.class,
-        parentColumns = "id",
-        childColumns = "realEstateId"),
+                parentColumns = "id",
+                childColumns = "realEstateId"),
         indices = {@Index("realEstateId")})
 public class Photo implements Parcelable {
 
@@ -33,8 +32,10 @@ public class Photo implements Parcelable {
     private String description;
     private long realEstateId;
 
+
+    // Constructor
     @Ignore
-    public Photo(long id, Uri uriPhoto, String description, long realEstateId) {
+    public Photo(long id, Uri uriPhoto, long realEstateId) {
         this.id = id;
         this.uriPhoto = uriPhoto;
         this.realEstateId = realEstateId;
@@ -43,6 +44,8 @@ public class Photo implements Parcelable {
     public Photo() {
     }
 
+
+    // Getters/Setters
     public long getId() {
         return id;
     }
@@ -75,6 +78,8 @@ public class Photo implements Parcelable {
         this.realEstateId = realEstateId;
     }
 
+
+    // Parcelable
     @Override
     public int describeContents() {
         return 0;

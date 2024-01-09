@@ -1,7 +1,6 @@
 package fr.vegeto52.realestatemanager.database.repository;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.RoomDatabase;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -25,59 +24,37 @@ public class PhotoRoomRepository {
         mListPhoto = mPhotoDao.getListPhoto();
     }
 
-    public LiveData<List<Photo>> getListPhoto(){
+    public LiveData<List<Photo>> getListPhoto() {
         return mListPhoto;
     }
 
-    public LiveData<Photo> getPhoto(long photoId){
-        return mPhotoDao.getPhoto(photoId);
-    }
-
-    public void insertPhoto(Photo photo){
+    public void insertPhoto(Photo photo) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-
-        Future<?> future = executor.submit(() -> {
-            // Votre tâche en arrière-plan ici
-            Executors.newSingleThreadExecutor().execute(() -> mPhotoDao.insert(photo));
-        });
-
-// Attendre que la tâche en arrière-plan se termine
+        Future<?> future = executor.submit(() -> Executors.newSingleThreadExecutor().execute(() -> mPhotoDao.insert(photo)));
         try {
-            future.get(); // Ceci bloque jusqu'à ce que la tâche soit terminée
-        } catch (InterruptedException | ExecutionException e) {
-            // Gérer les exceptions si nécessaire
+            future.get();
+        } catch (InterruptedException | ExecutionException ignored) {
         } finally {
-            executor.shutdown(); // Arrêter l'ExecutorService une fois terminé
+            executor.shutdown();
         }
     }
 
-    public void updatePhoto(Photo photo){
-        Executors.newSingleThreadExecutor().execute(() -> mPhotoDao.update(photo));
-    }
-
-    public void deletePhoto(Photo photo){
+    public void deletePhoto(Photo photo) {
         Executors.newSingleThreadExecutor().execute(() -> mPhotoDao.delete(photo));
     }
 
-    public LiveData<List<Photo>> getListPhotoToRealEstate(long realEstateId){
+    public LiveData<List<Photo>> getListPhotoToRealEstate(long realEstateId) {
         return mPhotoDao.getListPhotoToRealEstate(realEstateId);
     }
 
-    public void deleteAllPhotos(long realEstateId){
+    public void deleteAllPhotos(long realEstateId) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-
-        Future<?> future = executor.submit(() -> {
-            executor.execute(() -> mPhotoDao.deleteAllPhotos(realEstateId));
-            // Votre tâche en arrière-plan ici
-        });
-
-// Attendre que la tâche en arrière-plan se termine
+        Future<?> future = executor.submit(() -> executor.execute(() -> mPhotoDao.deleteAllPhotos(realEstateId)));
         try {
-            future.get(); // Ceci bloque jusqu'à ce que la tâche soit terminée
-        } catch (InterruptedException | ExecutionException e) {
-            // Gérer les exceptions si nécessaire
+            future.get();
+        } catch (InterruptedException | ExecutionException ignored) {
         } finally {
-            executor.shutdown(); // Arrêter l'ExecutorService une fois terminé
+            executor.shutdown();
         }
     }
 }

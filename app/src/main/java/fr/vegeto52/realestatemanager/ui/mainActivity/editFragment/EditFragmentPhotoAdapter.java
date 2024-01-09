@@ -21,27 +21,26 @@ import fr.vegeto52.realestatemanager.model.Photo;
 /**
  * Created by Vegeto52-PC on 05/12/2023.
  */
-public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentPhotoAdapter.ViewHolder>  {
+public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentPhotoAdapter.ViewHolder> {
 
-    public interface OnEditDescriptionClickListener{
+    public interface OnEditDescriptionClickListener {
         void onEditDescriptionClick(int position);
     }
 
     public OnEditDescriptionClickListener mEditDescriptionClickListener;
 
-    public void setOnEditDescriptionClickListener(OnEditDescriptionClickListener listener){
+    public void setOnEditDescriptionClickListener(OnEditDescriptionClickListener listener) {
         mEditDescriptionClickListener = listener;
     }
 
     private static List<Photo> mPhotoList;
-    private OnRemovePhotoClickListener mRemovePhotoClickListener;
-    String mInputDescription;
+    private final OnRemovePhotoClickListener mRemovePhotoClickListener;
 
-    public interface OnRemovePhotoClickListener{
+    public interface OnRemovePhotoClickListener {
         void onRemoveClick(int position);
     }
 
-    public EditFragmentPhotoAdapter(List<Photo> photoList, OnRemovePhotoClickListener removePhotoClickListener){
+    public EditFragmentPhotoAdapter(List<Photo> photoList, OnRemovePhotoClickListener removePhotoClickListener) {
         mPhotoList = photoList;
         mRemovePhotoClickListener = removePhotoClickListener;
     }
@@ -58,27 +57,16 @@ public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentP
     public void onBindViewHolder(@NonNull EditFragmentPhotoAdapter.ViewHolder holder, int position) {
         holder.displayPhoto(mPhotoList.get(position));
 
-    //    Glide.with(holder.photoCarousel.getContext())
-    //            .load(mPhotoList.get(position).getUriPhoto())
-    //            .centerCrop()
-    //            .into(holder.photoCarousel);
-
-        holder.deleteButtonCarousel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mRemovePhotoClickListener != null){
-                    mRemovePhotoClickListener.onRemoveClick(holder.getAdapterPosition());
-                    holder.textDescription.setText("");
-                }
+        holder.deleteButtonCarousel.setOnClickListener(view -> {
+            if (mRemovePhotoClickListener != null) {
+                mRemovePhotoClickListener.onRemoveClick(holder.getAdapterPosition());
+                holder.textDescription.setText("");
             }
         });
 
-        holder.editDescription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mEditDescriptionClickListener != null){
-                    mEditDescriptionClickListener.onEditDescriptionClick(holder.getAdapterPosition());
-                }
+        holder.editDescription.setOnClickListener(view -> {
+            if (mEditDescriptionClickListener != null) {
+                mEditDescriptionClickListener.onEditDescriptionClick(holder.getAdapterPosition());
             }
         });
     }
@@ -88,11 +76,7 @@ public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentP
         return mPhotoList.size();
     }
 
-    public void setOnRemovePhotoClickLister(OnRemovePhotoClickListener listener){
-        mRemovePhotoClickListener = listener;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView photoCarousel;
         public ImageButton deleteButtonCarousel;
@@ -110,8 +94,8 @@ public class EditFragmentPhotoAdapter extends RecyclerView.Adapter<EditFragmentP
             textDescription = itemView.findViewById(R.id.item_photo_text_description_edit_fragment);
         }
 
-        public void displayPhoto(Photo photo){
-            if (TextUtils.isEmpty(photo.getDescription())){
+        public void displayPhoto(Photo photo) {
+            if (TextUtils.isEmpty(photo.getDescription())) {
                 blackBand.setVisibility(View.GONE);
             } else {
                 blackBand.setVisibility(View.VISIBLE);
