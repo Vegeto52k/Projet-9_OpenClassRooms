@@ -216,7 +216,6 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
                         }
                     }
                     newRealEstate.setStatut(!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString()));
-                    newRealEstate.setPhoto("TODO");
 
                     if (!TextUtils.isEmpty(mAddressEditText.getText().toString())) {
                         mAddFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), (latitude, longitude) -> {

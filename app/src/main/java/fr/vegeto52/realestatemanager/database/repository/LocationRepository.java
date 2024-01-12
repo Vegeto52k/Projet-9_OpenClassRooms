@@ -18,8 +18,9 @@ import fr.vegeto52.realestatemanager.database.MainApplication;
  */
 public class LocationRepository {
 
-    private final MutableLiveData<Location> mLocationMutableLiveData = new MutableLiveData<>();
-    FusedLocationProviderClient mFusedLocationProviderClient;
+    public MutableLiveData<Location> mLocationMutableLiveData = new MutableLiveData<>();
+
+    public FusedLocationProviderClient mFusedLocationProviderClient;
 
     public LocationRepository() {
         getLocation();

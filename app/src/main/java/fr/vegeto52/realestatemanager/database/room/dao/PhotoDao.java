@@ -1,5 +1,7 @@
 package fr.vegeto52.realestatemanager.database.room.dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -34,4 +36,8 @@ public interface PhotoDao {
 
     @Query("DELETE FROM photo WHERE realEstateId = :realEstateId")
     void deleteAllPhotos(long realEstateId);
+
+    // Provider
+    @Query("SELECT * FROM photo")
+    Cursor getPhotoWithCursor();
 }

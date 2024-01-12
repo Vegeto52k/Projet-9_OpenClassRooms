@@ -8,25 +8,39 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
+import fr.vegeto52.realestatemanager.model.Photo;
+import fr.vegeto52.realestatemanager.model.RealEstate;
+
 /**
- * Created by Vegeto52-PC on 07/01/2024.
+ * Created by Vegeto52-PC on 12/01/2024.
  */
-public class ItemContentProvider extends ContentProvider {
+public class RealEstateContentProvider extends ContentProvider {
+
+    public static final String AUTHORITY = "fr.vegeto52.realestatemanager.provider";
+    public static final String TABLE_NAME = RealEstate.class.getSimpleName();
+    public static final Uri URI_REALESTATE = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
+
     @Override
     public boolean onCreate() {
-        return false;
+        return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        return null;
+        if (getContext() != null){
+            final Cursor cursor = RealEstateDatabase.getInstance(getContext()).mRealEstateDao().getRealEstateWithCursor();
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            return cursor;
+        }
+        throw new IllegalArgumentException("Failed to query row for uri " + uri);
     }
 
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        return "vnd.android.cursor.photo/" + AUTHORITY + "." + TABLE_NAME;
     }
 
     @Nullable

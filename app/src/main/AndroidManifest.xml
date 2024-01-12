@@ -44,7 +44,11 @@
 
         <provider
             android:authorities="fr.vegeto52.realestatemanager.provider"
-            android:name=".provider.ItemContentProvider"
+            android:name=".provider.PhotoContentProvider"
+            android:exported="true"/>
+        <provider
+            android:authorities="fr.vegeto52.realestatemanager.provider"
+            android:name=".provider.RealEstateContentProvider"
             android:exported="true"/>
     </application>
 

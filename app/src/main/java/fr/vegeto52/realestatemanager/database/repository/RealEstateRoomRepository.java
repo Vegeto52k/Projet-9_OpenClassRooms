@@ -1,6 +1,7 @@
 package fr.vegeto52.realestatemanager.database.repository;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -57,9 +58,5 @@ public class RealEstateRoomRepository {
 
     public void updateRealEstate(RealEstate realEstate){
         Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.update(realEstate));
-    }
-
-    public void deleteRealEstate(RealEstate realEstate){
-        Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.delete(realEstate));
     }
 }

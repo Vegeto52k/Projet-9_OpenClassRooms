@@ -2,10 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ExampleInstrumentedTest">
-        <State />
-      </entry>
-      <entry key="app">
+      <entry key="RealEstateContentProviderTest">
         <State>
           <targetSelectedWithDropDown>
             <Target>
@@ -18,24 +15,30 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-08T15:01:31.716281100Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-01-12T14:12:17.324963800Z" />
         </State>
       </entry>
-      <entry key="useAppContext()">
+      <entry key="Tests in 'fr.vegeto52.realestatemanager'">
+        <State />
+      </entry>
+      <entry key="app">
         <State>
-          <targetSelectedWithDropDown>
+          <runningDeviceTargetSelectedWithDropDown>
             <Target>
-              <type value="QUICK_BOOT_TARGET" />
+              <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Vegeto52-PC\.android\avd\Pixel_7_Pro_API_30_Google_Play.avd" />
+                  <value value="C:\Users\Vegeto52-PC\.android\avd\Medium_Tablet_API_30_Google_Play.avd" />
                 </Key>
               </deviceKey>
             </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-08T02:05:02.609816900Z" />
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-10T15:10:09.479217100Z" />
         </State>
+      </entry>
+      <entry key="getPhotoWhenNoPhotoInserted()">
+        <State />
       </entry>
     </value>
   </component>

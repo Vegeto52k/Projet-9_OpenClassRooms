@@ -39,10 +39,6 @@ public class PhotoRoomRepository {
         }
     }
 
-    public void deletePhoto(Photo photo) {
-        Executors.newSingleThreadExecutor().execute(() -> mPhotoDao.delete(photo));
-    }
-
     public LiveData<List<Photo>> getListPhotoToRealEstate(long realEstateId) {
         return mPhotoDao.getListPhotoToRealEstate(realEstateId);
     }

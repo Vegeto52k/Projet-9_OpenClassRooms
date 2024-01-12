@@ -22,7 +22,6 @@ public class RealEstate implements Parcelable {
     private Double surface;
     private Integer numberOfRooms;
     private String description;
-    private String photo;
     private String address;
     private String pointsOfInterest;
     private boolean statut;
@@ -35,14 +34,13 @@ public class RealEstate implements Parcelable {
 
     // Constructor
     @Ignore
-    public RealEstate(long id, String type, Double price, Double surface, Integer numberOfRooms, String description, String photo, String address, String pointsOfInterest, boolean statut, String dateOfEntry, String dateOfSale, String agent) {
+    public RealEstate(long id, String type, Double price, Double surface, Integer numberOfRooms, String description, String address, String pointsOfInterest, boolean statut, String dateOfEntry, String dateOfSale, String agent) {
         this.id = id;
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.numberOfRooms = numberOfRooms;
         this.description = description;
-        this.photo = photo;
         this.address = address;
         this.pointsOfInterest = pointsOfInterest;
         this.statut = statut;
@@ -108,15 +106,6 @@ public class RealEstate implements Parcelable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Nullable
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     @Nullable
@@ -210,7 +199,6 @@ public class RealEstate implements Parcelable {
             numberOfRooms = in.readInt();
         }
         description = in.readString();
-        photo = in.readString();
         address = in.readString();
         pointsOfInterest = in.readString();
         statut = in.readByte() != 0;
@@ -269,7 +257,6 @@ public class RealEstate implements Parcelable {
             parcel.writeInt(numberOfRooms);
         }
         parcel.writeString(description);
-        parcel.writeString(photo);
         parcel.writeString(address);
         parcel.writeString(pointsOfInterest);
         parcel.writeByte((byte) (statut ? 1 : 0));

@@ -56,9 +56,4 @@ public class AddFragmentViewModel extends ViewModel {
     public interface GeocodingCallback {
         void onGeocodingComplete(Double latitude, Double longitude);
     }
-
-    public LiveData<ResultsGeocodingApi> getGeocodingLiveData() {
-        return mResultsGeocodingApiMediatorLiveData;
-    }
-
 }

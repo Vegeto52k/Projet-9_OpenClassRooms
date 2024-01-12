@@ -54,32 +54,31 @@ public class AddFragmentViewModelTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         addFragmentViewModel = new AddFragmentViewModel(mockRealEstateRepository, mockPhotoRepository, mockGeocodingRepository);
-        addFragmentViewModel.getGeocodingLiveData().observeForever(mockGeocodingObserver);
     }
 
     @Test
-    public void insertRealEstate_callsRepositoryInsert() {
+    public void testInsertRealEstate() {
         RealEstate mockRealEstate = mock(RealEstate.class);
         addFragmentViewModel.insertRealEstate(mockRealEstate);
         verify(mockRealEstateRepository).insertRealEstate(mockRealEstate);
     }
 
     @Test
-    public void insertRealEstateAndGetId_callsRepositoryInsertAndGetId() {
+    public void testInsertRealEstateAndGetId() {
         RealEstate mockRealEstate = mock(RealEstate.class);
         addFragmentViewModel.insertRealEstateAndGetId(mockRealEstate);
         verify(mockRealEstateRepository).insertRealEstateAndGetId(mockRealEstate);
     }
 
     @Test
-    public void insertPhoto_callsRepositoryInsert() {
+    public void testInsertPhoto() {
         Photo mockPhoto = mock(Photo.class);
         addFragmentViewModel.insertPhoto(mockPhoto);
         verify(mockPhotoRepository).insertPhoto(mockPhoto);
     }
 
     @Test
-    public void getGeocoding_callsRepositoryGetGeocoding() {
+    public void testGetGeocoding() {
         String mockAddress = "Mock Address";
         addFragmentViewModel.getGeocoding(mockAddress, mockGeocodingCallback);
         verify(mockGeocodingRepository).getGeocoding(eq(mockAddress), any());

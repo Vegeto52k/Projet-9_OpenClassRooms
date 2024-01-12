@@ -250,7 +250,6 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                         }
                     }
                     updatedRealEstate.setStatut(!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString().trim()));
-                    updatedRealEstate.setPhoto("TODO");
 
                     mEditFragmentViewModel.deleteAllPhotos(mRealEstateId);
                     for (Photo photo2 : mPhotoList) {

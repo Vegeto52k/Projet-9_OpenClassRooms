@@ -1,8 +1,9 @@
 package fr.vegeto52.realestatemanager.database.room.dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -29,12 +30,13 @@ public interface RealEstateDao {
     @Update
     void update(RealEstate realEstate);
 
-    @Delete
-    void delete(RealEstate realEstate);
-
     @Query("SELECT * FROM real_estate")
     LiveData<List<RealEstate>> getListRealEstate();
 
     @Query("SELECT * FROM real_estate WHERE id = :realEstateId")
     LiveData<RealEstate> getRealEstate(long realEstateId);
+
+    // Provider
+    @Query("SELECT * FROM real_estate")
+    Cursor getRealEstateWithCursor();
 }
