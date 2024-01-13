@@ -11,9 +11,9 @@
 
     <ImageView
         android:id="@+id/photo_real_estate_item"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="4dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,13 +22,15 @@
 
     <TextView
         android:id="@+id/type_real_estate_item"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="14sp"
+        android:textSize="24sp"
         android:textStyle="bold"
+        android:gravity="start"
+        app:layout_constraintRight_toLeftOf="@id/icon_sale_real_estate_item"
         app:layout_constraintLeft_toRightOf="@id/photo_real_estate_item"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Duplex" />
@@ -40,7 +42,7 @@
         android:layout_margin="4dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="11sp"
+        android:textSize="18sp"
         app:layout_constraintLeft_toRightOf="@id/photo_real_estate_item"
         app:layout_constraintTop_toBottomOf="@id/type_real_estate_item"
         tools:text="Liverpool" />
@@ -52,7 +54,7 @@
         android:layout_margin="4dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/photo_real_estate_item"
@@ -61,8 +63,8 @@
 
     <ImageView
         android:id="@+id/icon_sale_real_estate_item"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_margin="4dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

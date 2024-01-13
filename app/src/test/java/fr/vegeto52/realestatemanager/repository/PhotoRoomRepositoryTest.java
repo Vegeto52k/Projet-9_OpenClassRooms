@@ -53,12 +53,12 @@ public class PhotoRoomRepositoryTest {
     PhotoRoomRepository SUT;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testGetListPhoto(){
+    public void testGetListPhoto() {
         List<Photo> photoList = new ArrayList<>();
         photoList.add(new Photo());
         photoList.add(new Photo());
@@ -81,7 +81,6 @@ public class PhotoRoomRepositoryTest {
         SUT = new PhotoRoomRepository(mPhotoDaoMock);
         SUT.insertPhoto(photo);
 
-    //    verify(mPhotoDao).insert(photo);
         Thread.sleep(1000);
 
         verify(mPhotoDaoMock).insert(photoCaptor.capture());
@@ -89,7 +88,7 @@ public class PhotoRoomRepositoryTest {
     }
 
     @Test
-    public void testGetListPhotoToRealEstate(){
+    public void testGetListPhotoToRealEstate() {
         long realEstateId = 123;
         List<Photo> photoList = new ArrayList<>();
         photoList.add(new Photo());

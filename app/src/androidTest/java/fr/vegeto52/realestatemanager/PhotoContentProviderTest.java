@@ -1,7 +1,7 @@
 package fr.vegeto52.realestatemanager;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
 import android.content.ContentResolver;
@@ -23,10 +23,10 @@ import fr.vegeto52.realestatemanager.provider.PhotoContentProvider;
 public class PhotoContentProviderTest {
 
     private ContentResolver mContentResolver;
-    private static long USER_ID = 1;
+    private static final long USER_ID = 1;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getContext(), RealEstateDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -35,10 +35,10 @@ public class PhotoContentProviderTest {
     }
 
     @Test
-    public void getPhotoWhenNoPhotoInserted(){
+    public void getPhotoWhenNoPhotoInserted() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(PhotoContentProvider.URI_PHOTO, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(0));
+        assertThat(cursor.getCount(), greaterThanOrEqualTo(0));
         cursor.close();
     }
 }

@@ -34,6 +34,7 @@ import java.util.Objects;
 
 import fr.vegeto52.realestatemanager.EditDescriptionDialog;
 import fr.vegeto52.realestatemanager.R;
+import fr.vegeto52.realestatemanager.Utils;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
@@ -256,7 +257,7 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                         mEditFragmentViewModel.insertPhoto(photo2);
                     }
 
-                    if (!TextUtils.isEmpty(mAddressEditText.getText().toString())) {
+                    if (!TextUtils.isEmpty(mAddressEditText.getText().toString()) && Utils.isInternetAvailable2(requireContext())) {
                         mEditFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), (latitude, longitude) -> {
                             updatedRealEstate.setLatitude(latitude);
                             updatedRealEstate.setLongitude(longitude);

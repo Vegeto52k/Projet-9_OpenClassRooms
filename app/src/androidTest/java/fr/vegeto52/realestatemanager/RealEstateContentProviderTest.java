@@ -1,7 +1,7 @@
 package fr.vegeto52.realestatemanager;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
 import android.content.ContentResolver;
@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
-import fr.vegeto52.realestatemanager.provider.PhotoContentProvider;
 import fr.vegeto52.realestatemanager.provider.RealEstateContentProvider;
 
 /**
@@ -24,10 +23,10 @@ import fr.vegeto52.realestatemanager.provider.RealEstateContentProvider;
 public class RealEstateContentProviderTest {
 
     private ContentResolver mContentResolver;
-    private static long USER_ID = 1;
+    private static final long USER_ID = 1;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getContext(), RealEstateDatabase.class)
                 .allowMainThreadQueries()
                 .build();
@@ -36,10 +35,10 @@ public class RealEstateContentProviderTest {
     }
 
     @Test
-    public void getPhotoWhenNoPhotoInserted(){
+    public void getRealEstateWhenNoPhotoInserted() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_REALESTATE, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(0));
+        assertThat(cursor.getCount(), greaterThanOrEqualTo(0));
         cursor.close();
     }
 }

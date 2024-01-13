@@ -45,9 +45,6 @@ public class AddFragmentViewModelTest {
     @Mock
     private AddFragmentViewModel.GeocodingCallback mockGeocodingCallback;
 
-    @Mock
-    private Observer<ResultsGeocodingApi> mockGeocodingObserver;
-
     private AddFragmentViewModel addFragmentViewModel;
 
     @Before

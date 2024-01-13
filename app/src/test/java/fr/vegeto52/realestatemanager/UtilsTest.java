@@ -34,8 +34,8 @@ public class UtilsTest {
 
         assertEquals(expectedDateString, actualDateString);
 
-        // Vérifier que la date obtenue peut être convertie en Date avec le même format
         Date actualDate = dateFormat.parse(actualDateString);
+        assert actualDate != null;
         String reconvertedDateString = dateFormat.format(actualDate);
 
         assertEquals(expectedDateString, reconvertedDateString);

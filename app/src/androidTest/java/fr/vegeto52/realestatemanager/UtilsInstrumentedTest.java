@@ -18,13 +18,10 @@ public class UtilsInstrumentedTest {
 
     @Test
     public void testIsInternetAvailable2() {
-        // Obtenir le contexte de l'application via le framework d'instrumentation
         Context context = ApplicationProvider.getApplicationContext();
 
-        // Appeler la méthode isInternetAvailable2
         boolean isInternetAvailable = Utils.isInternetAvailable2(context);
 
-        // Vérifier que le résultat est conforme aux attentes
         assertTrue(isInternetAvailable);
     }
 }

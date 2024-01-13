@@ -1,7 +1,5 @@
 package fr.vegeto52.realestatemanager.ui.mainActivity.addFragment;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import fr.vegeto52.realestatemanager.database.repository.GeocodingRepository;
@@ -19,7 +17,6 @@ public class AddFragmentViewModel extends ViewModel {
     private final RealEstateRoomRepository mRealEstateRoomRepository;
     private final PhotoRoomRepository mPhotoRoomRepository;
     private final GeocodingRepository mGeocodingRepository;
-    private final MediatorLiveData<ResultsGeocodingApi> mResultsGeocodingApiMediatorLiveData = new MediatorLiveData<>();
 
 
     public AddFragmentViewModel(RealEstateRoomRepository realEstateRoomRepository, PhotoRoomRepository photoRoomRepository, GeocodingRepository geocodingRepository) {

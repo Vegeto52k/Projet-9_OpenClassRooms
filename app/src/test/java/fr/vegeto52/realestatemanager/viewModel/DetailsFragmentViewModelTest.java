@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import fr.vegeto52.realestatemanager.LiveDataTestUtils;
 import fr.vegeto52.realestatemanager.database.repository.PhotoRoomRepository;
 import fr.vegeto52.realestatemanager.database.repository.RealEstateRoomRepository;
 import fr.vegeto52.realestatemanager.model.Photo;
@@ -59,7 +57,7 @@ public class DetailsFragmentViewModelTest {
     @Test
     public void testGetRealEstateLiveData() throws InterruptedException {
         long realEstateId = 123;
-        RealEstate mockRealEstate = new RealEstate(/* pass required parameters */);
+        RealEstate mockRealEstate = new RealEstate();
         MutableLiveData<RealEstate> mockLiveData = new MutableLiveData<>();
         mockLiveData.setValue(mockRealEstate);
 
@@ -69,7 +67,6 @@ public class DetailsFragmentViewModelTest {
 
         resultLiveData.observeForever(mockRealEstateObserver);
 
-        // Wait for LiveData to be updated
         CountDownLatch latch = new CountDownLatch(1);
         resultLiveData.observeForever(value -> latch.countDown());
         latch.await(2, TimeUnit.SECONDS);
@@ -91,7 +88,6 @@ public class DetailsFragmentViewModelTest {
 
         resultLiveData.observeForever(mockPhotoListObserver);
 
-        // Wait for LiveData to be updated
         CountDownLatch latch = new CountDownLatch(1);
         resultLiveData.observeForever(value -> latch.countDown());
         latch.await(2, TimeUnit.SECONDS);

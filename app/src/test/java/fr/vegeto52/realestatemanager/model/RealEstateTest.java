@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import android.os.Parcel;
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import org.junit.Before;
@@ -25,12 +23,12 @@ public class RealEstateTest {
     public final InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testDefaultConstructor(){
+    public void testDefaultConstructor() {
         long id = 1L;
         String type = "House";
         Double price = 250000.0;
@@ -44,13 +42,10 @@ public class RealEstateTest {
         String dateOfSale = "2022-02-01";
         String agent = "John Doe";
 
-        // Créer une instance de RealEstate avec le constructeur
         RealEstate realEstate = new RealEstate(id, type, price, surface, numberOfRooms, description, address, pointsOfInterest, statut, dateOfEntry, dateOfSale, agent);
 
-        // Vérifier que l'objet n'est pas null
         assertNotNull(realEstate);
 
-        // Vérifier que les champs sont correctement initialisés
         assertEquals(id, realEstate.getId());
         assertEquals(type, realEstate.getType());
         assertEquals(price, realEstate.getPrice());
@@ -66,7 +61,7 @@ public class RealEstateTest {
     }
 
     @Test
-    public void testGettersAndSetters(){
+    public void testGettersAndSetters() {
         RealEstate realEstate = new RealEstate();
 
         long id = 1L;
@@ -119,7 +114,6 @@ public class RealEstateTest {
     public void testNullableGettersWithNullValues() {
         RealEstate realEstate = new RealEstate();
 
-        // Utiliser les getters pour obtenir les valeurs (qui devraient être null par défaut)
         assertNull(realEstate.getType());
         assertNull(realEstate.getPrice());
         assertNull(realEstate.getSurface());

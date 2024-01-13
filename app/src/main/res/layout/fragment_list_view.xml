@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:src="@drawable/baseline_add_home_24"
+                android:layout_marginEnd="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -35,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:src="@drawable/baseline_filter_list_24"
+                android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/list_view_fragment_add_button"
                 app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fragment_list_view_empty"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_fragment_list"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -101,7 +103,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/fragment_list_view_price"
-                android:textSize="16sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -142,7 +144,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/fragment_list_view_surface"
-                android:textSize="16sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filter_price_maximum_fragment_list" />
@@ -183,7 +185,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/fragment_list_view_number_of_rooms"
-                android:textSize="16dp"
+                android:textSize="24dp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filter_surface_maximum_fragment_list"
@@ -225,7 +227,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/fragment_list_view_number_of_photos_minimum"
-                android:textSize="16sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filter_number_of_rooms_maximum_fragment_list" />
@@ -259,19 +261,22 @@
                     android:id="@+id/filter_radiobutton_available_fragment_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fragment_list_view_available" />
+                    android:text="@string/fragment_list_view_available"
+                    android:textSize="20sp"/>
 
                 <RadioButton
                     android:id="@+id/filter_radiobutton_both_fragment_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fragment_list_view_both" />
+                    android:text="@string/fragment_list_view_both"
+                    android:textSize="20sp"/>
 
                 <RadioButton
                     android:id="@+id/filter_radiobutton_unavailable_fragment_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fragment_list_view_unavailable" />
+                    android:text="@string/fragment_list_view_unavailable"
+                    android:textSize="20sp"/>
 
             </RadioGroup>
 

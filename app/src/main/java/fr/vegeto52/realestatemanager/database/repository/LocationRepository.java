@@ -27,14 +27,14 @@ public class LocationRepository {
     }
 
     @SuppressLint("MissingPermission")
-    public void getLocation(){
+    public void getLocation() {
         Context context = MainApplication.getApplication();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         Task<Location> task = mFusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(mLocationMutableLiveData::setValue);
     }
 
-    public LiveData<Location> getLocationLiveData(){
+    public LiveData<Location> getLocationLiveData() {
         return mLocationMutableLiveData;
     }
 

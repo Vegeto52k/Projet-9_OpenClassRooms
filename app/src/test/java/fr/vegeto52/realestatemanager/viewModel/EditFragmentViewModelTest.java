@@ -1,5 +1,9 @@
 package fr.vegeto52.realestatemanager.viewModel;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,17 +20,11 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import fr.vegeto52.realestatemanager.database.repository.GeocodingRepository;
 import fr.vegeto52.realestatemanager.database.repository.PhotoRoomRepository;
 import fr.vegeto52.realestatemanager.database.repository.RealEstateRoomRepository;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
-import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
 import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragmentViewModel;
 
 /**
@@ -47,9 +45,6 @@ public class EditFragmentViewModelTest {
     private GeocodingRepository mockGeocodingRepository;
 
     @Mock
-    private EditFragmentViewModel.GeocodingCallback mockGeocodingCallback;
-
-    @Mock
     private Observer<RealEstate> mockRealEstateObserver;
 
     @Mock
@@ -66,7 +61,7 @@ public class EditFragmentViewModelTest {
     @Test
     public void testGetRealEstateLiveData() throws InterruptedException {
         long realEstateId = 123;
-        RealEstate mockRealEstate = new RealEstate(/* pass required parameters */);
+        RealEstate mockRealEstate = new RealEstate();
         MutableLiveData<RealEstate> mockLiveData = new MutableLiveData<>();
         mockLiveData.setValue(mockRealEstate);
 
@@ -76,7 +71,6 @@ public class EditFragmentViewModelTest {
 
         resultLiveData.observeForever(mockRealEstateObserver);
 
-        // Wait for LiveData to be updated
         CountDownLatch latch = new CountDownLatch(1);
         resultLiveData.observeForever(value -> latch.countDown());
         latch.await(2, TimeUnit.SECONDS);
@@ -87,7 +81,7 @@ public class EditFragmentViewModelTest {
 
     @Test
     public void testUpdateRealEstate() {
-        RealEstate mockRealEstate = new RealEstate(/* pass required parameters */);
+        RealEstate mockRealEstate = new RealEstate();
         editFragmentViewModel.updateRealEstate(mockRealEstate);
 
         verify(mockRealEstateRoomRepository).updateRealEstate(mockRealEstate);
@@ -96,7 +90,7 @@ public class EditFragmentViewModelTest {
     @Test
     public void testGetListPhotoToRealEstate() throws InterruptedException {
         long realEstateId = 123;
-        List<Photo> mockPhotoList = new ArrayList<>(); // Populate with mock data
+        List<Photo> mockPhotoList = new ArrayList<>();
         MutableLiveData<List<Photo>> mockLiveData = new MutableLiveData<>();
         mockLiveData.setValue(mockPhotoList);
 
@@ -106,7 +100,6 @@ public class EditFragmentViewModelTest {
 
         resultLiveData.observeForever(mockPhotoListObserver);
 
-        // Wait for LiveData to be updated
         CountDownLatch latch = new CountDownLatch(1);
         resultLiveData.observeForever(value -> latch.countDown());
         latch.await(2, TimeUnit.SECONDS);
@@ -117,7 +110,7 @@ public class EditFragmentViewModelTest {
 
     @Test
     public void testInsertPhoto() {
-        Photo mockPhoto = new Photo(/* pass required parameters */);
+        Photo mockPhoto = new Photo();
         editFragmentViewModel.insertPhoto(mockPhoto);
 
         verify(mockPhotoRoomRepository).insertPhoto(mockPhoto);

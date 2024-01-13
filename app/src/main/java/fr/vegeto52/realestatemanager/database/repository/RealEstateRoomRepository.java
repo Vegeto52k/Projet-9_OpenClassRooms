@@ -1,7 +1,6 @@
 package fr.vegeto52.realestatemanager.database.repository;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -20,20 +19,20 @@ public class RealEstateRoomRepository {
     private final RealEstateDao mRealEstateDao;
     private final LiveData<List<RealEstate>> mListRealEstate;
 
-    public RealEstateRoomRepository(RealEstateDao realEstateDao){
+    public RealEstateRoomRepository(RealEstateDao realEstateDao) {
         mRealEstateDao = realEstateDao;
         mListRealEstate = mRealEstateDao.getListRealEstate();
     }
 
-    public LiveData<List<RealEstate>> getListRealEstate(){
+    public LiveData<List<RealEstate>> getListRealEstate() {
         return mListRealEstate;
     }
 
-    public LiveData<RealEstate> getRealEstate(long realEstateId){
+    public LiveData<RealEstate> getRealEstate(long realEstateId) {
         return mRealEstateDao.getRealEstate(realEstateId);
     }
 
-    public void insertRealEstate(RealEstate realEstate){
+    public void insertRealEstate(RealEstate realEstate) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<?> future = executor.submit(() -> Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.insert(realEstate)));
         try {
@@ -44,7 +43,7 @@ public class RealEstateRoomRepository {
         }
     }
 
-    public long insertRealEstateAndGetId(RealEstate realEstate){
+    public long insertRealEstateAndGetId(RealEstate realEstate) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Long> future = executor.submit(() -> mRealEstateDao.insertAndGetId(realEstate));
         try {
@@ -56,7 +55,7 @@ public class RealEstateRoomRepository {
         }
     }
 
-    public void updateRealEstate(RealEstate realEstate){
+    public void updateRealEstate(RealEstate realEstate) {
         Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.update(realEstate));
     }
 }

@@ -2,7 +2,6 @@ package fr.vegeto52.realestatemanager.ui.mainActivity.photoViewFragment;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,6 @@ public class PhotoViewFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             mUriPhoto = args.getParcelable("uriPhoto");
-            Log.d("Vérification uri 3", "Uri : " + mUriPhoto);
         }
         return view;
     }
@@ -75,7 +73,6 @@ public class PhotoViewFragment extends Fragment {
     }
 
     private void initUI() {
-        Log.d("Vérification uri", "Uri : " + mUriPhoto);
         Glide.with(requireContext())
                 .load(mUriPhoto)
                 .error(R.drawable.baseline_cancel_24)

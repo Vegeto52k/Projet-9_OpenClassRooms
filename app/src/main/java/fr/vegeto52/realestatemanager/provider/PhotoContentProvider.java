@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 
 import fr.vegeto52.realestatemanager.database.room.RealEstateDatabase;
 import fr.vegeto52.realestatemanager.model.Photo;
-import fr.vegeto52.realestatemanager.model.RealEstate;
 
 /**
  * Created by Vegeto52-PC on 07/01/2024.
@@ -29,7 +28,7 @@ public class PhotoContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        if (getContext() != null){
+        if (getContext() != null) {
             final Cursor cursor = RealEstateDatabase.getInstance(getContext()).mPhotoDao().getPhotoWithCursor();
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             return cursor;

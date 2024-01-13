@@ -33,6 +33,7 @@ import java.util.Objects;
 import fr.vegeto52.realestatemanager.EditDescriptionDialog;
 import fr.vegeto52.realestatemanager.NotificationHelper;
 import fr.vegeto52.realestatemanager.R;
+import fr.vegeto52.realestatemanager.Utils;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentAddBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
@@ -217,7 +218,7 @@ public class AddFragment extends Fragment implements AddFragmentPhotoAdapter.OnE
                     }
                     newRealEstate.setStatut(!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString()));
 
-                    if (!TextUtils.isEmpty(mAddressEditText.getText().toString())) {
+                    if (!TextUtils.isEmpty(mAddressEditText.getText().toString()) && Utils.isInternetAvailable2(requireContext())) {
                         mAddFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), (latitude, longitude) -> {
                             newRealEstate.setLatitude(latitude);
                             newRealEstate.setLongitude(longitude);
