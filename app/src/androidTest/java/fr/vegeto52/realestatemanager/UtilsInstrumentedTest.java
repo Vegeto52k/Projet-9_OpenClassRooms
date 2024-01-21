@@ -10,6 +10,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fr.vegeto52.realestatemanager.utils.Utils;
+
 /**
  * Created by Vegeto52-PC on 11/01/2024.
  */

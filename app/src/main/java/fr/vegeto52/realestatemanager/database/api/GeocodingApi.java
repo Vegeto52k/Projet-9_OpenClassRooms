@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager.api;
+package fr.vegeto52.realestatemanager.database.api;
 
 import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
 import retrofit2.Call;

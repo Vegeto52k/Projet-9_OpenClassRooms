@@ -1,6 +1,7 @@
 package fr.vegeto52.realestatemanager.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,7 +17,7 @@ import fr.vegeto52.realestatemanager.model.Photo;
  */
 public class PhotoContentProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "fr.vegeto52.realestatemanager.provider";
+    public static final String AUTHORITY = "fr.vegeto52.realestatemanager.provider.photo";
     public static final String TABLE_NAME = Photo.class.getSimpleName();
     public static final Uri URI_PHOTO = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
 
@@ -39,13 +40,22 @@ public class PhotoContentProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return "vnd.android.cursor.photo/" + AUTHORITY + "." + TABLE_NAME;
+        return "vnd.android.cursor.dir/" + AUTHORITY + "." + TABLE_NAME;
     }
 
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+        if (getContext() != null){
+            assert contentValues != null;
+            final long id = RealEstateDatabase.getInstance(getContext()).mPhotoDao().insertAndGetId(Photo.fromContentValues(contentValues));
+            if (id != 0){
+                getContext().getContentResolver().notifyChange(uri, null);
+                return ContentUris.withAppendedId(uri, id);
+            }
+        }
+        throw new IllegalArgumentException("Failed to insert row into " + uri);
+    //    return null;
     }
 
     @Override

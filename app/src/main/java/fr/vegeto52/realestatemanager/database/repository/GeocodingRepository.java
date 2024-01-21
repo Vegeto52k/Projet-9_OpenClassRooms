@@ -5,8 +5,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import fr.vegeto52.realestatemanager.BuildConfig;
-import fr.vegeto52.realestatemanager.api.GeocodingApi;
-import fr.vegeto52.realestatemanager.api.RetrofitService;
+import fr.vegeto52.realestatemanager.database.api.GeocodingApi;
+import fr.vegeto52.realestatemanager.database.api.RetrofitService;
 import fr.vegeto52.realestatemanager.model.ResultsGeocodingApi;
 import retrofit2.Call;
 import retrofit2.Response;

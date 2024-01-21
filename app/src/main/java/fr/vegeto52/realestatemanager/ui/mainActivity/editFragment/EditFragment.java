@@ -32,9 +32,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import fr.vegeto52.realestatemanager.EditDescriptionDialog;
+import fr.vegeto52.realestatemanager.utils.EditDescriptionDialog;
 import fr.vegeto52.realestatemanager.R;
-import fr.vegeto52.realestatemanager.Utils;
+import fr.vegeto52.realestatemanager.utils.Utils;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
 import fr.vegeto52.realestatemanager.model.Photo;

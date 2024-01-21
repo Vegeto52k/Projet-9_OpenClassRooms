@@ -10,6 +10,7 @@
                 <map>
                   <entry key="Copy_of_Nexus_5_API_30" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="Medium_Tablet_API_30_Google_Play" value="120" />
                   <entry key="Pixel_7_Pro_API_30_Google_Play" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -30,6 +31,34 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1380124027">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Medium_Tablet_API_30_Google_Play" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-1289693763">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Copy_of_Nexus_5_API_30" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Medium_Tablet_API_30_Google_Play" value="120" />
+                  <entry key="Pixel_7_Pro_API_30_Google_Play" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-825298723">
           <value>
             <AndroidTestResultsTableState>
@@ -37,6 +66,19 @@
                 <map>
                   <entry key="Copy_of_Nexus_5_API_30" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-285215401">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Medium_Tablet_API_30_Google_Play" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -76,6 +118,7 @@
                 <map>
                   <entry key="Copy_of_Nexus_5_API_30" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="Medium_Tablet_API_30_Google_Play" value="120" />
                   <entry key="Pixel_7_Pro_API_30_Google_Play" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -90,6 +133,19 @@
                 <map>
                   <entry key="Copy_of_Nexus_5_API_30" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1759652228">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Medium_Tablet_API_30_Google_Play" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

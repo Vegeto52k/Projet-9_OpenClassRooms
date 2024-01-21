@@ -350,6 +350,7 @@ public class ListViewFragment extends Fragment {
         mFilterPhotosMinimum.setText("");
         mFilterRadioGroup.check(R.id.filter_radiobutton_both_fragment_list);
         mRecyclerView.setAdapter(new ListViewRealEstateAdapter(mRealEstateListStatic, mPhotoList, mIsTablet));
+        mRealEstateList = new ArrayList<>(mRealEstateListStatic);
         mBinding.fragmentListViewEmpty.setVisibility(mRealEstateListStatic.isEmpty() ? View.VISIBLE : View.GONE);
     }
 }

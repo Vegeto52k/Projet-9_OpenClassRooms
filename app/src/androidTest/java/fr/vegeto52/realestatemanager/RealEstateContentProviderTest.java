@@ -2,11 +2,14 @@ package fr.vegeto52.realestatemanager;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -35,10 +38,31 @@ public class RealEstateContentProviderTest {
     }
 
     @Test
-    public void getRealEstateWhenNoPhotoInserted() {
+    public void getRealEstateWhenNoRealEstateInserted() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_REALESTATE, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
         assertThat(cursor.getCount(), greaterThanOrEqualTo(0));
         cursor.close();
+    }
+
+    @Test
+    public void insertAndGetRealEstate(){
+        final Uri uri = mContentResolver.insert(RealEstateContentProvider.URI_REALESTATE, generateRealEstate());
+        assertThat(uri, notNullValue());
+        final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_REALESTATE, USER_ID), null, null, null, null);
+        assertThat(cursor, notNullValue());
+
+        assertThat(cursor.getCount(), greaterThanOrEqualTo(1));
+        assertThat(cursor.moveToLast(), is(true));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("type")), is("Castle"));
+
+        cursor.close();
+    }
+
+    private ContentValues generateRealEstate(){
+        final ContentValues values = new ContentValues();
+        values.put("type", "Castle");
+        values.put("description", "Kaamelott");
+        return values;
     }
 }

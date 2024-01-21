@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager.api;
+package fr.vegeto52.realestatemanager.database.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

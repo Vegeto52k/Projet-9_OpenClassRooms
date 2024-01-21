@@ -28,8 +28,8 @@ import java.util.Locale;
 
 import fr.vegeto52.realestatemanager.BuildConfig;
 import fr.vegeto52.realestatemanager.R;
-import fr.vegeto52.realestatemanager.api.MapsStaticApi;
-import fr.vegeto52.realestatemanager.api.RetrofitService;
+import fr.vegeto52.realestatemanager.database.api.MapsStaticApi;
+import fr.vegeto52.realestatemanager.database.api.RetrofitService;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentDetailsBinding;
 import fr.vegeto52.realestatemanager.model.Photo;

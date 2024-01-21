@@ -43,11 +43,11 @@
         </activity>
 
         <provider
-            android:authorities="fr.vegeto52.realestatemanager.provider"
+            android:authorities="fr.vegeto52.realestatemanager.provider.photo"
             android:name=".provider.PhotoContentProvider"
             android:exported="true"/>
         <provider
-            android:authorities="fr.vegeto52.realestatemanager.provider"
+            android:authorities="fr.vegeto52.realestatemanager.provider.realEstate"
             android:name=".provider.RealEstateContentProvider"
             android:exported="true"/>
     </application>

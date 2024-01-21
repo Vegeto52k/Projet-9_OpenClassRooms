@@ -2,11 +2,14 @@ package fr.vegeto52.realestatemanager;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -27,7 +30,7 @@ public class PhotoContentProviderTest {
 
     @Before
     public void setUp() {
-        Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getContext(), RealEstateDatabase.class)
+       Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getInstrumentation().getContext(), RealEstateDatabase.class)
                 .allowMainThreadQueries()
                 .build();
 
@@ -40,5 +43,26 @@ public class PhotoContentProviderTest {
         assertThat(cursor, notNullValue());
         assertThat(cursor.getCount(), greaterThanOrEqualTo(0));
         cursor.close();
+    }
+
+    @Test
+    public void insertAndGetPhoto(){
+        final Uri uri = mContentResolver.insert(PhotoContentProvider.URI_PHOTO, generatePhoto());
+        assertThat(uri, notNullValue());
+        final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(PhotoContentProvider.URI_PHOTO, USER_ID), null, null, null, null);
+        assertThat(cursor, notNullValue());
+
+        assertThat(cursor.getCount(), greaterThanOrEqualTo(1));
+        assertThat(cursor.moveToLast(), is(true));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("description")), is("Kitchen"));
+
+        cursor.close();
+    }
+
+    private ContentValues generatePhoto(){
+        final ContentValues values = new ContentValues();
+        values.put("description", "Kitchen");
+        values.put("realEstateId", "1");
+        return values;
     }
 }

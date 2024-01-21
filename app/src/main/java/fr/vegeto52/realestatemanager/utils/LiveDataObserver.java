@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager;
+package fr.vegeto52.realestatemanager.utils;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;

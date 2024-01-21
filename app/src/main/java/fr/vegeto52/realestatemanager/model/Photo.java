@@ -1,5 +1,6 @@
 package fr.vegeto52.realestatemanager.model;
 
+import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -110,5 +111,13 @@ public class Photo implements Parcelable {
         uriPhoto = in.readParcelable(Uri.class.getClassLoader());
         description = in.readString();
         realEstateId = in.readLong();
+    }
+
+    // Utils
+    public static Photo fromContentValues(ContentValues values){
+        Photo photo = new Photo();
+        if (values.containsKey("description")) photo.setDescription(values.getAsString("description"));
+        if (values.containsKey("realEstateId")) photo.setRealEstateId(values.getAsLong("realEstateId"));
+        return photo;
     }
 }

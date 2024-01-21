@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager;
+package fr.vegeto52.realestatemanager.utils;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;

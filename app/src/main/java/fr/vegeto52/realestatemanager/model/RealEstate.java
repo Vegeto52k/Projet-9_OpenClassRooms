@@ -1,5 +1,6 @@
 package fr.vegeto52.realestatemanager.model;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -275,5 +276,13 @@ public class RealEstate implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeDouble(longitude);
         }
+    }
+
+    // Utils
+    public static RealEstate fromContentValues(ContentValues values){
+        RealEstate realEstate = new RealEstate();
+        if (values.containsKey("type")) realEstate.setType(values.getAsString("type"));
+        if (values.containsKey("description")) realEstate.setDescription(values.getAsString("description"));
+        return realEstate;
     }
 }

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-import fr.vegeto52.realestatemanager.LiveDataObserver;
+import fr.vegeto52.realestatemanager.utils.LiveDataObserver;
 import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentLocationBinding;
@@ -97,6 +98,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     private void initViewModel() {
         LocationViewModel locationViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(LocationViewModel.class);
         LiveDataObserver.observeOnce(locationViewModel.getLocationViewState(), locationViewState -> {
+            Log.d("Vérif Location", "Salutations !");
             mLocation = locationViewState.getLocation();
             double userLatitude = mLocation.getLatitude();
             double userLongitude = mLocation.getLongitude();

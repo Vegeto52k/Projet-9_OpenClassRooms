@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager;
+package fr.vegeto52.realestatemanager.utils;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
+
+import fr.vegeto52.realestatemanager.R;
 
 /**
  * Created by Vegeto52-PC on 17/12/2023.

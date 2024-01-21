@@ -1,4 +1,4 @@
-package fr.vegeto52.realestatemanager;
+package fr.vegeto52.realestatemanager.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
