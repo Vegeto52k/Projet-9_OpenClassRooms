@@ -2,23 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="Tests in 'fr.vegeto52.realestatemanager'">
-        <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Vegeto52-PC\.android\avd\Pixel_7_Pro_API_30_Google_Play.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-21T13:59:07.695159900Z" />
-        </State>
+      <entry key="RealEstateDatabaseTest">
+        <State />
       </entry>
-      <entry key="UtilsInstrumentedTest">
+      <entry key="Tests in 'fr.vegeto52.realestatemanager'">
         <State />
       </entry>
       <entry key="app">
@@ -36,6 +23,12 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-01-23T16:07:04.632938100Z" />
         </State>
+      </entry>
+      <entry key="insertRealEstateAndGetId()">
+        <State />
+      </entry>
+      <entry key="insertRealEstateList()">
+        <State />
       </entry>
     </value>
   </component>

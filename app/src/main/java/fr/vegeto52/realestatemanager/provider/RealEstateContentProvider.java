@@ -78,6 +78,7 @@ public class RealEstateContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+        // For Testing
     //    if (getContext() != null){
     //        assert contentValues != null;
     //        final long id = RealEstateDatabase.getInstance(getContext()).mRealEstateDao().insertAndGetId(RealEstate.fromContentValues(contentValues));

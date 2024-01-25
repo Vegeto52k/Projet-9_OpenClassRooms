@@ -78,6 +78,7 @@ public class PhotoContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+        // For testing
     //    if (getContext() != null){
     //        assert contentValues != null;
     //        final long id = RealEstateDatabase.getInstance(getContext()).mPhotoDao().insertAndGetId(Photo.fromContentValues(contentValues));
