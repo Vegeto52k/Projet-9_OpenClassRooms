@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import fr.vegeto52.realestatemanager.database.repository.MapsStaticRepository;
 import fr.vegeto52.realestatemanager.database.repository.PhotoRoomRepository;
 import fr.vegeto52.realestatemanager.database.repository.RealEstateRoomRepository;
 import fr.vegeto52.realestatemanager.model.Photo;
@@ -41,6 +42,9 @@ public class DetailsFragmentViewModelTest {
     private PhotoRoomRepository mockPhotoRoomRepository;
 
     @Mock
+    private MapsStaticRepository mockMapsStaticRepository;
+
+    @Mock
     private Observer<RealEstate> mockRealEstateObserver;
 
     @Mock
@@ -51,7 +55,7 @@ public class DetailsFragmentViewModelTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        detailsFragmentViewModel = new DetailsFragmentViewModel(mockRealEstateRoomRepository, mockPhotoRoomRepository);
+        detailsFragmentViewModel = new DetailsFragmentViewModel(mockRealEstateRoomRepository, mockPhotoRoomRepository, mockMapsStaticRepository);
     }
 
     @Test

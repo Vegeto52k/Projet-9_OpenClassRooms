@@ -16,7 +16,8 @@ import androidx.room.TypeConverters;
 import fr.vegeto52.realestatemanager.database.room.Converters;
 
 /**
- * Created by Vegeto52-PC on 04/12/2023.
+ * The Photo class represents an image associated with a real estate property.
+ * It includes information such as the image URI, description, and the ID of the associated real estate.
  */
 @Entity(tableName = "photo",
         foreignKeys = @ForeignKey(entity = RealEstate.class,
@@ -25,16 +26,22 @@ import fr.vegeto52.realestatemanager.database.room.Converters;
         indices = {@Index("realEstateId")})
 public class Photo implements Parcelable {
 
+    // Auto-generated ID for the photo
     @PrimaryKey(autoGenerate = true)
     private long id;
+
+    // URI of the photo using TypeConverters for database storage
     @TypeConverters(Converters.class)
     private Uri uriPhoto;
 
+    // Description of the photo
     private String description;
+
+    // ID of the real estate associated with the photo
     private long realEstateId;
 
 
-    // Constructor
+    // Constructors
     @Ignore
     public Photo(long id, Uri uriPhoto, long realEstateId) {
         this.id = id;
@@ -80,7 +87,7 @@ public class Photo implements Parcelable {
     }
 
 
-    // Parcelable
+    // Parcelable implementation
     @Override
     public int describeContents() {
         return 0;
@@ -94,6 +101,7 @@ public class Photo implements Parcelable {
         parcel.writeLong(realEstateId);
     }
 
+    // Creator for Parcelable
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
         @Override
         public Photo createFromParcel(Parcel in) {
@@ -106,6 +114,7 @@ public class Photo implements Parcelable {
         }
     };
 
+    // Parcelable constructor
     protected Photo(Parcel in) {
         id = in.readLong();
         uriPhoto = in.readParcelable(Uri.class.getClassLoader());
@@ -113,7 +122,12 @@ public class Photo implements Parcelable {
         realEstateId = in.readLong();
     }
 
-    // Utils
+    /**
+     * Creates a Photo instance from ContentValues.
+     *
+     * @param values ContentValues containing photo information.
+     * @return Photo instance.
+     */
     public static Photo fromContentValues(ContentValues values){
         Photo photo = new Photo();
         if (values.containsKey("description")) photo.setDescription(values.getAsString("description"));

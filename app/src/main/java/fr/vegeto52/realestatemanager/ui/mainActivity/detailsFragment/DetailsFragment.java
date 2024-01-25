@@ -26,70 +26,89 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-import fr.vegeto52.realestatemanager.BuildConfig;
 import fr.vegeto52.realestatemanager.R;
-import fr.vegeto52.realestatemanager.database.api.MapsStaticApi;
-import fr.vegeto52.realestatemanager.database.api.RetrofitService;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentDetailsBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 import fr.vegeto52.realestatemanager.ui.mainActivity.editFragment.EditFragment;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
+/**
+ * The DetailsFragment class extends Fragment and displays detailed information about a RealEstate entity.
+ * It includes a RecyclerView for displaying photos and provides an option to edit the RealEstate details.
+ */
 public class DetailsFragment extends Fragment {
 
+    // View Binding
     FragmentDetailsBinding mBinding;
+
+    // UI elements
     RecyclerView mRecyclerViewPhoto;
     TextView mTextDescription, mTextAdress, mTextSurface, mTextNumberOfRooms, mTextPointsOfInterest, mTextDateOfEntry, mTextDateOfSale, mTextAgent, mTextPrice;
     ImageView mImageApi;
     Toolbar mToolbar;
     ImageButton mBackButton, mEditButton;
+
+    // ViewModel for handling data operations
     private DetailsFragmentViewModel mDetailsFragmentViewModel;
+
+    // Data related to the displayed RealEstate
     private RealEstate mRealEstate;
     private Long mRealEstateId;
-    String MAPS_API_KEY = BuildConfig.MAPS_API_KEY;
     private List<Photo> mPhotoList;
+
+    // Flag indicating whether the device is a tablet
     private boolean mIsTablet;
 
+    /**
+     * Default constructor for the DetailsFragment class.
+     */
     public DetailsFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Called to create and return the view hierarchy associated with the fragment.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate views.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return The View for the fragment's UI.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentDetailsBinding.inflate(inflater, container, false);
         View view = mBinding.getRoot();
 
-        mRecyclerViewPhoto = view.findViewById(R.id.recyclerview_fragment_details_photo);
-        mTextDescription = view.findViewById(R.id.description_details_fragment);
-        mTextAdress = view.findViewById(R.id.adress_details_fragment);
-        mImageApi = view.findViewById(R.id.map_adress_details_fragment);
-        mTextSurface = view.findViewById(R.id.surface_details_fragment);
-        mTextNumberOfRooms = view.findViewById(R.id.number_of_rooms_details_fragment);
-        mTextPointsOfInterest = view.findViewById(R.id.points_of_interest_details_fragment);
-        mTextDateOfEntry = view.findViewById(R.id.date_of_entry_details_fragment);
-        mTextDateOfSale = view.findViewById(R.id.date_of_sale_details_fragment);
-        mTextAgent = view.findViewById(R.id.agent_details_fragment);
-        mTextPrice = view.findViewById(R.id.price_details_fragment);
+        // Initialize UI elements
+        mRecyclerViewPhoto = mBinding.recyclerviewFragmentDetailsPhoto;
+        mTextDescription = mBinding.descriptionDetailsFragment;
+        mTextAdress = mBinding.adressDetailsFragment;
+        mImageApi = mBinding.mapAdressDetailsFragment;
+        mTextSurface = mBinding.surfaceDetailsFragment;
+        mTextNumberOfRooms = mBinding.numberOfRoomsDetailsFragment;
+        mTextPointsOfInterest = mBinding.pointsOfInterestDetailsFragment;
+        mTextDateOfEntry = mBinding.dateOfEntryDetailsFragment;
+        mTextDateOfSale = mBinding.dateOfSaleDetailsFragment;
+        mTextAgent = mBinding.agentDetailsFragment;
+        mTextPrice = mBinding.priceDetailsFragment;
 
-        mToolbar = view.findViewById(R.id.details_fragment_toolbar);
-        mBackButton = view.findViewById(R.id.details_fragment_back_button);
-        mEditButton = view.findViewById(R.id.details_fragment_edit_button);
+        mToolbar = mBinding.detailsFragmentToolbar;
+        mBackButton = mBinding.detailsFragmentBackButton;
+        mEditButton = mBinding.detailsFragmentEditButton;
 
+        // Retrieve RealEstate ID from arguments
         Bundle args = getArguments();
         if (args != null) {
             mRealEstateId = args.getLong("idRealEstate");
         }
 
+        // Check if the device is a tablet
         int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
         mIsTablet = smallestScreenWidthDp >= 600;
 
+        // Hide back button on tablets
         if (mIsTablet) {
             mBackButton.setVisibility(View.INVISIBLE);
         }
@@ -97,6 +116,12 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Called after the fragment's view has been created.
+     *
+     * @param view               The created view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -105,6 +130,9 @@ public class DetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * Initializes the toolbar, setting up click listeners for back and edit buttons.
+     */
     private void initToolbar() {
         mBackButton.setOnClickListener(view -> requireActivity().onBackPressed());
         mEditButton.setOnClickListener(view -> {
@@ -122,6 +150,9 @@ public class DetailsFragment extends Fragment {
         });
     }
 
+    /**
+     * Initializes the toolbar, ViewModel, and observes LiveData for RealEstate details and photos.
+     */
     private void initViewModel() {
         mDetailsFragmentViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(DetailsFragmentViewModel.class);
         mDetailsFragmentViewModel.getRealEstateLiveData(mRealEstateId).observe(getViewLifecycleOwner(), realEstate -> {
@@ -135,6 +166,9 @@ public class DetailsFragment extends Fragment {
         });
     }
 
+    /**
+     * Initializes the UI elements with RealEstate data.
+     */
     private void initUi() {
         mTextDescription.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "Description not provided");
         mTextAdress.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "Address not provided");
@@ -152,6 +186,9 @@ public class DetailsFragment extends Fragment {
         initStaticMapsApi();
     }
 
+    /**
+     * Initializes the RecyclerView for displaying photos.
+     */
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         DetailsFragmentPhotoAdapter detailsFragmentPhotoAdapter = new DetailsFragmentPhotoAdapter(mPhotoList, mIsTablet);
@@ -162,29 +199,19 @@ public class DetailsFragment extends Fragment {
         mBinding.photoCarouselEmptyDetailsFragment.setVisibility(mPhotoList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    private void initStaticMapsApi() {
-        if (TextUtils.isEmpty(mRealEstate.getAddress())) {
-            mImageApi.setImageResource(R.drawable.baseline_not_listed_location_24);
-        } else {
-            MapsStaticApi mapsStaticApi = RetrofitService.getRetrofitInstance().create(MapsStaticApi.class);
-            Call<ResponseBody> call = mapsStaticApi.getStaticMaps(mRealEstate.getAddress(), 18, "200x200", "color:blue|" + mRealEstate.getAddress(), MAPS_API_KEY);
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        String imageUrl = response.raw().request().url().toString();
-
-                        Glide.with(requireContext())
-                                .load(imageUrl)
-                                .into(mImageApi);
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                    mImageApi.setImageResource(R.drawable.baseline_signal_cellular_connected_no_internet_4_bar_24);
-                }
-            });
-        }
+    /**
+     * Initializes the Static Maps API, displaying a map image based on the RealEstate address.
+     */
+    private void initStaticMapsApi(){
+        mDetailsFragmentViewModel.getMapsStatic(mRealEstate.getAddress()).observe(getViewLifecycleOwner(), responseBodyResponse -> {
+            if (responseBodyResponse.isSuccessful() && responseBodyResponse.body() != null){
+                String imageUrl = responseBodyResponse.raw().request().url().toString();
+                Glide.with(requireContext())
+                        .load(imageUrl)
+                        .into(mImageApi);
+            } else {
+                mImageApi.setImageResource(R.drawable.baseline_signal_cellular_connected_no_internet_4_bar_24);
+            }
+        });
     }
 }

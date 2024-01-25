@@ -2,38 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PhotoContentProviderTest">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Vegeto52-PC\.android\avd\Pixel_7_Pro_API_30_Google_Play.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-17T03:03:47.372294300Z" />
-        </State>
-      </entry>
-      <entry key="RealEstateContentProviderTest">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Vegeto52-PC\.android\avd\Medium_Tablet_API_30_Google_Play.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-17T00:35:34.607607Z" />
-        </State>
-      </entry>
       <entry key="Tests in 'fr.vegeto52.realestatemanager'">
         <State>
           <runningDeviceTargetSelectedWithDropDown>
@@ -50,6 +18,9 @@
           <timeTargetWasSelectedWithDropDown value="2024-01-21T13:59:07.695159900Z" />
         </State>
       </entry>
+      <entry key="UtilsInstrumentedTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -63,11 +34,8 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-21T14:41:07.893995200Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-01-23T16:07:04.632938100Z" />
         </State>
-      </entry>
-      <entry key="insertAndGetPhoto()">
-        <State />
       </entry>
     </value>
   </component>

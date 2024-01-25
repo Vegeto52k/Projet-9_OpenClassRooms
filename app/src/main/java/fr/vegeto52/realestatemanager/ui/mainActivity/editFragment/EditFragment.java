@@ -32,35 +32,60 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import fr.vegeto52.realestatemanager.utils.EditDescriptionDialog;
-import fr.vegeto52.realestatemanager.R;
-import fr.vegeto52.realestatemanager.utils.Utils;
 import fr.vegeto52.realestatemanager.database.repository.ViewModelFactory;
 import fr.vegeto52.realestatemanager.databinding.FragmentEditBinding;
 import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 import fr.vegeto52.realestatemanager.ui.cameraActivity.CameraActivity;
+import fr.vegeto52.realestatemanager.utils.EditDescriptionDialog;
+import fr.vegeto52.realestatemanager.utils.Utils;
 
+/**
+ * The EditFragment class extends Fragment and provides functionality for editing RealEstate details.
+ * It includes UI elements such as text fields, buttons, and a photo carousel.
+ */
 public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.OnEditDescriptionClickListener, EditDescriptionDialog.OnInputSelected {
 
+    // Constants for request codes
     private static final int PICK_IMAGES_REQUEST_CODE = 1;
     private static final int CAMERA_ACTIVITY_REQUEST_CODE = 100;
 
+    // View binding for the fragment
     FragmentEditBinding mBinding;
+
+    // UI elements
     EditText mTypeEditText, mDescriptionEditText, mAddressEditText, mSurfaceEditText, mNumberOfRoomsEditText, mPointsOfInterestEditText, mDateOfEntryEditText, mDateOfSaleEditText, mAgentEditText, mPriceEditText;
     RecyclerView mRecyclerViewPhoto;
     Button mSaveButton, mCancelButton, mSelectPhotosButton, mTakePhoto;
     Toolbar mToolbar;
     ImageButton mBackButton;
+
+    // ViewModel for managing data
     private EditFragmentViewModel mEditFragmentViewModel;
+
+    // RealEstate object being edited
     private RealEstate mRealEstate;
+
+    // ID of the RealEstate being edited
     Long mRealEstateId;
+
+    // List of photos associated with the RealEstate
     List<Photo> mPhotoList = new ArrayList<>();
+
+    // Position of the current photo being edited
     int mPositionPhoto;
+
+    // Description associated with a photo
     String mDescription;
+
+    // Flag to check if the state is restored
     private boolean saveRestored = false;
 
-
+    /**
+     * Called when the fragment is created. Restores the state if available.
+     *
+     * @param savedInstanceState A Bundle containing the saved state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +95,11 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         }
     }
 
+    /**
+     * Called to save the current state of the fragment.
+     *
+     * @param outState A Bundle in which to place the saved state.
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -88,6 +118,11 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         }
     }
 
+    /**
+     * Called when the view state of the fragment is restored.
+     *
+     * @param savedInstanceState A Bundle containing the saved state.
+     */
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -105,33 +140,43 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         }
     }
 
+    /**
+     * Called to create and return the view hierarchy associated with the fragment.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate views.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return The View for the fragment's UI.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentEditBinding.inflate(inflater, container, false);
         View view = mBinding.getRoot();
 
-        mTypeEditText = view.findViewById(R.id.type_edit_fragment);
-        mDescriptionEditText = view.findViewById(R.id.description_edit_fragment);
-        mAddressEditText = view.findViewById(R.id.address_edit_fragment);
-        mSurfaceEditText = view.findViewById(R.id.surface_edit_fragment);
-        mNumberOfRoomsEditText = view.findViewById(R.id.number_of_rooms_edit_fragment);
-        mPointsOfInterestEditText = view.findViewById(R.id.points_of_interest_edit_fragment);
-        mDateOfEntryEditText = view.findViewById(R.id.date_of_entry_edit_fragment);
-        mDateOfSaleEditText = view.findViewById(R.id.date_of_sale_edit_fragment);
-        mAgentEditText = view.findViewById(R.id.agent_edit_fragment);
-        mPriceEditText = view.findViewById(R.id.price_edit_fragment);
-        mRecyclerViewPhoto = view.findViewById(R.id.recyclerview_photo_edit_fragment);
+        // Initialize UI elements
+        mTypeEditText = mBinding.typeEditFragment;
+        mDescriptionEditText = mBinding.descriptionEditFragment;
+        mAddressEditText = mBinding.addressEditFragment;
+        mSurfaceEditText = mBinding.surfaceEditFragment;
+        mNumberOfRoomsEditText = mBinding.numberOfRoomsEditFragment;
+        mPointsOfInterestEditText = mBinding.pointsOfInterestEditFragment;
+        mDateOfEntryEditText = mBinding.dateOfEntryEditFragment;
+        mDateOfSaleEditText = mBinding.dateOfSaleEditFragment;
+        mAgentEditText = mBinding.agentEditFragment;
+        mPriceEditText = mBinding.priceEditFragment;
+        mRecyclerViewPhoto = mBinding.recyclerviewPhotoEditFragment;
 
-        mSaveButton = view.findViewById(R.id.save_button_edit_fragment);
-        mCancelButton = view.findViewById(R.id.cancel_button_edit_fragment);
+        mSaveButton = mBinding.saveButtonEditFragment;
+        mCancelButton = mBinding.cancelButtonEditFragment;
 
-        mToolbar = view.findViewById(R.id.edit_fragment_toolbar);
-        mBackButton = view.findViewById(R.id.edit_fragment_back_button);
+        mToolbar = mBinding.editFragmentToolbar;
+        mBackButton = mBinding.editFragmentBackButton;
 
-        mSelectPhotosButton = view.findViewById(R.id.select_photos_button_edit_fragment);
-        mTakePhoto = view.findViewById(R.id.take_photo_button_edit_fragment);
+        mSelectPhotosButton = mBinding.selectPhotosButtonEditFragment;
+        mTakePhoto = mBinding.takePhotoButtonEditFragment;
 
+        // Get RealEstate ID from arguments
         Bundle args = getArguments();
         if (args != null) {
             mRealEstateId = args.getLong("idRealEstate");
@@ -139,16 +184,30 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         return view;
     }
 
+    /**
+     * Called when the fragment's view has been created.
+     *
+     * @param view               The View returned by onCreateView.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViewModel();
     }
 
+    /**
+     * Initializes the ViewModel and observes changes in RealEstate data.
+     */
     private void initViewModel() {
+        // Initialize ViewModel
         mEditFragmentViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(EditFragmentViewModel.class);
+
+        // Observe RealEstate data changes
         mEditFragmentViewModel.getRealEstateLiveData(mRealEstateId).observe(getViewLifecycleOwner(), realEstate -> {
             mRealEstate = realEstate;
+
+            // Observe list of photos associated with the RealEstate
             mEditFragmentViewModel.getListPhotoToRealEstate(mRealEstateId).observe(getViewLifecycleOwner(), photos -> {
                 if (!saveRestored) {
                     mPhotoList = photos;
@@ -164,11 +223,19 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         });
     }
 
+    /**
+     * Initializes the toolbar with a click listener for the back button.
+     */
     private void initToolbar() {
+        // Set click listener for the back button
         mBackButton.setOnClickListener(view -> requireActivity().onBackPressed());
     }
 
+    /**
+     * Initializes the UI elements with data from the RealEstate object.
+     */
     private void initUi() {
+        // Set text for UI elements based on RealEstate data
         mTypeEditText.setText(!TextUtils.isEmpty(mRealEstate.getType()) ? mRealEstate.getType() : "");
         mDescriptionEditText.setText(!TextUtils.isEmpty(mRealEstate.getDescription()) ? mRealEstate.getDescription() : "");
         mAddressEditText.setText(!TextUtils.isEmpty(mRealEstate.getAddress()) ? mRealEstate.getAddress() : "");
@@ -185,8 +252,13 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         mPriceEditText.setText(priceText);
     }
 
+    /**
+     * Initializes the RecyclerView for displaying photos.
+     */
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        // Listener for removing a photo
         @SuppressLint("NotifyDataSetChanged") EditFragmentPhotoAdapter.OnRemovePhotoClickListener removePhotoClickListener = position -> {
             mPhotoList.remove(position);
             Objects.requireNonNull(mRecyclerViewPhoto.getAdapter()).notifyDataSetChanged();
@@ -194,21 +266,33 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                 mBinding.photoCarouselEmptyEditFragment.setVisibility(View.VISIBLE);
             }
         };
+
+        // Create and set up the adapter for the RecyclerView
         EditFragmentPhotoAdapter editFragmentPhotoAdapter = new EditFragmentPhotoAdapter(mPhotoList, removePhotoClickListener);
         editFragmentPhotoAdapter.setOnEditDescriptionClickListener(this);
+
+        // Add divider decoration to the RecyclerView
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
         mRecyclerViewPhoto.addItemDecoration(dividerItemDecoration);
+
+        // Set layout manager and adapter for the RecyclerView
         mRecyclerViewPhoto.setLayoutManager(layoutManager);
         mRecyclerViewPhoto.setAdapter(editFragmentPhotoAdapter);
     }
 
+    /**
+     * Initializes click listeners for various buttons in the fragment.
+     */
     private void initButton() {
+        // Cancel button click listener
         mCancelButton.setOnClickListener(view -> requireActivity().onBackPressed());
 
+        // Save button click listener
         mSaveButton.setOnClickListener(view -> {
             if (mPhotoList.isEmpty()) {
                 Toast.makeText(getContext(), "Need one photo with description", Toast.LENGTH_LONG).show();
             } else {
+                // Check if at least one photo has a description
                 boolean photoWithDescription = false;
                 for (Photo photo : mPhotoList) {
                     if (photo.getDescription() != null) {
@@ -217,6 +301,7 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                     }
                 }
                 if (photoWithDescription) {
+                    // Create an updated RealEstate object with edited details
                     RealEstate updatedRealEstate = new RealEstate();
                     updatedRealEstate.setId(mRealEstateId);
                     updatedRealEstate.setType(mTypeEditText.getText().toString());
@@ -252,11 +337,13 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
                     }
                     updatedRealEstate.setStatut(!TextUtils.isEmpty(mDateOfSaleEditText.getText().toString().trim()));
 
+                    // Delete existing photos and insert new photos
                     mEditFragmentViewModel.deleteAllPhotos(mRealEstateId);
                     for (Photo photo2 : mPhotoList) {
                         mEditFragmentViewModel.insertPhoto(photo2);
                     }
 
+                    // Update RealEstate data with geocoding if available
                     if (!TextUtils.isEmpty(mAddressEditText.getText().toString()) && Utils.isInternetAvailable2(requireContext())) {
                         mEditFragmentViewModel.getGeocoding(mAddressEditText.getText().toString(), (latitude, longitude) -> {
                             updatedRealEstate.setLatitude(latitude);
@@ -279,16 +366,24 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
 
         });
 
+        // Button to open gallery for selecting photos
         mSelectPhotosButton.setOnClickListener(view -> openGallery());
 
+        // Button to open camera for capturing photos
         mTakePhoto.setOnClickListener(view -> openCamera());
     }
 
+    /**
+     * Opens the camera to capture photos.
+     */
     private void openCamera() {
         Intent intent = new Intent(getContext(), CameraActivity.class);
         startActivityForResult(intent, CAMERA_ACTIVITY_REQUEST_CODE);
     }
 
+    /**
+     * Opens the gallery to select photos.
+     */
     @SuppressLint("IntentReset")
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -297,6 +392,9 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         startActivityForResult(intent, PICK_IMAGES_REQUEST_CODE);
     }
 
+    /**
+     * Handles the result of activities such as gallery or camera.
+     */
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -336,6 +434,11 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         }
     }
 
+    /**
+     * Handles the click event when the user wants to edit the description of a photo.
+     *
+     * @param position The position of the clicked photo.
+     */
     @Override
     public void onEditDescriptionClick(int position) {
         mPositionPhoto = position;
@@ -348,6 +451,11 @@ public class EditFragment extends Fragment implements EditFragmentPhotoAdapter.O
         editDescriptionDialog.show(getFragmentManager(), "EditDescriptionDialog");
     }
 
+    /**
+     * Receives the user input from the EditDescriptionDialog and updates the description of the photo.
+     *
+     * @param input The user input for the description.
+     */
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void sendInput(String input) {

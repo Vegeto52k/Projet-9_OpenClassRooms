@@ -12,19 +12,33 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 /**
- * Created by Vegeto52-PC on 28/12/2023.
+ * The GeocodingRepository class acts as a repository for geocoding operations.
+ * It uses the GeocodingApi interface and RetrofitService for making HTTP requests.
  */
 public class GeocodingRepository {
 
+    // API key for accessing the geocoding service
     private final static String MAPS_API_KEY = BuildConfig.MAPS_API_KEY;
 
+    /**
+     * Default constructor for the GeocodingRepository class.
+     */
     public GeocodingRepository() {
     }
 
+    /**
+     * Callback interface for handling geocoding results asynchronously.
+     */
     public interface GeocodingCallBack {
         void onGeocodingResult(ResultsGeocodingApi resultsGeocodingApi);
     }
 
+    /**
+     * Perform a geocoding request asynchronously and invoke the callback with the results.
+     *
+     * @param address The address to be geocoded.
+     * @param callBack The callback to be invoked with the geocoding results.
+     */
     public void getGeocoding(String address, GeocodingCallBack callBack) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
@@ -35,6 +49,12 @@ public class GeocodingRepository {
         });
     }
 
+    /**
+     * Perform the actual geocoding request using Retrofit and the GeocodingApi.
+     *
+     * @param address The address to be geocoded.
+     * @return The geocoding results.
+     */
     private ResultsGeocodingApi getGeocodingMethod(String address) {
         GeocodingApi geocodingApi = RetrofitService.getRetrofitInstance().create(GeocodingApi.class);
         Call<ResultsGeocodingApi> call = geocodingApi.getGeocoding(address, MAPS_API_KEY);

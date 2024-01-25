@@ -11,29 +11,56 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
- * Created by Vegeto52-PC on 07/11/2023.
+ * The RealEstate class represents a real estate property with details such as type, price, and location.
  */
 @Entity(tableName = "real_estate")
 public class RealEstate implements Parcelable {
 
+    // Auto-generated ID for the real estate property
     @PrimaryKey(autoGenerate = true)
     private long id;
+
+    // Type of the real estate property (e.g., Flat, House, Studio)
     private String type;
+
+    // Price of the real estate property
     private Double price;
+
+    // Surface area of the real estate property
     private Double surface;
+
+    // Number of rooms in the real estate property
     private Integer numberOfRooms;
+
+    // Description of the real estate property
     private String description;
+
+    // Address of the real estate property
     private String address;
+
+    // Points of interest near the real estate property
     private String pointsOfInterest;
+
+    // Status of the real estate property (available or sold)
     private boolean statut;
+
+    // Date of entry of the real estate property into the market
     private String dateOfEntry;
+
+    // Date of sale of the real estate property (if sold)
     private String dateOfSale;
+
+    // Agent handling the real estate property
     private String agent;
+
+    // Latitude of the real estate property's location
     private Double latitude;
+
+    // Longitude of the real estate property's location
     private Double longitude;
 
 
-    // Constructor
+    // Constructors
     @Ignore
     public RealEstate(long id, String type, Double price, Double surface, Integer numberOfRooms, String description, String address, String pointsOfInterest, boolean statut, String dateOfEntry, String dateOfSale, String agent) {
         this.id = id;
@@ -180,7 +207,7 @@ public class RealEstate implements Parcelable {
         this.longitude = longitude;
     }
 
-    // Parcelable
+    // Parcelable implementation
     protected RealEstate(Parcel in) {
         id = in.readLong();
         type = in.readString();
@@ -278,7 +305,12 @@ public class RealEstate implements Parcelable {
         }
     }
 
-    // Utils
+    /**
+     * Creates a RealEstate instance from ContentValues.
+     *
+     * @param values ContentValues containing real estate information.
+     * @return RealEstate instance.
+     */
     public static RealEstate fromContentValues(ContentValues values){
         RealEstate realEstate = new RealEstate();
         if (values.containsKey("type")) realEstate.setType(values.getAsString("type"));

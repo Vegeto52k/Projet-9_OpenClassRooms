@@ -17,18 +17,36 @@ import fr.vegeto52.realestatemanager.model.Photo;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 
 /**
- * Created by Vegeto52-PC on 10/11/2023.
+ * The RealEstateDatabase class serves as the Room database for the real estate application.
+ * It defines entities, version, and type converters for Room.
  */
 @Database(entities = {RealEstate.class, Photo.class}, version = 3, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class RealEstateDatabase extends RoomDatabase {
 
+    /**
+     * Abstract method to retrieve the RealEstateDao interface for database operations on RealEstate entities.
+     *
+     * @return RealEstateDao instance.
+     */
     public abstract RealEstateDao mRealEstateDao();
 
+    /**
+     * Abstract method to retrieve the PhotoDao interface for database operations on Photo entities.
+     *
+     * @return PhotoDao instance.
+     */
     public abstract PhotoDao mPhotoDao();
 
+    // Singleton pattern to ensure a single instance of the database
     private static volatile RealEstateDatabase instance;
 
+    /**
+     * Get the singleton instance of the RealEstateDatabase.
+     *
+     * @param context The application context.
+     * @return RealEstateDatabase instance.
+     */
     public static RealEstateDatabase getInstance(Context context) {
         if (instance == null) {
             synchronized (RealEstateDatabase.class) {
@@ -42,6 +60,11 @@ public abstract class RealEstateDatabase extends RoomDatabase {
         return instance;
     }
 
+    /**
+     * Callback to prepopulate the database with dummy real estate data on creation.
+     *
+     * @return Callback instance.
+     */
     private static Callback prepopulateDatabase() {
         return new Callback() {
             @Override

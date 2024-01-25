@@ -19,32 +19,55 @@ import fr.vegeto52.realestatemanager.R;
 import fr.vegeto52.realestatemanager.model.Photo;
 
 /**
- * Created by Vegeto52-PC on 19/12/2023.
+ * The AddFragmentPhotoAdapter class extends RecyclerView.Adapter and is responsible for displaying photos
+ * in a RecyclerView in the AddFragment. It includes interfaces OnEditDescriptionClickListener and OnRemovePhotoClickListener
+ * to handle click events on edit and remove buttons.
  */
 public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPhotoAdapter.ViewHolder> {
 
     public OnEditDescriptionClickListener mEditDescriptionClickListener;
     public OnRemovePhotoClickListener mRemovePhotoClickListener;
 
+    // Interface to handle click events on edit button
     public interface OnEditDescriptionClickListener {
         void onEditDescriptionClick(int position);
     }
 
+    // Interface to handle click events on remove button
     public interface OnRemovePhotoClickListener {
         void onRemoveClick(int position);
     }
 
+    /**
+     * Sets the listener for edit button click events.
+     *
+     * @param listener Listener for edit button click events.
+     */
     public void setOnEditDescriptionClickListener(OnEditDescriptionClickListener listener) {
         mEditDescriptionClickListener = listener;
     }
 
+    // List of photos to be displayed
     private static List<Photo> mPhotoList;
 
+    /**
+     * Constructor for AddFragmentPhotoAdapter.
+     *
+     * @param photoList                List of photos to be displayed.
+     * @param removePhotoClickListener Listener for remove button click events.
+     */
     public AddFragmentPhotoAdapter(List<Photo> photoList, OnRemovePhotoClickListener removePhotoClickListener) {
         mPhotoList = photoList;
         mRemovePhotoClickListener = removePhotoClickListener;
     }
 
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public AddFragmentPhotoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,6 +76,12 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
         return new ViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     *
+     * @param holder   The ViewHolder that should be updated to represent the contents of the item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull AddFragmentPhotoAdapter.ViewHolder holder, int position) {
         holder.displayPhoto(mPhotoList.get(position));
@@ -71,11 +100,19 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
         });
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     *
+     * @return The total number of items in this adapter.
+     */
     @Override
     public int getItemCount() {
         return mPhotoList.size();
     }
 
+    /**
+     * The ViewHolder class represents each item in the RecyclerView.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView photoCarousel;
@@ -84,6 +121,11 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
         public View blackBand;
         public TextView textDescription;
 
+        /**
+         * Constructor for ViewHolder.
+         *
+         * @param itemView The View for each item in the RecyclerView.
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -94,6 +136,11 @@ public class AddFragmentPhotoAdapter extends RecyclerView.Adapter<AddFragmentPho
             textDescription = itemView.findViewById(R.id.item_photo_text_description_add_fragment);
         }
 
+        /**
+         * Displays the photo in the item view.
+         *
+         * @param photo The Photo object to be displayed.
+         */
         public void displayPhoto(Photo photo) {
             if (TextUtils.isEmpty(photo.getDescription())) {
                 blackBand.setVisibility(View.GONE);

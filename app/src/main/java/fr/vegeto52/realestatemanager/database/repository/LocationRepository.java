@@ -14,7 +14,8 @@ import com.google.android.gms.tasks.Task;
 import fr.vegeto52.realestatemanager.database.MainApplication;
 
 /**
- * Created by Vegeto52-PC on 23/12/2023.
+ * The LocationRepository class serves as a repository for obtaining device location information.
+ * It uses the FusedLocationProviderClient from the Google Play Services Location API.
  */
 public class LocationRepository {
 
@@ -22,10 +23,18 @@ public class LocationRepository {
 
     public FusedLocationProviderClient mFusedLocationProviderClient;
 
+    /**
+     * Default constructor for the LocationRepository class.
+     * Initiates the process of obtaining the device location.
+     */
     public LocationRepository() {
         getLocation();
     }
 
+    /**
+     * Request the device's last known location using the FusedLocationProviderClient.
+     * The result is stored in the LiveData for observation.
+     */
     @SuppressLint("MissingPermission")
     public void getLocation() {
         Context context = MainApplication.getApplication();
@@ -34,8 +43,12 @@ public class LocationRepository {
         task.addOnSuccessListener(mLocationMutableLiveData::setValue);
     }
 
+    /**
+     * Get the LiveData object for observing device location changes.
+     *
+     * @return The LiveData object containing the device location.
+     */
     public LiveData<Location> getLocationLiveData() {
         return mLocationMutableLiveData;
     }
-
 }

@@ -37,7 +37,8 @@ import fr.vegeto52.realestatemanager.ui.mainActivity.locationFragment.LocationFr
 import fr.vegeto52.realestatemanager.ui.mainActivity.simulatorFragment.SimulatorFragment;
 
 /**
- * Created by Vegeto52-PC on 15/11/2023.
+ * The ListViewFragment class extends Fragment and represents the fragment displaying a list of real estate properties.
+ * It includes functionality for filtering and adding properties to the list.
  */
 public class ListViewFragment extends Fragment {
 
@@ -49,6 +50,8 @@ public class ListViewFragment extends Fragment {
     private List<RealEstate> mRealEstateList = new ArrayList<>();
     private List<RealEstate> mRealEstateListStatic;
     private List<Photo> mPhotoList;
+
+    // UI elements
     private ImageButton mAddButton, mFilterButton;
     private BottomNavigationView mBottomNavigationView;
     private ScrollView mFilterScrollView;
@@ -57,8 +60,15 @@ public class ListViewFragment extends Fragment {
     private RadioButton mFilterRadioButtonAvailable;
     private RadioButton mFilterRadioButtonUnavailable;
     private Button mFilterCancelButton, mFilterValidateButton, mFilterResetButton;
+
+    // Flag indicating whether the device is a tablet
     private boolean mIsTablet;
 
+    /**
+     * Called when the fragment is created. Restores saved instance state if available.
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +77,11 @@ public class ListViewFragment extends Fragment {
         }
     }
 
+    /**
+     * Called to save the current dynamic state of the fragment into the given Bundle.
+     *
+     * @param outState Bundle in which to place the saved state.
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -82,6 +97,11 @@ public class ListViewFragment extends Fragment {
         }
     }
 
+    /**
+     * Called to restore the saved instance state.
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     */
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -96,44 +116,63 @@ public class ListViewFragment extends Fragment {
         }
     }
 
+    /**
+     * Called to create and return the view hierarchy associated with the fragment.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate views.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return The View for the fragment's UI.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = FragmentListViewBinding.inflate(inflater, container, false);
         mView = mBinding.getRoot();
 
-        mRecyclerView = mView.findViewById(R.id.recyclerview_fragment_list_view);
-        mAddButton = mView.findViewById(R.id.list_view_fragment_add_button);
-        mFilterButton = mView.findViewById(R.id.list_view_fragment_filter_button);
-        mBottomNavigationView = mView.findViewById(R.id.bottom_navigation_fragment_list);
+        // Initialize UI elements
+        mRecyclerView = mBinding.recyclerviewFragmentListView;
+        mAddButton = mBinding.listViewFragmentAddButton;
+        mFilterButton = mBinding.listViewFragmentFilterButton;
+        mBottomNavigationView = mBinding.bottomNavigationFragmentList;
 
-        mFilterScrollView = mView.findViewById(R.id.layout_filter_fragment_list);
-        mFilterPriceMinimum = mView.findViewById(R.id.filter_price_minimum_fragment_list);
-        mFilterPriceMaximum = mView.findViewById(R.id.filter_price_maximum_fragment_list);
-        mFilterSurfaceMinimum = mView.findViewById(R.id.filter_surface_minimum_fragment_list);
-        mFilterSurfaceMaximum = mView.findViewById(R.id.filter_surface_maximum_fragment_list);
-        mFilterNumberOfRoomsMinimum = mView.findViewById(R.id.filter_number_of_rooms_minimum_fragment_list);
-        mFilterNumberOfRoomsMaximum = mView.findViewById(R.id.filter_number_of_rooms_maximum_fragment_list);
-        mFilterPhotosMinimum = mView.findViewById(R.id.filter_photos_minimum_edit_fragment_list);
-        mFilterRadioGroup = mView.findViewById(R.id.filter_radiogroup_fragment_list);
-        mFilterRadioButtonAvailable = mView.findViewById(R.id.filter_radiobutton_available_fragment_list);
-        mFilterRadioButtonUnavailable = mView.findViewById(R.id.filter_radiobutton_unavailable_fragment_list);
-        mFilterCancelButton = mView.findViewById(R.id.filter_cancel_button_fragment_list);
-        mFilterValidateButton = mView.findViewById(R.id.filter_validate_button_fragment_list);
-        mFilterResetButton = mView.findViewById(R.id.filter_reset_button_fragment_list);
+        mFilterScrollView = mBinding.layoutFilterFragmentList;
+        mFilterPriceMinimum = mBinding.filterPriceMinimumFragmentList;
+        mFilterPriceMaximum = mBinding.filterPriceMaximumFragmentList;
+        mFilterSurfaceMinimum = mBinding.filterSurfaceMinimumFragmentList;
+        mFilterSurfaceMaximum = mBinding.filterSurfaceMaximumFragmentList;
+        mFilterNumberOfRoomsMinimum = mBinding.filterNumberOfRoomsMinimumFragmentList;
+        mFilterNumberOfRoomsMaximum = mBinding.filterNumberOfRoomsMaximumFragmentList;
+        mFilterPhotosMinimum = mBinding.filterPhotosMinimumEditFragmentList;
+        mFilterRadioGroup = mBinding.filterRadiogroupFragmentList;
+        mFilterRadioButtonAvailable = mBinding.filterRadiobuttonAvailableFragmentList;
+        mFilterRadioButtonUnavailable = mBinding.filterRadiobuttonUnavailableFragmentList;
+        mFilterCancelButton = mBinding.filterCancelButtonFragmentList;
+        mFilterValidateButton = mBinding.filterValidateButtonFragmentList;
+        mFilterResetButton = mBinding.filterResetButtonFragmentList;
 
+        // Check if the device is a tablet
         int smallestScreenWidthDp = getResources().getConfiguration().smallestScreenWidthDp;
         mIsTablet = smallestScreenWidthDp >= 600;
 
         return mView;
     }
 
+    /**
+     * Called when the fragment's activity has been created and this fragment's view hierarchy instantiated.
+     *
+     * @param view               The created view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViewModel();
     }
 
+    /**
+     * Initializes the ViewModel for the ListViewFragment.
+     */
     private void initViewModel() {
         ListViewViewModel listViewViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(requireContext())).get(ListViewViewModel.class);
         listViewViewModel.getListViewMutableLiveData().observe(getViewLifecycleOwner(), listViewViewState -> {
@@ -146,6 +185,9 @@ public class ListViewFragment extends Fragment {
         });
     }
 
+    /**
+     * Initializes the toolbar, including the "Add" and "Filter" buttons.
+     */
     private void initToolbar() {
         mAddButton.setOnClickListener(view -> {
             Fragment fragment = new AddFragment();
@@ -161,6 +203,9 @@ public class ListViewFragment extends Fragment {
         mFilterButton.setOnClickListener(view -> initFilterView());
     }
 
+    /**
+     * Initializes the RecyclerView for displaying the list of real estate properties.
+     */
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         if (mRealEstateList.isEmpty()) {
@@ -175,6 +220,9 @@ public class ListViewFragment extends Fragment {
         mRecyclerView.setAdapter(mListViewRealEstateAdapter);
     }
 
+    /**
+     * Initializes the BottomNavigationView for navigating between different fragments.
+     */
     private void initBottomNavigationView() {
         mBottomNavigationView.setSelectedItemId(R.id.menu_bottom_navigation_list);
         mBottomNavigationView.setOnItemSelectedListener(item -> {
@@ -182,6 +230,7 @@ public class ListViewFragment extends Fragment {
             int id = item.getItemId();
 
             if (id == R.id.menu_bottom_navigation_location) {
+                // Handling navigation to the LocationFragment
                 String fragmentTag = "LOCATION_FRAGMENT";
                 LocationFragment locationFragment = (LocationFragment) requireActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
                 if (locationFragment == null) {
@@ -200,6 +249,7 @@ public class ListViewFragment extends Fragment {
                             .commit();
                 }
             } else if (id == R.id.menu_bottom_navigation_simulator) {
+                // Handling navigation to the SimulatorFragment
                 String fragmentTag = "SIMULATOR_FRAGMENT";
                 SimulatorFragment simulatorFragment = (SimulatorFragment) requireActivity().getSupportFragmentManager().findFragmentByTag(fragmentTag);
                 if (simulatorFragment == null) {
@@ -222,6 +272,9 @@ public class ListViewFragment extends Fragment {
         });
     }
 
+    /**
+     * Initializes the filter view, making it visible and setting up listeners for cancel, validate, and reset buttons.
+     */
     private void initFilterView() {
         mFilterScrollView.setVisibility(View.VISIBLE);
         if (mFilterRadioButtonAvailable.isChecked()) {
@@ -239,11 +292,18 @@ public class ListViewFragment extends Fragment {
         mFilterResetButton.setOnClickListener(view -> initFilterResetButton());
     }
 
+    /**
+     * Handles canceling the filter, making the filter view invisible.
+     */
     private void initFilterCancelButton() {
         mFilterScrollView.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Handles validating the filter criteria and updating the RecyclerView accordingly.
+     */
     private void initFilterValidateButton() {
+        // Code for validating filter criteria and updating RecyclerView
         mFilterScrollView.setVisibility(View.INVISIBLE);
         mRealEstateList = new ArrayList<>(mRealEstateListStatic);
         Iterator<RealEstate> iterator = mRealEstateList.iterator();
@@ -339,7 +399,11 @@ public class ListViewFragment extends Fragment {
         mBinding.fragmentListViewEmpty.setVisibility(mRealEstateList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Handles resetting the filter criteria, making the filter view invisible, and updating the RecyclerView.
+     */
     private void initFilterResetButton() {
+        // Code for resetting filter criteria and updating RecyclerView
         mFilterScrollView.setVisibility(View.INVISIBLE);
         mFilterPriceMinimum.setText("");
         mFilterPriceMaximum.setText("");

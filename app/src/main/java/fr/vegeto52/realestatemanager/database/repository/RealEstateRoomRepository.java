@@ -12,26 +12,48 @@ import fr.vegeto52.realestatemanager.database.room.dao.RealEstateDao;
 import fr.vegeto52.realestatemanager.model.RealEstate;
 
 /**
- * Created by Vegeto52-PC on 15/11/2023.
+ * The RealEstateRoomRepository class acts as a repository for managing real estate data using Room database.
+ * It uses the RealEstateDao for database operations and provides LiveData for observing real estate data changes.
  */
 public class RealEstateRoomRepository {
 
     private final RealEstateDao mRealEstateDao;
     private final LiveData<List<RealEstate>> mListRealEstate;
 
+    /**
+     * Constructor for the RealEstateRoomRepository class.
+     *
+     * @param realEstateDao The RealEstateDao used for database operations.
+     */
     public RealEstateRoomRepository(RealEstateDao realEstateDao) {
         mRealEstateDao = realEstateDao;
         mListRealEstate = mRealEstateDao.getListRealEstate();
     }
 
+    /**
+     * Get LiveData for observing the list of real estate.
+     *
+     * @return The LiveData object containing the list of real estate.
+     */
     public LiveData<List<RealEstate>> getListRealEstate() {
         return mListRealEstate;
     }
 
+    /**
+     * Get LiveData for observing a specific real estate by its ID.
+     *
+     * @param realEstateId The ID of the real estate to be observed.
+     * @return The LiveData object containing the specific real estate.
+     */
     public LiveData<RealEstate> getRealEstate(long realEstateId) {
         return mRealEstateDao.getRealEstate(realEstateId);
     }
 
+    /**
+     * Insert a new real estate into the database.
+     *
+     * @param realEstate The real estate to be inserted.
+     */
     public void insertRealEstate(RealEstate realEstate) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<?> future = executor.submit(() -> Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.insert(realEstate)));
@@ -43,6 +65,12 @@ public class RealEstateRoomRepository {
         }
     }
 
+    /**
+     * Insert a new real estate into the database and get its ID.
+     *
+     * @param realEstate The real estate to be inserted.
+     * @return The ID of the inserted real estate.
+     */
     public long insertRealEstateAndGetId(RealEstate realEstate) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Long> future = executor.submit(() -> mRealEstateDao.insertAndGetId(realEstate));
@@ -55,6 +83,11 @@ public class RealEstateRoomRepository {
         }
     }
 
+    /**
+     * Update an existing real estate in the database.
+     *
+     * @param realEstate The real estate to be updated.
+     */
     public void updateRealEstate(RealEstate realEstate) {
         Executors.newSingleThreadExecutor().execute(() -> mRealEstateDao.update(realEstate));
     }
